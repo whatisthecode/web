@@ -1,8 +1,8 @@
 ﻿###################
 #  system files   #
 ###################
-Web.config
-.vs
+WebApplication2/Web.config
+.vs/
 ###################
 # compiled source #
 ###################
