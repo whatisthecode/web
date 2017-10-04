@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LaptopWebsite.Models.Mapping;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,21 +11,21 @@ namespace WebApplication2.DAO
     {
         public CategoryDAOImpl() : base()
         {
-        }
 
-        public void deleteCategory(Int16 id)
+        }
+        public void deleteCategory(Int16 CategoryId)
         {
-            base.delete(id);
+            base.delete(CategoryId);
         }
 
-        public Category getCategoryById(Int16 id)
-        {
-            return base.getById(id);
-        }
-
-        public IEnumerable<Category> getCategories()
+        public IEnumerable<Category> getCategory()
         {
             return base.get();
+        }
+
+        public Category getCategoryById(Int16 categoryId)
+        {
+            return base.getById(categoryId);
         }
 
         public void insertCategory(Category category)
@@ -45,6 +46,50 @@ namespace WebApplication2.DAO
         public void dispose()
         {
             base.Dispose();
+        }
+
+        public PagedResult<Category> PageView(int pageIndex, int pageSize, string columnName)
+        {
+            var query = from c in base.Dbset() select c;
+            switch (columnName)
+            {
+                case "name":
+                    query = query.OrderBy(n => n.name);
+                    break;
+            }
+
+            PagedResult<Category> pv = base.PageView(query, pageIndex, pageSize);
+            return pv;
+        }
+        public Boolean check(String column)
+        {
+            return base.checkColumnExist(column);
+        }
+        public PagedResult<Category> PageView(int pageIndex, int pageSize, string orderBy, Boolean ascending)
+        {
+            var query = from c in base.Dbset() select c;
+            if (orderBy != null && ascending)
+            {
+                switch (orderBy)
+                {
+                    case "name":
+                        query = query.OrderBy(n => n.name);
+                        break;
+                }
+            }
+            
+            if(orderBy != null && !ascending)
+            {
+                switch (orderBy)
+                {
+                    case "name":
+                        query = query.OrderByDescending(d => d.name);
+                        break;
+                }
+            }
+
+            PagedResult<Category> pv = base.PageView(query, pageIndex, pageSize);
+            return pv;
         }
     }
 }

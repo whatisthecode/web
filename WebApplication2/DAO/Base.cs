@@ -1,4 +1,6 @@
-﻿using System;
+﻿using LaptopWebsite.Models;
+using LaptopWebsite.Models.Mapping;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -13,5 +15,9 @@ namespace WebApplication2.DAO
         void delete(Int16 id);
         void update(T entity);
         void save();
+        Boolean checkColumnExist(String column);
+        Boolean checkColumnsExist(Array columns);
+        PagedResult<T> PageView(IQueryable<T> query, int page, int pageSize);
+
     }
 }

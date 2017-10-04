@@ -1,9 +1,12 @@
-﻿using System;
+﻿using LaptopWebsite.Models;
+using LaptopWebsite.Models.Mapping;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Web;
-using WebApplication2.Models;
 
 namespace WebApplication2.DAO
 {
@@ -12,39 +15,20 @@ namespace WebApplication2.DAO
         private Boolean disposed;
         private DBContext context;
 
-        public BaseImpl(){
+        public BaseImpl()
+        {
             this.context = DatabaseFactory.context;
+        }
+
+        public DbSet<T> Dbset()
+        {
+            return this.context.Set<T>();
         }
 
         public void delete(Int16 id)
         {
-            T instance = this.context.Set<T>().Find(id);
+            T instance = context.Set<T>().Find();
             this.context.Set<T>().Remove(instance);
-        }
-
-        public IEnumerable<T> get()
-        {
-            return this.context.Set<T>().ToList<T>();
-        }
-
-        public T getById(Int16 id)
-        {
-            return this.context.Set<T>().Find(id);
-        }
-
-        public void insert(T instance)
-        {
-            this.context.Set<T>().Add(instance);
-        }
-
-        public void save()
-        {
-            this.context.SaveChanges();
-        }
-
-        public void update(T instance)
-        {
-            this.context.Entry<T>(instance).State = EntityState.Modified;
         }
 
         public virtual void Dispose(Boolean disposing)
@@ -59,10 +43,68 @@ namespace WebApplication2.DAO
             this.disposed = true;
         }
 
+        public IEnumerable<T> get()
+        {
+            return this.context.Set<T>().ToList();
+        }
+
+        public T getById(Int16 id)
+        {
+            return this.context.Set<T>().Find(id);
+        }
+
+        public void insert(T entity)
+        {
+            this.context.Set<T>().Add(entity);
+        }
+
+        public void save()
+        {
+            this.context.SaveChanges();
+        }
+
+        public void update(T entity)
+        {
+            this.context.Entry<T>(entity).State = EntityState.Modified;
+        }
+
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        public PagedResult<T> PageView(IQueryable<T> query, int page, int pageSize)
+        {
+            var result = new PagedResult<T>();
+            result.currentPage = page;
+            result.pageSize = pageSize;
+            result.rowCount = query.Count();
+            var pageCount = (double)result.rowCount / pageSize;
+            result.pageCount = (int)Math.Ceiling(pageCount);
+            var skip = (page - 1) * pageSize;
+
+            result.results = Queryable.Skip(query, skip).Take(pageSize).ToList();
+
+            return result;
+        }
+
+        public Boolean checkColumnExists(string column)
+        {
+            var columns = typeof(T).GetProperties().Select(property => property.Name).ToArray();
+            return columns.Contains(column);
+        }
+        public Boolean checkColumnsExist(Array columns)
+        {
+            var length = columns.Length;
+            for (var i = 0; i < length; i++)
+            {
+                if (!this.checkColumnExists(columns.GetValue(i).ToString()))
+                {
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }
