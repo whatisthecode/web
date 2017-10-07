@@ -63,7 +63,7 @@ namespace WebApplication2.DAO
         }
         public Boolean check(String column)
         {
-            return base.checkColumnExist(column);
+            return base.checkColumnExists(column);
         }
         public PagedResult<Category> PageView(int pageIndex, int pageSize, string orderBy, Boolean ascending)
         {

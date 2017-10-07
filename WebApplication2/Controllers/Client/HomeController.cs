@@ -8,7 +8,7 @@ using WebApplication2.Models;
 
 namespace WebApplication2.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : Base
     {
         private CategoryDAO categoryDAO;
         public HomeController()

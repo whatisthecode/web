@@ -15,7 +15,7 @@ namespace WebApplication2.DAO
         void delete(Int16 id);
         void update(T entity);
         void save();
-        Boolean checkColumnExist(String column);
+        Boolean checkColumnExists(String column);
         Boolean checkColumnsExist(Array columns);
         PagedResult<T> PageView(IQueryable<T> query, int page, int pageSize);
 

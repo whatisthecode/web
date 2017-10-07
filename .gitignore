@@ -1,9 +1,4 @@
 ﻿###################
-#  system files   #
-###################
-WebApplication2/Web.config
-.vs/
-###################
 # compiled source #
 ###################
 *.com
