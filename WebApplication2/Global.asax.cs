@@ -20,6 +20,8 @@ namespace WebApplication2
             GlobalConfiguration.Configure(WebApiConfig.Register);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            ViewEngines.Engines.Clear();
+            ViewEngines.Engines.Add(new CustomViewEngine());
         }
     }
 }

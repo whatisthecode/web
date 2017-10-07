@@ -65,6 +65,7 @@ namespace WebApplication2.DAO
 
         public void update(T entity)
         {
+            this.context.Set<T>().Attach(entity);
             this.context.Entry<T>(entity).State = EntityState.Modified;
         }
 
