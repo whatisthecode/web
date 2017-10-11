@@ -11,7 +11,9 @@ namespace WebApplication2.DAO
     {
         IEnumerable<Category> getCategory();
         Category getCategoryById(Int16 categoryId);
+        Category checkExist(Category category);
         void insertCategory(Category category);
+
         void deleteCategory(Int16 CategoryId);
         void updateCategory(Category category);
         void saveCategory();

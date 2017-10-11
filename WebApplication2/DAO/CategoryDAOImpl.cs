@@ -27,7 +27,6 @@ namespace WebApplication2.DAO
         {
             return base.getById(categoryId);
         }
-
         public void insertCategory(Category category)
         {
             base.insert(category);
@@ -47,7 +46,15 @@ namespace WebApplication2.DAO
         {
             base.Dispose();
         }
-
+        public Category checkExist(Category category)
+        {
+            Category category1 = base.Dbset().Where(c => c.code == category.code || c.name == category.name).FirstOrDefault();
+            if (category1 != null ){
+                return category1;
+            }
+            base.detach(category);
+            return null;
+        }
         public PagedResult<Category> PageView(int pageIndex, int pageSize, string columnName)
         {
             var query = from c in base.Dbset() select c;
@@ -77,8 +84,8 @@ namespace WebApplication2.DAO
                         break;
                 }
             }
-            
-            if(orderBy != null && !ascending)
+
+            if (orderBy != null && !ascending)
             {
                 switch (orderBy)
                 {

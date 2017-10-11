@@ -1,0 +1,4 @@
+/** Your theme modifications here **/
+span.hidden-sm{
+    display:inline-block !important;
+}

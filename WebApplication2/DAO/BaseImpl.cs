@@ -25,6 +25,12 @@ namespace WebApplication2.DAO
             return this.context.Set<T>();
         }
 
+        public void detach(T entity)
+        {
+            this.context.Entry<T>(entity).State = EntityState.Detached;
+            this.save();
+        }
+
         public void delete(Int16 id)
         {
             T instance = context.Set<T>().Find();

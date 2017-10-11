@@ -17,8 +17,6 @@ namespace WebApplication2.Controllers
         }
         public ActionResult Index()
         {
-            this.categoryDAO.insertCategory( new Category("code1", "name1"));
-            this.categoryDAO.saveCategory();
             return View();
         }
 

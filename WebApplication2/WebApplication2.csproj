@@ -199,28 +199,91 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\bootstrap.css" />
-    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Assets\CSS\bootstrap.css" />
+    <Content Include="Assets\CSS\bootstrap.min.css" />
+    <Content Include="Assets\CSS\Client\animate.min.css" />
+    <Content Include="Assets\CSS\Client\custom.css" />
+    <Content Include="Assets\CSS\Client\style.default.css" />
+    <Content Include="Assets\CSS\font-awesome.css" />
+    <Content Include="Assets\CSS\Client\owl.carousel.css" />
+    <Content Include="Assets\CSS\Client\owl.theme.css" />
+    <Content Include="Assets\FONT\flexslider-icon.svg" />
+    <Content Include="Assets\FONT\fontawesome-webfont.svg" />
+    <Content Include="Assets\IMG\AjaxLoader.gif" />
+    <Content Include="Assets\IMG\banner.jpg" />
+    <Content Include="Assets\IMG\banner2.jpg" />
+    <Content Include="Assets\IMG\basketsquare.jpg" />
+    <Content Include="Assets\IMG\blog-avatar.jpg" />
+    <Content Include="Assets\IMG\blog-avatar2.jpg" />
+    <Content Include="Assets\IMG\blog.jpg" />
+    <Content Include="Assets\IMG\blog2.jpg" />
+    <Content Include="Assets\IMG\detailbig1.jpg" />
+    <Content Include="Assets\IMG\detailbig2.jpg" />
+    <Content Include="Assets\IMG\detailbig3.jpg" />
+    <Content Include="Assets\IMG\detailsquare.jpg" />
+    <Content Include="Assets\IMG\detailsquare2.jpg" />
+    <Content Include="Assets\IMG\detailsquare3.jpg" />
+    <Content Include="Assets\IMG\getinspired1.jpg" />
+    <Content Include="Assets\IMG\getinspired2.jpg" />
+    <Content Include="Assets\IMG\getinspired3.jpg" />
+    <Content Include="Assets\IMG\grabbing.png" />
+    <Content Include="Assets\IMG\logo-small.png" />
+    <Content Include="Assets\IMG\logo.png" />
+    <Content Include="Assets\IMG\main-slider1.jpg" />
+    <Content Include="Assets\IMG\main-slider2.jpg" />
+    <Content Include="Assets\IMG\main-slider3.jpg" />
+    <Content Include="Assets\IMG\main-slider4.jpg" />
+    <Content Include="Assets\IMG\product1.jpg" />
+    <Content Include="Assets\IMG\product1_2.jpg" />
+    <Content Include="Assets\IMG\product2.jpg" />
+    <Content Include="Assets\IMG\product2_2.jpg" />
+    <Content Include="Assets\IMG\product3.jpg" />
+    <Content Include="Assets\IMG\product3_2.jpg" />
+    <Content Include="Assets\IMG\slider1.jpg" />
+    <Content Include="Assets\IMG\slider2.jpg" />
+    <Content Include="Assets\IMG\slider3.jpg" />
+    <Content Include="Assets\IMG\slider4.jpg" />
+    <Content Include="Assets\JS\Client\bootstrap-hover-dropdown.js" />
+    <Content Include="Assets\JS\Client\front.js" />
+    <Content Include="Assets\JS\Client\jquery.cookie.js" />
+    <Content Include="Assets\JS\Client\owl.carousel.min.js" />
+    <Content Include="Assets\JS\Client\waypoints.min.js" />
+    <Content Include="Content\Site.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
-    <Content Include="Content\Site.css" />
-    <Content Include="Scripts\bootstrap.js" />
-    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Assets\CSS\Site.css" />
+    <Content Include="Assets\JS\angular-cookies.min.js" />
+    <Content Include="Assets\JS\angular-route.min.js" />
+    <Content Include="Assets\JS\angular.min.js" />
+    <Content Include="Assets\JS\bootstrap.js" />
+    <Content Include="Assets\JS\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
-    <Content Include="Scripts\jquery-1.10.2.js" />
-    <Content Include="Scripts\jquery-1.10.2.min.js" />
-    <None Include="Scripts\jquery.validate-vsdoc.js" />
-    <Content Include="Scripts\jquery.validate.js" />
-    <Content Include="Scripts\jquery.validate.min.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
-    <Content Include="Scripts\modernizr-2.6.2.js" />
-    <Content Include="Scripts\respond.js" />
-    <Content Include="Scripts\respond.min.js" />
+    <Content Include="Assets\FONT\flexslider-icon.eot" />
+    <Content Include="Assets\FONT\flexslider-icon.ttf" />
+    <Content Include="Assets\FONT\flexslider-icon.woff" />
+    <Content Include="Assets\FONT\fontawesome-webfont.eot" />
+    <Content Include="Assets\FONT\fontawesome-webfont.ttf" />
+    <Content Include="Assets\FONT\fontawesome-webfont.woff" />
+    <Content Include="Assets\FONT\FontAwesome.otf" />
+    <None Include="Assets\JS\jquery-1.10.2.intellisense.js" />
+    <Content Include="Assets\JS\jquery-1.10.2.js" />
+    <Content Include="Assets\JS\jquery-1.10.2.min.js" />
+    <None Include="Assets\JS\jquery.validate-vsdoc.js" />
+    <Content Include="Assets\JS\jquery.validate.js" />
+    <Content Include="Assets\JS\jquery.validate.min.js" />
+    <Content Include="Assets\JS\jquery.validate.unobtrusive.js" />
+    <Content Include="Assets\JS\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Assets\JS\modernizr-2.6.2.js" />
+    <Content Include="Assets\JS\respond.js" />
+    <Content Include="Assets\JS\respond.min.js" />
+    <Content Include="Scripts\Admin\app.config.js" />
+    <Content Include="Scripts\Admin\app.js" />
+    <Content Include="Scripts\Client\app.config.js" />
+    <Content Include="Scripts\Client\app.js" />
+    <Content Include="Scripts\Client\Controller\Index.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -233,17 +296,33 @@
     <Content Include="Views\Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Client\_ViewStart.cshtml" />
+    <Content Include="Views\Client\Shared\Error.cshtml" />
+    <Content Include="Views\Layouts\_Layout.cshtml" />
     <Content Include="Views\Client\Home\About.cshtml" />
     <Content Include="Views\Client\Home\Contact.cshtml" />
     <Content Include="Views\Client\Home\Index.cshtml" />
+    <Content Include="Views\Admin\_ViewStart.cshtml" />
+    <Content Include="Views\Admin\Home\About.cshtml" />
+    <Content Include="Views\Admin\Home\Contact.cshtml" />
+    <Content Include="Views\Admin\Home\Index.cshtml" />
+    <Content Include="Views\Admin\Shared\Error.cshtml" />
+    <Content Include="Views\Layouts\_Layout_Admin.cshtml" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Client\Shared\Header.cshtml" />
+    <Content Include="Views\Client\Shared\Footer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Controllers\Admin\" />
-    <Folder Include="Views\Admin\" />
+    <Folder Include="Scripts\Admin\Controller\" />
+    <Folder Include="Scripts\Admin\Factory\" />
+    <Folder Include="Scripts\Admin\Provider\" />
+    <Folder Include="Scripts\Admin\Shared\" />
+    <Folder Include="Scripts\Client\Factory\" />
+    <Folder Include="Scripts\Client\Provider\" />
+    <Folder Include="Scripts\Client\Shared\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -256,7 +335,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <Content Include="Assets\JS\jquery-1.10.2.min.map" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

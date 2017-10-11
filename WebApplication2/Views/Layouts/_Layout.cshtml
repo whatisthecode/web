@@ -1,0 +1,31 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="robots" content="all,follow">
+    <meta name="googlebot" content="index,follow,snippet,archive">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Obaju e-commerce template">
+    <meta name="author" content="Ondrej Svestka | ondrejsvestka.cz">
+    <meta name="keywords" content="">
+
+    <title>@ViewBag.Title</title>
+
+    <meta name="keywords" content="">
+
+    <link href='http://fonts.googleapis.com/css?family=Roboto:400,500,700,300,100' rel='stylesheet' type='text/css'>
+
+    <link rel="shortcut icon" href="favicon.png">
+
+    @Styles.Render("~/Content/client_template")
+</head>
+<body data-ng-app="TMDT-client">
+    @Html.Partial("~/Views/Client/Shared/Header.cshtml")
+    @RenderBody()
+    @Html.Partial("~/Views/Client/Shared/Footer.cshtml")
+    @Scripts.Render("~/bundles/angularjs")
+    @Scripts.Render("~/bundles/client_js")
+    @Scripts.Render("~/bundles/client_controller")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
