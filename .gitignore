@@ -2,6 +2,7 @@
 # Not need #
 ###################
 .vs/WebApplication2/
+WebApplication2/Web.config
 ###################
 # compiled source #
 ###################
