@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LaptopWebsite.Models.Mapping;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -15,5 +16,6 @@ namespace WebApplication2.DAO
         void updateUser(User user);
         void saveUser();
         void dispose();
+        PagedResult<User> PageReview(int index, int PageSize, string columnname);
     }
 }

@@ -166,6 +166,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\API\CategoryController.cs" />
+    <Compile Include="Controllers\API\UserController.cs" />
     <Compile Include="Controllers\Base.cs" />
     <Compile Include="Controllers\Client\HomeController.cs" />
     <Compile Include="DAO\Base.cs" />

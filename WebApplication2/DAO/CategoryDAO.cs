@@ -20,5 +20,6 @@ namespace WebApplication2.DAO
         Boolean check(String column);
         PagedResult<Category> PageView(int pageIndex, int pageSize, string columnName);
         void dispose();
+
     }
 }

@@ -83,6 +83,38 @@ namespace WebApplication2.Controllers.API
             response.status = "Xóa loại sản phẩm thành công";
             return Content<Response>(HttpStatusCode.OK, response);
         }
+        [Route("api/category/getby/{id}")]
+        [HttpGet]
+        public IHttpActionResult getCategory(short id)
+        {
+            Category categorytemp = this.categoryDao.getCategoryById(id);
+            Response response = new Response();
+            if (categorytemp == null)
+            {
+                response.code = "404";
+                response.status = ("Không tìm thấy loại sản phẩm");
+                return Content<Response>(HttpStatusCode.NotFound, response);
+            }
+            
+                response.code="200";
+                response.status = "Loại sản phẩm cần tìm";
+                response.results = categorytemp;
+                return Content<Response>(HttpStatusCode.OK, response);
+
+        }
+        [Route("api/category")]
+        [HttpGet]
+        public IHttpActionResult getCategories()
+        {
+            IEnumerable<Category> categories = this.categoryDao.getCategory();
+            Response response = new Response();
+            response.code = "200";
+            response.status = "Thành công";
+            response.results = categories.ToList();
+            return Content<Response>(HttpStatusCode.OK, response);
+
+        }
+        
 
     }
 }
