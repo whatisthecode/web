@@ -9,12 +9,17 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using WebApplication2.App_Start;
+using WebApplication2.DAO;
 
 namespace WebApplication2.Providers
 {
     public class ApplicationOAuthProvider : OAuthAuthorizationServerProvider
     {
         private readonly string _publicClientId;
+
+        private UserDAO userDao;
+
+
 
         public ApplicationOAuthProvider(string publicClientId)
         {

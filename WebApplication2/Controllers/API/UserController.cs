@@ -36,5 +36,17 @@ namespace WebApplication2.Controllers.API
             response.results = usertemp;
             return Content<Response>(HttpStatusCode.OK, response);
         }
+        [Route("api/user/{id}")]
+        [HttpGet]
+        public IHttpActionResult getusers()
+        {
+            IEnumerable<User> users = this.userdao.getUsers().ToList();
+            Response response = new Response();
+            response.code = "200";
+            response.status= "Danh sách các user hiện tại :";
+            response.results = users;
+
+            return Content<Response>(HttpStatusCode.OK, response);
+        }
     }
 }
