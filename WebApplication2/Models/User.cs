@@ -30,5 +30,10 @@ namespace WebApplication2.Models
             this.identityNumber = identityNumber;
             this.type = type;
         }
+
+        public User()
+        {
+
+        }
     }
 }

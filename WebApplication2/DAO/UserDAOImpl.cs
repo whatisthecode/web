@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using LaptopWebsite.Models.Mapping;
 using WebApplication2.Models;
 
 namespace WebApplication2.DAO
@@ -45,6 +46,46 @@ namespace WebApplication2.DAO
         public void dispose()
         {
             base.Dispose();
+        }
+
+
+   
+        public PagedResult<User> Pageview(int pageindex, int pagesize, string orderby, Boolean ascending)
+        {
+            var query = from c in base.Dbset() select c;
+            if (query != null && ascending)
+            {
+                switch (orderby)
+                {
+                    case "id":
+                        query = query.OrderBy(n=>n.id);
+                        break;
+                }
+            }
+            if (query != null && !ascending)
+            {
+                switch (orderby)
+                {
+                    case "id":
+                        query = query.OrderByDescending(d => d.id);
+                        break;
+                }
+            }
+            PagedResult<User> pv = base.PageView(query, pageindex, pagesize);
+            return pv;
+        }
+
+        public PagedResult<User> PageReview(int index, int PageSize, string columnname)
+        {
+            var query = from c in base.Dbset() select c;
+            switch (columnname)
+            {
+                case "id":
+                    query = query.OrderBy(n => n.id);
+                    break;
+            }
+            PagedResult<User> pv = base.PageView(query, index, PageSize);
+            return pv;
         }
     }
 }
