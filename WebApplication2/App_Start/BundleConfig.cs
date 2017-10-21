@@ -27,6 +27,8 @@ namespace WebApplication2
                         "~/Assets/JS/angular-cookies.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/client_controller").Include(
+                       "~/Scripts/Client/Shared/Top.js",
+                       "~/Scripts/Client/Shared/Error.js",
                        "~/Scripts/Client/Controller/Index.js"));
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're

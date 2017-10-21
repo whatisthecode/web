@@ -199,7 +199,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\CSS\bootstrap.css" />
     <Content Include="Assets\CSS\bootstrap.min.css" />
     <Content Include="Assets\CSS\Client\animate.min.css" />
     <Content Include="Assets\CSS\Client\custom.css" />
@@ -243,6 +242,7 @@
     <Content Include="Assets\IMG\slider2.jpg" />
     <Content Include="Assets\IMG\slider3.jpg" />
     <Content Include="Assets\IMG\slider4.jpg" />
+    <Content Include="Assets\JS\bootstrap.min.js" />
     <Content Include="Assets\JS\Client\bootstrap-hover-dropdown.js" />
     <Content Include="Assets\JS\Client\front.js" />
     <Content Include="Assets\JS\Client\jquery.cookie.js" />
@@ -257,7 +257,6 @@
     <Content Include="Assets\JS\angular-route.min.js" />
     <Content Include="Assets\JS\angular.min.js" />
     <Content Include="Assets\JS\bootstrap.js" />
-    <Content Include="Assets\JS\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -284,6 +283,10 @@
     <Content Include="Scripts\Client\app.config.js" />
     <Content Include="Scripts\Client\app.js" />
     <Content Include="Scripts\Client\Controller\Index.js" />
+    <Content Include="Scripts\Client\Shared\Error.js" />
+    <Content Include="Scripts\Client\Shared\Top.js" />
+    <Content Include="Scripts\Client\View\error.html" />
+    <Content Include="Scripts\Client\View\index.html" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -312,6 +315,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Client\Shared\Header.cshtml" />
     <Content Include="Views\Client\Shared\Footer.cshtml" />
+    <Content Include="Views\Client\Shared\Top.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -322,7 +326,6 @@
     <Folder Include="Scripts\Admin\Shared\" />
     <Folder Include="Scripts\Client\Factory\" />
     <Folder Include="Scripts\Client\Provider\" />
-    <Folder Include="Scripts\Client\Shared\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
