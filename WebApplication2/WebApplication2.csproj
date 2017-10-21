@@ -199,6 +199,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\API\AccountController.cs" />
     <Compile Include="Controllers\API\CategoryController.cs" />
+    <Compile Include="Controllers\API\ProductController.cs" />
     <Compile Include="Controllers\API\UserController.cs" />
     <Compile Include="Controllers\Base.cs" />
     <Compile Include="Controllers\Client\HomeController.cs" />
@@ -208,6 +209,8 @@
     <Compile Include="DAO\CategoryDAOImpl.cs" />
     <Compile Include="DAO\DatabaseFactory.cs" />
     <Compile Include="DAO\DBContext.cs" />
+    <Compile Include="DAO\ProductDAO.cs" />
+    <Compile Include="DAO\ProductDAOImpl.cs" />
     <Compile Include="DAO\UserTypeDAO.cs" />
     <Compile Include="DAO\UserDAO.cs" />
     <Compile Include="DAO\UserTypeDAOImpl.cs" />
