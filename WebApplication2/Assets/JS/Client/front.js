@@ -66,7 +66,7 @@ function productDetailGallery(confDetailSwitch) {
 
     function autoSwitch() {
 	var nextThumb = $('.thumb.active').closest('div').next('div').find('.thumb');
-	if (nextThumb.length == 0) {
+	if (nextThumb.length === 0) {
 	    nextThumb = $('.thumb:first');
 	}
 	switchImage(nextThumb);
@@ -143,7 +143,7 @@ function carousels() {
 	singleItem: true,
 	afterInit: ''
     });
-
+    console.log($('.product-slider'));
     $('.product-slider').owlCarousel({
 	navigation: true, // Show next and prev buttons
 	slideSpeed: 300,
@@ -224,7 +224,7 @@ $.fn.alignElementsSameHeight = function() {
 
 	children.each(function() {
 	    if ($(this).innerHeight() > maxHeight) {
-		maxHeight = $(this).innerHeight();
+		    maxHeight = $(this).innerHeight();
 	    }
 	});
 

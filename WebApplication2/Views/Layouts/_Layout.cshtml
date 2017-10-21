@@ -12,7 +12,7 @@
     <title>@ViewBag.Title</title>
 
     <meta name="keywords" content="">
-
+    <base href="/" />
     <link href='http://fonts.googleapis.com/css?family=Roboto:400,500,700,300,100' rel='stylesheet' type='text/css'>
 
     <link rel="shortcut icon" href="favicon.png">
@@ -20,8 +20,11 @@
     @Styles.Render("~/Content/client_template")
 </head>
 <body data-ng-app="TMDT-client">
+    @Html.Partial("~/Views/Client/Shared/Top.cshtml")
     @Html.Partial("~/Views/Client/Shared/Header.cshtml")
-    @RenderBody()
+    <div id="all">
+        @RenderBody()
+    </div>
     @Html.Partial("~/Views/Client/Shared/Footer.cshtml")
     @Scripts.Render("~/bundles/angularjs")
     @Scripts.Render("~/bundles/client_js")
