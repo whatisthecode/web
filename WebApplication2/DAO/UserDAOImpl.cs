@@ -87,5 +87,10 @@ namespace WebApplication2.DAO
             PagedResult<User> pv = base.PageView(query, index, PageSize);
             return pv;
         }
+
+        public User validateUser(string username, string password)
+        {
+            return null;
+        }
     }
 }
