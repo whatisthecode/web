@@ -2,3 +2,10 @@
 span.hidden-sm{
     display:inline-block !important;
 }
+#error h1 {
+    font-size: 128px;
+}
+#error #e404 h1 {
+    color: #e73827;
+}
+
