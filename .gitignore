@@ -1,7 +1,9 @@
 ﻿###################
-# Not need #
+#  system files   #
 ###################
+WebApplication2/Web.config
 .vs/WebApplication2/
+.vs/config/
 ###################
 # compiled source #
 ###################

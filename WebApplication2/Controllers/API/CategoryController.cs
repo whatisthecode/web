@@ -9,7 +9,7 @@ using WebApplication2.Models.Mapping;
 
 namespace WebApplication2.Controllers.API
 {
-    [Authorize]
+    //[Authorize]
     public class CategoryController : ApiController
     {
         private CategoryDAO categoryDao;
@@ -24,7 +24,7 @@ namespace WebApplication2.Controllers.API
         public IHttpActionResult insert([FromBody]Category category)
         {
             Response response = new Response();
-            if (this.categoryDao.checkExist(category) != null)
+            if (this.categoryDao.findUnique(category) != null)
             {
                 response = new Response("409", "Loại sản phẩm này đã tồn tại", null);
                 return Content<Response>(HttpStatusCode.Conflict, response);
@@ -42,7 +42,7 @@ namespace WebApplication2.Controllers.API
         [HttpPut]
         public IHttpActionResult update([FromBody]Category category)
         {
-            Category category1 = this.categoryDao.checkExist(category);
+            Category category1 = this.categoryDao.findUnique(category);
             Response response = new Response();
             if (category1 != null && category1.id != category.id)
             {
@@ -84,7 +84,7 @@ namespace WebApplication2.Controllers.API
             response.status = "Xóa loại sản phẩm thành công";
             return Content<Response>(HttpStatusCode.OK, response);
         }
-        [Route("api/category/getby/{id}")]
+        [Route("api/category/{id}")]
         [HttpGet]
         public IHttpActionResult getCategory(short id)
         {
@@ -101,7 +101,7 @@ namespace WebApplication2.Controllers.API
                 response.status = "Loại sản phẩm cần tìm";
                 response.results = categorytemp;
                 return Content<Response>(HttpStatusCode.OK, response);
-
+                
         }
         [Route("api/category")]
         [HttpGet]
@@ -115,7 +115,5 @@ namespace WebApplication2.Controllers.API
             return Content<Response>(HttpStatusCode.OK, response);
 
         }
-        
-
     }
 }

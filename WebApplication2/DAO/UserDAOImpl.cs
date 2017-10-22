@@ -52,7 +52,7 @@ namespace WebApplication2.DAO
    
         public PagedResult<User> Pageview(int pageindex, int pagesize, string orderby, Boolean ascending)
         {
-            var query = from c in base.Dbset() select c;
+            var query = from c in base.getContext().users select c;
             if (query != null && ascending)
             {
                 switch (orderby)
@@ -77,7 +77,7 @@ namespace WebApplication2.DAO
 
         public PagedResult<User> PageReview(int index, int PageSize, string columnname)
         {
-            var query = from c in base.Dbset() select c;
+            var query = from c in base.getContext().users select c;
             switch (columnname)
             {
                 case "id":
@@ -86,6 +86,19 @@ namespace WebApplication2.DAO
             }
             PagedResult<User> pv = base.PageView(query, index, PageSize);
             return pv;
+        }
+
+        public User validateUser(string username, string password)
+        {
+            var query = from u in base.getContext().users
+                        where u.username == username && u.password == password
+                        select u;
+            User user = base.findUnique(query);
+            if(query == null)
+            {
+                return null;
+            }
+            return user;
         }
     }
 }
