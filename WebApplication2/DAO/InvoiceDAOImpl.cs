@@ -21,7 +21,7 @@ namespace WebApplication2.DAO
 
         public Invoice checkExist(Invoice invoice)
         {
-            Invoice invoice1 = base.Dbset().Where(c => c.code == invoice.code).FirstOrDefault();
+            Invoice invoice1 = base.getContext().invoices.Where(c => c.code == invoice.code).FirstOrDefault();
             if (invoice1 != null)
             {
                 return invoice1;
@@ -57,7 +57,7 @@ namespace WebApplication2.DAO
 
         public PagedResult<Invoice> PageView(int pageIndex, int pageSize, string columnName)
         {
-            var query = from c in base.Dbset() select c;
+            var query = from c in base.getContext().invoices select c;
             switch (columnName)
             {
                 case "name":

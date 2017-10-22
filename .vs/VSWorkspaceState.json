@@ -2,7 +2,10 @@
   "ExpandedNodes": [
     "",
     "\\WebApplication2",
-    "\\WebApplication2\\DAO"
+    "\\WebApplication2\\App_Start",
+    "\\WebApplication2\\DAO",
+    "\\WebApplication2\\Providers"
   ],
+  "SelectedNode": "\\WebApplication2\\App_Start\\IdentityConfig.cs",
   "PreviewInSolutionExplorer": false
 }

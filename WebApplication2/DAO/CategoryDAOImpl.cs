@@ -64,8 +64,8 @@ namespace WebApplication2.DAO
         public IEnumerable<Product> find(Int16 categoryId)
         {
             List<Int16> cateProds = (from catePro in base.getContext().categoryProducts
-                         where categoryId == catePro.category
-                         select catePro.product).ToList<Int16>();
+                         where categoryId == catePro.categoryId
+                         select catePro.id).ToList<Int16>();
 
             var query = (from pro in base.getContext().products
                          where cateProds.Contains(pro.id)

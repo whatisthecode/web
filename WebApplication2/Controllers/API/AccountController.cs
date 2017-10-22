@@ -78,7 +78,7 @@ namespace WebApplication2.Controllers.API
         [Route("ManageInfo")]
         public async Task<ManageInfoViewModel> GetManageInfo(string returnUrl, bool generateState = false)
         {
-            IdentityUser user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            IdentityUser user = null;/*await UserManager.FindByIdAsync(User.Identity.GetUserId());*/
 
             if (user == null)
             {
