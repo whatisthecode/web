@@ -12,7 +12,8 @@ namespace WebApplication2.Models
         public Int16 id { get; set; }
         public String code { get; set; }
         public String name { get; set; }
-        public ICollection<CategoryProduct> products { get; set; }
+        public virtual ICollection<CategoryProduct> products { get; set; }
+        public ICollection<Product> product1s;
         public Category(string code, string name)
         {
             this.code = code;

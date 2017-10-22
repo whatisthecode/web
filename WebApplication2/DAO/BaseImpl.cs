@@ -20,9 +20,9 @@ namespace WebApplication2.DAO
             this.context = DatabaseFactory.context;
         }
 
-        public DbSet<T> Dbset()
+        public DBContext getContext()
         {
-            return this.context.Set<T>();
+            return this.context;
         }
 
         public void detach(T entity)
@@ -101,6 +101,7 @@ namespace WebApplication2.DAO
             var columns = typeof(T).GetProperties().Select(property => property.Name).ToArray();
             return columns.Contains(column);
         }
+
         public Boolean checkColumnsExist(Array columns)
         {
             var length = columns.Length;
@@ -112,6 +113,16 @@ namespace WebApplication2.DAO
                 }
             }
             return true;
+        }
+
+        public T findUnique(IQueryable<T> query)
+        {
+            return query.FirstOrDefault();
+        }
+
+        public IEnumerable<T> find(IQueryable<T> query)
+        {
+            return query.ToList();
         }
     }
 }

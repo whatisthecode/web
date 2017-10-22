@@ -9,10 +9,13 @@ namespace WebApplication2.DAO
 {
     public class CategoryDAOImpl : BaseImpl<Category, Int16>, CategoryDAO, IDisposable
     {
+        protected ProductDAO productDAO;
+
         public CategoryDAOImpl() : base()
         {
-
+            productDAO = new ProductDAOImpl();
         }
+
         public void deleteCategory(Int16 CategoryId)
         {
             base.delete(CategoryId);
@@ -48,18 +51,33 @@ namespace WebApplication2.DAO
         {
             base.Dispose();
         }
-        public Category checkExist(Category category)
+
+        public Category findUnique(Category category)
         {
-            Category category1 = base.Dbset().Where(c => c.code == category.code || c.name == category.name).FirstOrDefault();
-            if (category1 != null ){
-                return category1;
-            }
-            base.detach(category);
-            return null;
+            var query = from q in base.getContext().categories select q;
+            query = query.Where(q => q.code == category.code);
+            Category cate = base.findUnique(query);
+            return cate;
         }
+
+        //Testing
+        public IEnumerable<Product> find(Int16 categoryId)
+        {
+            List<Int16> cateProds = (from catePro in base.getContext().categoryProducts
+                         where categoryId == catePro.category
+                         select catePro.product).ToList<Int16>();
+
+            var query = (from pro in base.getContext().products
+                         where cateProds.Contains(pro.id)
+                         select pro);
+
+            List < Product > products = query.ToList();
+            return products;
+        }
+
         public PagedResult<Category> PageView(int pageIndex, int pageSize, string columnName)
         {
-            var query = from c in base.Dbset() select c;
+            var query = from c in base.getContext().categories select c;
             switch (columnName)
             {
                 case "name":
@@ -76,7 +94,7 @@ namespace WebApplication2.DAO
         }
         public PagedResult<Category> PageView(int pageIndex, int pageSize, string orderBy, Boolean ascending)
         {
-            var query = from c in base.Dbset() select c;
+            var query = from c in base.getContext().categories select c;
             if (orderBy != null && ascending)
             {
                 switch (orderBy)

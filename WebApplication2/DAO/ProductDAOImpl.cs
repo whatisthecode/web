@@ -36,7 +36,11 @@ namespace WebApplication2.DAO
         }
         public Product checkexist(Product product)
         {
-            Product product2compare = base.Dbset().Where(p=> p.code == product.code || p.name== product.name || p.shortDescription==product.longDescription).FirstOrDefault();
+<<<<<<< HEAD
+            Product product2compare = base.Dbset().Where(p=> p.code == product.code ).FirstOrDefault();
+=======
+            Product product2compare = base.getContext().products.Where(p=> p.code == product.code || p.name== product.name || p.shortDescription==product.longDescription).FirstOrDefault();
+>>>>>>> ed6761a2fa49829da336113a63180e073dbc8faf
             if (product2compare != null)
             {
                 return product;
@@ -51,7 +55,7 @@ namespace WebApplication2.DAO
         
         public PagedResult<Product> PageView(Int16 indexnum, Int16 pagesize, String Orderby)
         {
-            var query = from c in base.Dbset() select c;
+            var query = from c in base.getContext().products select c;
             switch (Orderby)
             {
                 case "name":
@@ -66,7 +70,7 @@ namespace WebApplication2.DAO
 
         public PagedResult<Product> PageView(short indexnum, short pagesize, string Orderby, bool ascending)
         {
-            var query = from c in base.Dbset() select c;
+            var query = from c in base.getContext().products select c;
             if (query != null && ascending)
             {
                 switch (Orderby)
