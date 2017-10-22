@@ -9,12 +9,18 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using WebApplication2.App_Start;
+using WebApplication2.DAO;
+using WebApplication2.Models;
 
 namespace WebApplication2.Providers
 {
     public class ApplicationOAuthProvider : OAuthAuthorizationServerProvider
     {
         private readonly string _publicClientId;
+
+        private UserDAO userDao;
+
+
 
         public ApplicationOAuthProvider(string publicClientId)
         {
@@ -30,7 +36,10 @@ namespace WebApplication2.Providers
         {
             var userManager = context.OwinContext.GetUserManager<ApplicationUserManager>();
 
-            ApplicationUser user = await userManager.FindAsync(context.UserName, context.Password);
+            //ApplicationUser user = await userManager.FindAsync(context.UserName, context.Password);
+
+            UserDAO userDao = new UserDAOImpl();
+            User user = userDao.validateUser(context.UserName, context.Password);
 
             if (user == null)
             {
@@ -43,7 +52,7 @@ namespace WebApplication2.Providers
             ClaimsIdentity cookiesIdentity = await user.GenerateUserIdentityAsync(userManager,
                 CookieAuthenticationDefaults.AuthenticationType);
 
-            AuthenticationProperties properties = CreateProperties(user.UserName);
+            AuthenticationProperties properties = CreateProperties(user.username);
             AuthenticationTicket ticket = new AuthenticationTicket(oAuthIdentity, properties);
             context.Validated(ticket);
             context.Request.Context.Authentication.SignIn(cookiesIdentity);

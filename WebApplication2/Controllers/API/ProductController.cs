@@ -16,7 +16,12 @@ namespace WebApplication2.Controllers.API
 
         public ProductController()
         {
+<<<<<<< HEAD
             this.productDao = new ProductDAOImpl();
+=======
+            Response response = new Response();
+            return null;
+>>>>>>> ed6761a2fa49829da336113a63180e073dbc8faf
         }
 
         [Route("api/product")]
