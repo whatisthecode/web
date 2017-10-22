@@ -13,13 +13,13 @@ namespace WebApplication2.Controllers.API
     public class ProductController : ApiController
     {
         private ProductDAO productdao;
-        [Route("api/product")]
+        /*[Route("api/product")]
         [HttpPost]
-        IHttpActionResult insertnewProduct([FromBody]Product product)
+        IHttpActionResult insertNewProduct([FromBody]Product product)
         {
             Response response = new Response();
             return 1;
-        }
+        }*/
     
 
 

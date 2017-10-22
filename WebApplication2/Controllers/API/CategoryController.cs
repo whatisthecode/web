@@ -9,7 +9,7 @@ using WebApplication2.Models.Mapping;
 
 namespace WebApplication2.Controllers.API
 {
-    [Authorize]
+    //[Authorize]
     public class CategoryController : ApiController
     {
         private CategoryDAO categoryDao;
@@ -84,7 +84,7 @@ namespace WebApplication2.Controllers.API
             response.status = "Xóa loại sản phẩm thành công";
             return Content<Response>(HttpStatusCode.OK, response);
         }
-        [Route("api/category/getby/{id}")]
+        [Route("api/category/{id}")]
         [HttpGet]
         public IHttpActionResult getCategory(short id)
         {

@@ -25,7 +25,9 @@ namespace WebApplication2.DAO
 
         public Category getCategoryById(Int16 categoryId)
         {
-            return base.getById(categoryId);
+            Category category = base.getById(categoryId);
+            base.context.Entry<Category>(category).Collection(c => c.products).Load();
+            return category;
         }
         public void insertCategory(Category category)
         {

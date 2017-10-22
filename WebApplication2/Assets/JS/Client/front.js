@@ -143,7 +143,7 @@ function carousels() {
 	singleItem: true,
 	afterInit: ''
     });
-    console.log($('.product-slider'));
+
     $('.product-slider').owlCarousel({
 	navigation: true, // Show next and prev buttons
 	slideSpeed: 300,
