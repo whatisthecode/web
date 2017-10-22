@@ -21,5 +21,9 @@ namespace WebApplication2.Models
             this.buyer = buyer;
             this.total = total;
         }
+        public Invoice()
+        {
+
+        }
     }
 }
