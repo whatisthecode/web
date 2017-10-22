@@ -30,10 +30,6 @@ namespace WebApplication2.Models
             this.longDescription = longDescription;
             this.createdBy = createdBy;
         }
-<<<<<<< HEAD
-=======
-
->>>>>>> ed6761a2fa49829da336113a63180e073dbc8faf
         public Product()
         {
 
