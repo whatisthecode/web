@@ -9,6 +9,7 @@ namespace WebApplication2.Models
     public class Invoice : Base
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public Int16 status { get; set; }
         public Int16 id { get; set; }
         public String code { get; set; }
         [ForeignKey("User")]
@@ -20,6 +21,7 @@ namespace WebApplication2.Models
             this.code = code;
             this.buyer = buyer;
             this.total = total;
+            this.status = 0;
         }
     }
 }

@@ -12,15 +12,37 @@ namespace WebApplication2.Controllers.API
 {
     public class ProductController : ApiController
     {
-        private ProductDAO productdao;
+         private ProductDAO productDao;
+
+        public ProductController()
+        {
+            this.productDao = new ProductDAOImpl();
+        }
+
         [Route("api/product")]
         [HttpPost]
-        IHttpActionResult insertnewProduct([FromBody]Product product)
-        {
-            Response response = new Response();
-            return 1;
-        }
-    
+         public IHttpActionResult insertNewProduct([FromBody]Product product)
+         {
+             Response response = new Response();
+             Product productcheck = this.productDao.checkexist(product);
+            if (productcheck != null)
+            {
+                response.code = "409";
+                response.status = "Trùng sản phẩm, xin nhập lại";
+                return Content<Response>(HttpStatusCode.Conflict, response);
+
+            }
+            else
+            {
+                this.productDao.insertProduct(product);
+                this.productDao.save();
+                response.code = "200";
+                response.results = "Thêm sản phẩm thành công";
+                return Content<Response>(HttpStatusCode.OK, response);
+
+            }
+         }
+
 
 
 

@@ -10,6 +10,7 @@ namespace WebApplication2.Models
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Int16 id { get; set; }
+        Boolean status { get; set; }
         public String code { get; set; }
         public String name { get; set; }
         [Column("short_description")]
@@ -28,6 +29,10 @@ namespace WebApplication2.Models
             this.shortDescription = shortDescription;
             this.longDescription = longDescription;
             this.createdBy = createdBy;
+        }
+        public Product()
+        {
+
         }
     }
 }
