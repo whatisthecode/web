@@ -23,5 +23,9 @@ namespace WebApplication2.Models
             this.total = total;
             this.status = 0;
         }
+        public Invoice()
+        {
+
+        }
     }
 }
