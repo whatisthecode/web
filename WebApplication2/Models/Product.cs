@@ -29,5 +29,10 @@ namespace WebApplication2.Models
             this.longDescription = longDescription;
             this.createdBy = createdBy;
         }
+
+        public Product()
+        {
+
+        }
     }
 }

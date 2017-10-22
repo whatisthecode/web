@@ -22,6 +22,7 @@ namespace WebApplication2
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new CustomViewEngine());
+            GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
         }
     }
 }

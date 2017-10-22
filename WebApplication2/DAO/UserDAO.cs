@@ -17,5 +17,6 @@ namespace WebApplication2.DAO
         void saveUser();
         void dispose();
         PagedResult<User> PageReview(int index, int PageSize, string columnname);
+        User validateUser(string username, string password);
     }
 }

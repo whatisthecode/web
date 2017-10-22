@@ -18,7 +18,7 @@ namespace WebApplication2.Controllers.API
         IHttpActionResult insertnewProduct([FromBody]Product product)
         {
             Response response = new Response();
-            return 1;
+            return null;
         }
     
 

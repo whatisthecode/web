@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
@@ -11,6 +12,7 @@ namespace WebApplication2.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Int16 id { get; set; }
         public String username { get; set; }
+        [DataType(DataType.Password)]
         public String password { get; set; }
         public String email { get; set; }
         public DateTime dob { get; set; }
