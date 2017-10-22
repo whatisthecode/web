@@ -331,7 +331,17 @@
     <Content Include="Scripts\Admin\app.js" />
     <Content Include="Scripts\Client\app.config.js" />
     <Content Include="Scripts\Client\app.js" />
+    <Content Include="Scripts\Client\Controller\CartController.js" />
+    <Content Include="Scripts\Client\Controller\Category.js" />
+    <Content Include="Scripts\Client\Controller\CategoryDetail.js" />
+    <Content Include="Scripts\Client\Controller\Checkout.js" />
     <Content Include="Scripts\Client\Controller\Index.js" />
+    <Content Include="Scripts\Client\Controller\Invoice.js" />
+    <Content Include="Scripts\Client\Controller\InvoiceDetail.js" />
+    <Content Include="Scripts\Client\Controller\Login.js" />
+    <Content Include="Scripts\Client\Controller\Product.js" />
+    <Content Include="Scripts\Client\Controller\ProductDetail.js" />
+    <Content Include="Scripts\Client\Controller\Register.js" />
     <Content Include="Scripts\Client\Shared\Error.js" />
     <Content Include="Scripts\Client\Shared\Top.js" />
     <Content Include="Scripts\Client\View\error.html" />

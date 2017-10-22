@@ -12,16 +12,11 @@ namespace WebApplication2.Controllers.API
 {
     public class ProductController : ApiController
     {
-         private ProductDAO productDao;
+        private ProductDAO productDao;
 
         public ProductController()
         {
-<<<<<<< HEAD
             this.productDao = new ProductDAOImpl();
-=======
-            Response response = new Response();
-            return null;
->>>>>>> ed6761a2fa49829da336113a63180e073dbc8faf
         }
 
         [Route("api/product")]
@@ -47,9 +42,5 @@ namespace WebApplication2.Controllers.API
 
             }
          }
-
-
-
-
     }
 }
