@@ -103,7 +103,7 @@ namespace WebApplication2.Controllers.API
                 return Content<Response>(HttpStatusCode.OK, response);
                 
         }
-        [Route("api/category")]
+        [Route("api/category/")]
         [HttpGet]
         public IHttpActionResult getCategories()
         {

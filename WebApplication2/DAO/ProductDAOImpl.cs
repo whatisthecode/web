@@ -36,7 +36,7 @@ namespace WebApplication2.DAO
         }
         public Product checkexist(Product product)
         {
-            Product product2compare = base.context.products.Where(p=> p.code == product.code || p.name== product.name || p.shortDescription==product.longDescription).FirstOrDefault();
+            Product product2compare = base.context.products.Where(p=> p.code == product.code).FirstOrDefault();
             if (product2compare != null)
             {
                 return product;
