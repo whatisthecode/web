@@ -114,15 +114,5 @@ namespace WebApplication2.DAO
             }
             return true;
         }
-
-        public T findUnique(IQueryable<T> query)
-        {
-            return query.FirstOrDefault();
-        }
-
-        public IEnumerable<T> find(IQueryable<T> query)
-        {
-            return query.ToList();
-        }
     }
 }

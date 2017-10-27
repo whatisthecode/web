@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace WebApplication2.Models
 {
@@ -48,7 +49,18 @@ namespace WebApplication2.Models
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            public DateTime dob { get; set; }
+            [Required]
+            public string firstName { get; set; }
+            [Required]
+            public string lastName { get; set; }
+            [Required]
+            public string identityNumber { get; set; }
+            [Required]
+            public Int16 type { get; set; }
         }
+    }
 
         public class RegisterExternalBindingModel
         {
@@ -81,5 +93,4 @@ namespace WebApplication2.Models
             [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
         }
-    }
 }

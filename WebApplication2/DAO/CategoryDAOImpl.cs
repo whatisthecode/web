@@ -56,7 +56,7 @@ namespace WebApplication2.DAO
         {
             var query = from q in base.getContext().categories select q;
             query = query.Where(q => q.code == category.code);
-            Category cate = base.findUnique(query);
+            Category cate = query.FirstOrDefault();
             return cate;
         }
 
