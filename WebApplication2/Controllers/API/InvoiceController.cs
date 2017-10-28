@@ -60,7 +60,6 @@ namespace WebApplication2.Controllers.API
                 invoice1.code = invoice.code;
                 invoice1.buyer = invoice.buyer;
                 invoice1.total = invoice.total;
-                invoice1.User = invoice.User;
                 this.invoiceDao.updateInvoice(invoice1);
                 this.invoiceDao.saveInvoice();
                 response = new Response("200", "Cập nhật hóa đơn thành công", invoice);

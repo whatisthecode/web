@@ -11,8 +11,6 @@ namespace WebApplication2.DAO
     {
         IEnumerable<T> get();
         T getById(Int16 id);
-        T findUnique(IQueryable<T> query);
-        IEnumerable<T> find(IQueryable<T> query);
         void insert(T entity);
         void delete(Int16 id);
         void update(T entity);

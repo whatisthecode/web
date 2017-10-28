@@ -17,12 +17,11 @@ namespace WebApplication2.Models
         public String shortDescription { get; set; }
         [Column("long_description")]
         public String longDescription { get; set; }
-        [ForeignKey("User")]
         [Column("created_by")]
         public Int16 createdBy { get; set; }
-        public User User { get; set; }
+        public virtual UserInfo userInfo { get; set; }
         public ICollection<ProductAttribute> attributes { get; set; }
-        public Product(string code, string name, string shortDescription, string longDescription, short createdBy)
+        public Product(string code, string name, string shortDescription, string longDescription, Int16 createdBy)
         {
             this.code = code;
             this.name = name;

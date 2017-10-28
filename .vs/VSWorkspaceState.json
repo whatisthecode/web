@@ -3,9 +3,12 @@
     "",
     "\\WebApplication2",
     "\\WebApplication2\\App_Start",
+    "\\WebApplication2\\Controllers",
+    "\\WebApplication2\\Controllers\\API",
     "\\WebApplication2\\DAO",
-    "\\WebApplication2\\Providers"
+    "\\WebApplication2\\DAO\\IdentityModels",
+    "\\WebApplication2\\Providers",
+    "\\WebApplication2\\Results"
   ],
-  "SelectedNode": "\\WebApplication2\\App_Start\\IdentityConfig.cs",
   "PreviewInSolutionExplorer": false
 }

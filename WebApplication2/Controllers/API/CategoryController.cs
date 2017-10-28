@@ -9,7 +9,7 @@ using WebApplication2.Models.Mapping;
 
 namespace WebApplication2.Controllers.API
 {
-    //[Authorize]
+    [Authorize]
     public class CategoryController : ApiController
     {
         private CategoryDAO categoryDao;
@@ -103,7 +103,7 @@ namespace WebApplication2.Controllers.API
                 return Content<Response>(HttpStatusCode.OK, response);
                 
         }
-        [Route("api/category")]
+        [Route("api/category/")]
         [HttpGet]
         public IHttpActionResult getCategories()
         {
