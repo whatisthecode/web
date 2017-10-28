@@ -10,7 +10,6 @@ namespace WebApplication2.DAO
     public class CategoryDAOImpl : BaseImpl<Category, Int16>, CategoryDAO, IDisposable
     {
         protected ProductDAO productDAO;
-
         public CategoryDAOImpl() : base()
         {
             productDAO = new ProductDAOImpl();
