@@ -331,7 +331,7 @@
     <Content Include="Scripts\Admin\app.js" />
     <Content Include="Scripts\Client\app.config.js" />
     <Content Include="Scripts\Client\app.js" />
-    <Content Include="Scripts\Client\Controller\CartController.js" />
+    <Content Include="Scripts\Client\Controller\Cart.js" />
     <Content Include="Scripts\Client\Controller\Category.js" />
     <Content Include="Scripts\Client\Controller\CategoryDetail.js" />
     <Content Include="Scripts\Client\Controller\Checkout.js" />
@@ -342,6 +342,17 @@
     <Content Include="Scripts\Client\Controller\Product.js" />
     <Content Include="Scripts\Client\Controller\ProductDetail.js" />
     <Content Include="Scripts\Client\Controller\Register.js" />
+    <Content Include="Scripts\Client\Factory\Cart.js" />
+    <Content Include="Scripts\Client\Factory\Category.js" />
+    <Content Include="Scripts\Client\Factory\CategoryDetail.js" />
+    <Content Include="Scripts\Client\Factory\Checkout.js" />
+    <Content Include="Scripts\Client\Factory\Invoice.js" />
+    <Content Include="Scripts\Client\Factory\InvoiceDetail.js" />
+    <Content Include="Scripts\Client\Factory\Login.js" />
+    <Content Include="Scripts\Client\Factory\Product.js" />
+    <Content Include="Scripts\Client\Factory\ProductDetail.js" />
+    <Content Include="Scripts\Client\Factory\Register.js" />
+    <Content Include="Scripts\Client\Provider\Helper.js" />
     <Content Include="Scripts\Client\Shared\Error.js" />
     <Content Include="Scripts\Client\Shared\Top.js" />
     <Content Include="Scripts\Client\View\error.html" />
@@ -383,8 +394,6 @@
     <Folder Include="Scripts\Admin\Factory\" />
     <Folder Include="Scripts\Admin\Provider\" />
     <Folder Include="Scripts\Admin\Shared\" />
-    <Folder Include="Scripts\Client\Factory\" />
-    <Folder Include="Scripts\Client\Provider\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
