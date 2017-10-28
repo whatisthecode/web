@@ -16,6 +16,6 @@ namespace WebApplication2.DAO
         void deleteUserInfo(Int16 id);
         void saveUserinfo();
         void dispose();
-        UserInfo findByIdentityNumber(UserInfo userInfo);
+        UserInfo checkExist(string field, string value);
     }
 }

@@ -26,6 +26,8 @@ namespace WebApplication2.Providers
 
         public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
         {
+            context.OwinContext.Response.Headers.Add("Access-Control-Allow-Methods", new[] { "POST", "PUT", "GET", "DELETE", "OPTIONS"});
+            context.OwinContext.Response.Headers.Add("Access-Control-Allow-Headers", new[] { "accept", "authorization", "content-type" });
             context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { "*" });
             var userManager = context.OwinContext.GetUserManager<ApplicationUserManager>();
 
