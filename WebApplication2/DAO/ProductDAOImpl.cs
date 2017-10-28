@@ -94,5 +94,13 @@ namespace WebApplication2.DAO
         {
             base.update(product);
         }
+
+       /* public void checkProductCode(Product product)
+        {
+            var query = from p in base.getContext().products select p;
+            query = query.Where(p => p.code == product.code);
+            Product pro = base.checkColumnExists(query);  
+
+        }*/
     }
 }

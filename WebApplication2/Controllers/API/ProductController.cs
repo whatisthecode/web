@@ -46,7 +46,7 @@ namespace WebApplication2.Controllers.API
             {
                 this.productDao.insertProduct(product);
                 this.productDao.save();
-                response.code = "200";
+                response.code = "201";
                 response.results = "Thêm sản phẩm thành công";
                 return Content<Response>(HttpStatusCode.OK, response);
 
@@ -87,27 +87,28 @@ namespace WebApplication2.Controllers.API
         }
         [Route("api/product/{id}")]
         [HttpPut]
-        public IHttpActionResult updateProduct([FromBody]Product product)
+        public IHttpActionResult updateProduct([FromBody]Product product, Int16 id)
         {
             Response response = new Response();
-            Product productcheck = this.productDao.checkexist(product);
-            if (productcheck != null)
+            Product productcheck = this.productDao.getProduct(id);
+           
+            if (productcheck == null)
             {
                 response.code = "404";
                 response.status = "Sản phẩm cần cập nhật không có trong danh sách";
                 return Content<Response>(HttpStatusCode.NotFound, response);
 
             }
-            else
+            else 
             {
-
+                
                 response.code = "200";
                 response.status = "Cập nhật sản phẩm thành công";
-                Product productcheck2 = this.productDao.getProduct(product.id);
-                productcheck2.name = product.name;
-                productcheck2.shortDescription = product.shortDescription;
-                productcheck2.longDescription = product.longDescription;
-                productcheck2.updatedAt = product.updatedAt;
+                
+                productcheck.name = product.name;
+                productcheck.shortDescription = product.shortDescription;
+                productcheck.longDescription = product.longDescription;
+                productcheck.updatedAt = product.updatedAt;
                 this.productDao.updateProduct(productcheck);
                 this.productDao.save();
                 return Content<Response>(HttpStatusCode.OK, response);
