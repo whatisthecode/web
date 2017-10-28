@@ -217,18 +217,19 @@
     <Compile Include="DAO\ProductDAO.cs" />
     <Compile Include="DAO\ProductDAOImpl.cs" />
     <Compile Include="DAO\UserTypeDAO.cs" />
-    <Compile Include="DAO\UserDAO.cs" />
+    <Compile Include="DAO\UserInfoDAO.cs" />
     <Compile Include="DAO\UserTypeDAOImpl.cs" />
-    <Compile Include="DAO\UserDAOImpl.cs" />
+    <Compile Include="DAO\UserInfoDAOImpl.cs" />
     <Compile Include="DAO\UserRoleDAO.cs" />
     <Compile Include="DAO\UserRoleDAOImpl.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\AccountBindingModels.cs" />
-    <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\IdentityModels\AccountBindingModels.cs" />
+    <Compile Include="Models\IdentityModels\AccountViewModels.cs" />
     <Compile Include="Models\Base.cs" />
     <Compile Include="Models\CategoryProduct.cs" />
+    <Compile Include="Models\IdentityModels\IdentityModels.cs" />
     <Compile Include="Models\Invoice.cs" />
     <Compile Include="Models\InvoiceDetail.cs" />
     <Compile Include="Models\Mapping\PagedResult.cs" />
@@ -237,13 +238,12 @@
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\ProductAttribute.cs" />
     <Compile Include="Models\Category.cs" />
-    <Compile Include="Models\User.cs" />
+    <Compile Include="Models\UserInfo.cs" />
     <Compile Include="Models\UserRole.cs" />
     <Compile Include="Models\UserType.cs" />
     <Compile Include="Models\UserTypeRole.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
-    <Compile Include="Providers\IdentityModels.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -331,7 +331,7 @@
     <Content Include="Scripts\Admin\app.js" />
     <Content Include="Scripts\Client\app.config.js" />
     <Content Include="Scripts\Client\app.js" />
-    <Content Include="Scripts\Client\Controller\CartController.js" />
+    <Content Include="Scripts\Client\Controller\Cart.js" />
     <Content Include="Scripts\Client\Controller\Category.js" />
     <Content Include="Scripts\Client\Controller\CategoryDetail.js" />
     <Content Include="Scripts\Client\Controller\Checkout.js" />
@@ -342,6 +342,17 @@
     <Content Include="Scripts\Client\Controller\Product.js" />
     <Content Include="Scripts\Client\Controller\ProductDetail.js" />
     <Content Include="Scripts\Client\Controller\Register.js" />
+    <Content Include="Scripts\Client\Factory\Cart.js" />
+    <Content Include="Scripts\Client\Factory\Category.js" />
+    <Content Include="Scripts\Client\Factory\CategoryDetail.js" />
+    <Content Include="Scripts\Client\Factory\Checkout.js" />
+    <Content Include="Scripts\Client\Factory\Invoice.js" />
+    <Content Include="Scripts\Client\Factory\InvoiceDetail.js" />
+    <Content Include="Scripts\Client\Factory\Login.js" />
+    <Content Include="Scripts\Client\Factory\Product.js" />
+    <Content Include="Scripts\Client\Factory\ProductDetail.js" />
+    <Content Include="Scripts\Client\Factory\Register.js" />
+    <Content Include="Scripts\Client\Provider\Helper.js" />
     <Content Include="Scripts\Client\Shared\Error.js" />
     <Content Include="Scripts\Client\Shared\Top.js" />
     <Content Include="Scripts\Client\View\error.html" />
@@ -383,8 +394,6 @@
     <Folder Include="Scripts\Admin\Factory\" />
     <Folder Include="Scripts\Admin\Provider\" />
     <Folder Include="Scripts\Admin\Shared\" />
-    <Folder Include="Scripts\Client\Factory\" />
-    <Folder Include="Scripts\Client\Provider\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

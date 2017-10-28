@@ -1,10 +1,4 @@
-﻿using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin.Security;
-using Microsoft.Owin.Security.Cookies;
-using Microsoft.Owin.Security.OAuth;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Security.Claims;
@@ -12,13 +6,23 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
-using WebApplication2.App_Start;
-using WebApplication2.Providers;
-using WebApplication2.Results;
-using static WebApplication2.Models.AccountBindingModels;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.Owin.Security;
+using Microsoft.Owin.Security.Cookies;
+using Microsoft.Owin.Security.OAuth;
+using WebApplication2;
 using static WebApplication2.Models.AccountViewModels;
+using static WebApplication2.Models.AccountBindingModels;
+using WebApplication2.Results;
+using WebApplication2.Providers;
+using WebApplication2.Models;
+using WebApplication2.DAO;
+using WebApplication2.Models.Mapping;
+using System.Net;
 
-namespace WebApplication2.Controllers.API
+namespace WebAPI_NG_TokenbasedAuth.Controllers
 {
     [Authorize]
     [RoutePrefix("api/Account")]
@@ -26,12 +30,15 @@ namespace WebApplication2.Controllers.API
     {
         private const string LocalLoginProvider = "Local";
         private ApplicationUserManager _userManager;
+        private UserInfoDAO userDao;
 
         public AccountController()
         {
+            userDao = new UserInfoDAOImpl();
         }
 
-        public AccountController(ApplicationUserManager userManager, ISecureDataFormat<AuthenticationTicket> accessTokenFormat)
+        public AccountController(ApplicationUserManager userManager,
+            ISecureDataFormat<AuthenticationTicket> accessTokenFormat)
         {
             UserManager = userManager;
             AccessTokenFormat = accessTokenFormat;
@@ -78,7 +85,7 @@ namespace WebApplication2.Controllers.API
         [Route("ManageInfo")]
         public async Task<ManageInfoViewModel> GetManageInfo(string returnUrl, bool generateState = false)
         {
-            IdentityUser user = null;/*await UserManager.FindByIdAsync(User.Identity.GetUserId());*/
+            IdentityUser user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
 
             if (user == null)
             {
@@ -125,7 +132,7 @@ namespace WebApplication2.Controllers.API
 
             IdentityResult result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword,
                 model.NewPassword);
-
+            
             if (!result.Succeeded)
             {
                 return GetErrorResult(result);
@@ -258,8 +265,8 @@ namespace WebApplication2.Controllers.API
             if (hasRegistered)
             {
                 Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
-
-                ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(UserManager,
+                
+                 ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(UserManager,
                     OAuthDefaults.AuthenticationType);
                 ClaimsIdentity cookieIdentity = await user.GenerateUserIdentityAsync(UserManager,
                     CookieAuthenticationDefaults.AuthenticationType);
@@ -328,16 +335,45 @@ namespace WebApplication2.Controllers.API
                 return BadRequest(ModelState);
             }
 
-            var user = new ApplicationUser() { UserName = model.Email, Email = model.Email };
+            Response response = new Response();
 
-            IdentityResult result = await UserManager.CreateAsync(user, model.Password);
+            UserInfo createUserInfo = new UserInfo();
+            createUserInfo.firstName = model.firstName;
+            createUserInfo.lastName = model.lastName;
+            createUserInfo.identityNumber = model.identityNumber;
+            createUserInfo.type = model.type;
+
+            UserInfo userInfo = userDao.findByIdentityNumber(createUserInfo);
+            if (userInfo != null)
+            {
+                response.code = "409";
+                response.status = "Số chứng minh nhân dân đã được đăng ký";
+                return Content<Response>(HttpStatusCode.Conflict, response);
+            }
+
+            //this.userDao.insertUserInfo(createUserInfo);
+            //this.userDao.saveUserinfo();
+
+            //UserInfo newUserInfo = this.userDao.findByIdentityNumber(createUserInfo);
+            
+            //if(newUserInfo == null)
+            //{
+            //    response.code = "500";
+            //    response.status = "Lưu thông tin thất bại";
+            //    return Content<Response>(HttpStatusCode.InternalServerError, response);
+            //}
+            var identityUser = new ApplicationUser() { UserName = model.Email, Email = model.Email};
+            identityUser.userInfo = createUserInfo;
+            IdentityResult result = await UserManager.CreateAsync(identityUser, model.Password);
 
             if (!result.Succeeded)
             {
                 return GetErrorResult(result);
             }
 
-            return Ok();
+            response.code = "200";
+            response.status = "Đăng ký thành công";
+            return Content<Response>(HttpStatusCode.Created, response);
         }
 
         // POST api/Account/RegisterExternal
@@ -368,7 +404,7 @@ namespace WebApplication2.Controllers.API
             result = await UserManager.AddLoginAsync(user.Id, info.Login);
             if (!result.Succeeded)
             {
-                return GetErrorResult(result);
+                return GetErrorResult(result); 
             }
             return Ok();
         }

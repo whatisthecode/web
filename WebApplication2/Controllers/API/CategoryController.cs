@@ -9,7 +9,7 @@ using WebApplication2.Models.Mapping;
 
 namespace WebApplication2.Controllers.API
 {
-    //[Authorize]
+    [Authorize]
     public class CategoryController : ApiController
     {
         private CategoryDAO categoryDao;

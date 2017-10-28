@@ -12,41 +12,22 @@ namespace WebApplication2.Controllers.API
 {
     public class UserController : ApiController
     {
-        private UserDAO userdao;
+        private UserInfoDAO userdao;
         public UserController()
         {
-            this.userdao = new UserDAOImpl();
+            this.userdao = new UserInfoDAOImpl();
         }
         [Route("api/user/{id}")]
         [HttpGet]
         public IHttpActionResult getuser(Int16 id)
         {
-            User usertemp = this.userdao.getUserById(id);
-            Response response = new Response();
-            if (usertemp == null)
-            {
-                response.code = "404";
-                response.status = "Tên đăng nhập không tìm thấy.";
-
-                return Content<Response>(HttpStatusCode.NotFound, response);
-                
-            }
-            response.code = "200";
-            response.status = "Tên đăng nhập cần tìm: ";
-            response.results = usertemp;
-            return Content<Response>(HttpStatusCode.OK, response);
+            return null;
         }
         [Route("api/user/{id}")]
         [HttpGet]
         public IHttpActionResult getusers()
         {
-            IEnumerable<User> users = this.userdao.getUsers().ToList();
-            Response response = new Response();
-            response.code = "200";
-            response.status= "Danh sách các user hiện tại :";
-            response.results = users;
-
-            return Content<Response>(HttpStatusCode.OK, response);
+            return null;
         }
     }
 }

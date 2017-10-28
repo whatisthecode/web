@@ -1,20 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
-using System.Linq;
-using System.Web;
 using WebApplication2.Models;
 
 namespace WebApplication2.DAO
 {
-    public class DBContext : DbContext
+    public class DBContext : IdentityDbContext<ApplicationUser>
     {
         public DBContext() : base("DBContext")
         { }
 
+        public static DBContext Create()
+        {
+            return new DBContext();
+        }
+
+        public DbSet<UserInfo> userInfos { get; set; }
         public DbSet<UserType> userTypes { get; set; }
-        public DbSet<User> users { get; set; }
         public DbSet<UserRole> userRoles { get; set; }
         public DbSet<UserTypeRole> userTypesRoles { get; set; }
 
@@ -31,6 +34,21 @@ namespace WebApplication2.DAO
         {
             Database.SetInitializer<DBContext>(null);
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<UserInfo>().HasKey(k => k.id)
+                        .Property(c => c.id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            modelBuilder.Entity<ApplicationUser>().HasRequired(t => t.userInfo);
+            modelBuilder.Entity<Product>().HasRequired(n => n.userInfo)
+                        .WithMany(a => a.products)
+                        .HasForeignKey(n => n.createdBy)
+                        .WillCascadeOnDelete(false);
+            modelBuilder.Entity<Invoice>().HasRequired(n => n.userInfo)
+                        .WithMany(a => a.invoices)
+                        .HasForeignKey(n => n.buyer)
+                        .WillCascadeOnDelete(false);
+            modelBuilder.Entity<UserInfo>().HasRequired(n => n.UserType)
+                        .WithMany(a => a.userInfo)
+                        .HasForeignKey(n => n.type)
+                        .WillCascadeOnDelete(false);
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
             modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
             modelBuilder.Conventions.Remove<OneToOneConstraintIntroductionConvention>();

@@ -13,11 +13,11 @@ namespace WebApplication2.Controllers.API
     public class ProductController : ApiController
     {
         private ProductDAO productDao;
-        private UserDAO userDao;
+        private UserInfoDAO userInfoDAO;
         public ProductController()
         {
             this.productDao = new ProductDAOImpl();
-            this.userDao = new UserDAOImpl();
+            this.userInfoDAO = new UserInfoDAOImpl();
         }
 
         [Route("api/product")]
@@ -26,7 +26,7 @@ namespace WebApplication2.Controllers.API
         {
             Response response = new Response();
             Product productcheck = this.productDao.checkexist(product);
-            User user = this.userDao.getUserById(product.createdBy);
+            UserInfo user = this.userInfoDAO.getUserInfo(product.createdBy);
 
             if (user == null)
             {
