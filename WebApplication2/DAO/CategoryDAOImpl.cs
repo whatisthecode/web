@@ -51,7 +51,7 @@ namespace WebApplication2.DAO
             base.Dispose();
         }
 
-        public Category findUnique(Category category)
+        public Category checkExist(Category category)
         {
             var query = from q in base.getContext().categories select q;
             query = query.Where(q => q.code == category.code);

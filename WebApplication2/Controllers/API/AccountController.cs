@@ -30,11 +30,11 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
     {
         private const string LocalLoginProvider = "Local";
         private ApplicationUserManager _userManager;
-        private UserInfoDAO userDao;
+        private UserInfoDAO userInfoDao;
 
         public AccountController()
         {
-            userDao = new UserInfoDAOImpl();
+            userInfoDao = new UserInfoDAOImpl();
         }
 
         public AccountController(ApplicationUserManager userManager,
@@ -64,12 +64,22 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
         public UserInfoViewModel GetUserInfo()
         {
             ExternalLoginData externalLogin = ExternalLoginData.FromIdentity(User.Identity as ClaimsIdentity);
-
+            UserInfo userInfo = new UserInfo();
+            var user = UserManager.FindById(User.Identity.GetUserId());
+            CurrentUserInfoLogin currentUserInfoLogin = new CurrentUserInfoLogin();
+            currentUserInfoLogin.dob = user.userInfo.dob;
+            currentUserInfoLogin.lastName = user.userInfo.lastName;
+            currentUserInfoLogin.firstName = user.userInfo.firstName;
+            currentUserInfoLogin.status = user.userInfo.status;
+            currentUserInfoLogin.type = user.userInfo.type;
+            currentUserInfoLogin.id = user.userInfo.id;
+            currentUserInfoLogin.identityNumber = user.userInfo.identityNumber;
             return new UserInfoViewModel
             {
                 Email = User.Identity.GetUserName(),
                 HasRegistered = externalLogin == null,
-                LoginProvider = externalLogin != null ? externalLogin.LoginProvider : null
+                LoginProvider = externalLogin != null ? externalLogin.LoginProvider : null,
+                userInfo = currentUserInfoLogin
             };
         }
 
@@ -328,7 +338,7 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
         // POST api/Account/Register
         [AllowAnonymous]//khong can dang nhap
         [Route("Register")]
-        public async Task<IHttpActionResult> Register(RegisterBindingModel model)
+        public async Task<IHttpActionResult> Register([FromBody]RegisterBindingModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -337,31 +347,20 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
 
             Response response = new Response();
 
-            UserInfo createUserInfo = new UserInfo();
-            createUserInfo.firstName = model.firstName;
-            createUserInfo.lastName = model.lastName;
-            createUserInfo.identityNumber = model.identityNumber;
-            createUserInfo.type = model.type;
-
-            UserInfo userInfo = userDao.findByIdentityNumber(createUserInfo);
-            if (userInfo != null)
+            UserInfo createUserInfo = userInfoDao.checkExist("identityNumber", model.identityNumber);
+            if (createUserInfo != null)
             {
                 response.code = "409";
                 response.status = "Số chứng minh nhân dân đã được đăng ký";
                 return Content<Response>(HttpStatusCode.Conflict, response);
             }
 
-            //this.userDao.insertUserInfo(createUserInfo);
-            //this.userDao.saveUserinfo();
-
-            //UserInfo newUserInfo = this.userDao.findByIdentityNumber(createUserInfo);
+            createUserInfo.firstName = model.firstName;
+            createUserInfo.lastName = model.lastName;
+            createUserInfo.identityNumber = model.identityNumber;
+            createUserInfo.type = model.type;
+            createUserInfo.dob = model.dob;
             
-            //if(newUserInfo == null)
-            //{
-            //    response.code = "500";
-            //    response.status = "Lưu thông tin thất bại";
-            //    return Content<Response>(HttpStatusCode.InternalServerError, response);
-            //}
             var identityUser = new ApplicationUser() { UserName = model.Email, Email = model.Email};
             identityUser.userInfo = createUserInfo;
             IdentityResult result = await UserManager.CreateAsync(identityUser, model.Password);

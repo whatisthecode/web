@@ -24,7 +24,7 @@ namespace WebApplication2.Controllers.API
         public IHttpActionResult insert([FromBody]Category category)
         {
             Response response = new Response();
-            if (this.categoryDao.findUnique(category) != null)
+            if (this.categoryDao.checkExist(category) != null)
             {
                 response = new Response("409", "Loại sản phẩm này đã tồn tại", null);
                 return Content<Response>(HttpStatusCode.Conflict, response);
@@ -42,7 +42,7 @@ namespace WebApplication2.Controllers.API
         [HttpPut]
         public IHttpActionResult update([FromBody]Category category)
         {
-            Category category1 = this.categoryDao.findUnique(category);
+            Category category1 = this.categoryDao.checkExist(category);
             Response response = new Response();
             if (category1 != null && category1.id != category.id)
             {

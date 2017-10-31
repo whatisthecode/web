@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
+using WebApplication2.Models.Mapping;
 
 namespace WebApplication2.Results
 {
@@ -26,6 +27,9 @@ namespace WebApplication2.Results
 
             HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.Unauthorized);
             response.RequestMessage = Request;
+            Response resp = new Response();
+            resp.code="401";
+            resp.status="Phiên Đăng Nhập Hết Hạn";
             return Task.FromResult(response);
         }
     }

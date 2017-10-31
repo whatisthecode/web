@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace WebApplication2.Models
 {
@@ -33,6 +34,8 @@ namespace WebApplication2.Models
             public bool HasRegistered { get; set; }
 
             public string LoginProvider { get; set; }
+
+            public object userInfo { get; set; }
         }
 
         public class UserLoginInfoViewModel
@@ -40,6 +43,17 @@ namespace WebApplication2.Models
             public string LoginProvider { get; set; }
 
             public string ProviderKey { get; set; }
+        }
+
+        public class CurrentUserInfoLogin
+        {
+            public Int16? id { get; set; }
+            public bool? status { get; set; }
+            public string firstName { get; set; }
+            public string lastName { get; set; }
+            public DateTime? dob { get; set; }
+            public string identityNumber { get; set; }
+            public Int16 type { get; set; }
         }
     }
 }

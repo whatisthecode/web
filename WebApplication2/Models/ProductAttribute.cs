@@ -26,5 +26,14 @@ namespace WebApplication2.Models
             this.key = key;
             this.value = value;
         }
+        public ProductAttribute()
+        {
+
+        }
+
+        public enum Attribute
+        {
+            price, color, amount, discount, size
+        }
     }
 }
