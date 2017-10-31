@@ -326,7 +326,7 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
         }
 
         // POST api/Account/Register
-        [AllowAnonymous]
+        [AllowAnonymous]//khong can dang nhap
         [Route("Register")]
         public async Task<IHttpActionResult> Register(RegisterBindingModel model)
         {

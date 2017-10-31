@@ -26,6 +26,7 @@ namespace WebApplication2
                 AllowOnlyAlphanumericUserNames = false,
                 RequireUniqueEmail = true
             };
+            // condition of pass word
             // Configure validation logic for passwords
             manager.PasswordValidator = new PasswordValidator
             {

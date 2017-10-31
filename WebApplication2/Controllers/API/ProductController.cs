@@ -10,6 +10,7 @@ using WebApplication2.Models.Mapping;
 
 namespace WebApplication2.Controllers.API
 {
+    [Authorize]
     public class ProductController : ApiController
     {
         private ProductDAO productDao;
@@ -19,7 +20,7 @@ namespace WebApplication2.Controllers.API
             this.productDao = new ProductDAOImpl();
             this.userInfoDAO = new UserInfoDAOImpl();
         }
-
+       
         [Route("api/product")]
         [HttpPost]
         public IHttpActionResult insertNewProduct([FromBody]Product product)
@@ -85,13 +86,14 @@ namespace WebApplication2.Controllers.API
             return Content<Response>(HttpStatusCode.OK, response);
 
         }
+  
         [Route("api/product/{id}")]
         [HttpPut]
         public IHttpActionResult updateProduct([FromBody]Product product, Int16 id)
         {
             Response response = new Response();
             Product productcheck = this.productDao.getProduct(id);
-           
+
             if (productcheck == null)
             {
                 response.code = "404";
@@ -99,12 +101,12 @@ namespace WebApplication2.Controllers.API
                 return Content<Response>(HttpStatusCode.NotFound, response);
 
             }
-            else 
+            else
             {
-                
+
                 response.code = "200";
                 response.status = "Cập nhật sản phẩm thành công";
-                
+
                 productcheck.name = product.name;
                 productcheck.shortDescription = product.shortDescription;
                 productcheck.longDescription = product.longDescription;
@@ -115,7 +117,28 @@ namespace WebApplication2.Controllers.API
             }
 
         }
+        
+        [HttpDelete]
+        [Route("api/product/{id}")]
+        public IHttpActionResult deleteProduct(Int16 iddel)
+        { 
+            Response response = new Response();
+            Product productcheck = this.productDao.getProduct(iddel);
+            if (productcheck == null)
+            {
+                response.code = "404";
+                response.status = "không tồn tại sản phẩm cần xóa";
+                return Content<Response>(HttpStatusCode.NotFound,response);
+            }
+            else
+            {
+                this.productDao.deleteProduct(iddel);
+                response.code = "200";
+                response.status = "Xóa thành công";
+                return Content<Response>(HttpStatusCode.OK, response);
+            }
 
+        }
 
     }
 }
