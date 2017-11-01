@@ -34,12 +34,12 @@ namespace WebApplication2.DAO
         {
             return base.get();
         }
-        public Product checkexist(Product product)
+        public Product checkexist(string code)
         {
-            Product product2compare = base.context.products.Where(p=> p.code == product.code).FirstOrDefault();
+            Product product2compare = base.context.products.Where(p=> p.code == code).FirstOrDefault();
             if (product2compare != null)
             {
-                return product;
+                return product2compare;
             }
             return null;
                 

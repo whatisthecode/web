@@ -7,6 +7,7 @@ using System.Web.Http;
 using WebApplication2.DAO;
 using WebApplication2.Models;
 using WebApplication2.Models.Mapping;
+using WebApplication2.Models.RequestModel;
 
 namespace WebApplication2.Controllers.API
 {
@@ -21,18 +22,23 @@ namespace WebApplication2.Controllers.API
         {
             this.productDao = new ProductDAOImpl();
             this.userInfoDAO = new UserInfoDAOImpl();
+            this.categoryProductDAO = new CategoryProductImplDAO();
         }
        
         [Route("api/product")]
         [HttpPost]
-        public IHttpActionResult insertNewProduct([FromBody]Product product,[FromBody]IEnumerable<Int16> listidcategory)
+        public IHttpActionResult insertNewProduct([FromBody]CreateProductModel createProductModel)
         {
             CategoryProduct catepro = new CategoryProduct();
             Response response = new Response();
-            Product productcheck = this.productDao.checkexist(product);
-            UserInfo user = this.userInfoDAO.getUserInfo(product.createdBy);
-            listidcategory.ToArray();
-
+            Product productcheck = this.productDao.checkexist(createProductModel.code);
+            UserInfo user = this.userInfoDAO.getUserInfo(createProductModel.createdBy);
+            if(createProductModel.categoryId.Length < 1)
+            {
+                response.code = "400";
+                response.status = "Missing require fields";
+                return Content<Response>(HttpStatusCode.BadRequest, response);
+            }
             if (user == null)
             {
                 response.code = "404";
@@ -49,19 +55,26 @@ namespace WebApplication2.Controllers.API
             }
             else
             {
+                //create Product object to insert data
+                Product product = new Product();
+                product.code = createProductModel.code;
+                product.shortDescription = createProductModel.shortDescription;
+                product.longDescription = createProductModel.longDescription;
+                product.name = createProductModel.name;
+                product.createdBy = createProductModel.createdBy;
                 this.productDao.insertProduct(product);
                 this.productDao.save();
+
+                //insert data to category product
+                Product newProduct = productDao.checkexist(product.code);
+                for(int i = 0; i < createProductModel.categoryId.Length; i++)
+                {
+                    catepro.categoryId = createProductModel.categoryId[i];
+                    catepro.productId = newProduct.id;
+                }
+
                 response.code = "201";
                 response.results = "Thêm sản phẩm thành công";
-
-
-                Int16 idprotemp = product.id;
-                foreach(var idCat in listidcategory)
-                {
-                    catepro.productId = idprotemp;
-                    catepro.categoryId = idCat;
-                    categoryProductDAO.insertCategoryProduct(catepro);
-                }
                 return Content<Response>(HttpStatusCode.OK, response);
 
             }
