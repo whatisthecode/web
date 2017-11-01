@@ -15,6 +15,8 @@ namespace WebApplication2.Controllers.API
     {
         private ProductDAO productDao;
         private UserInfoDAO userInfoDAO;
+        private CategoryDAO categoryDAO;
+        private CategoryProductDAO categoryProductDAO;
         public ProductController()
         {
             this.productDao = new ProductDAOImpl();
@@ -23,11 +25,13 @@ namespace WebApplication2.Controllers.API
        
         [Route("api/product")]
         [HttpPost]
-        public IHttpActionResult insertNewProduct([FromBody]Product product)
+        public IHttpActionResult insertNewProduct([FromBody]Product product,[FromBody]IEnumerable<Int16> listidcategory)
         {
+            CategoryProduct catepro = new CategoryProduct();
             Response response = new Response();
             Product productcheck = this.productDao.checkexist(product);
             UserInfo user = this.userInfoDAO.getUserInfo(product.createdBy);
+            listidcategory.ToArray();
 
             if (user == null)
             {
@@ -49,6 +53,15 @@ namespace WebApplication2.Controllers.API
                 this.productDao.save();
                 response.code = "201";
                 response.results = "Thêm sản phẩm thành công";
+
+
+                Int16 idprotemp = product.id;
+                foreach(var idCat in listidcategory)
+                {
+                    catepro.productId = idprotemp;
+                    catepro.categoryId = idCat;
+                    categoryProductDAO.insertCategoryProduct(catepro);
+                }
                 return Content<Response>(HttpStatusCode.OK, response);
 
             }
