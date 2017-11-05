@@ -55,8 +55,8 @@ namespace WebApplication2.DAO
             var query = from u in base.getContext().userInfos select u;
             switch(field)
             {
-                case "identity":
-                    query.Where(q => q.identityNumber == value);
+                case "identityNumber":
+                   query = query.Where(q => q.identityNumber == value);
                 break;
                 default:
                 break;

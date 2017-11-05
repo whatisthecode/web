@@ -5,6 +5,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using WebApplication2.Models;
 using WebApplication2.DAO;
+using System;
 
 namespace WebApplication2
 {
@@ -36,10 +37,16 @@ namespace WebApplication2
                 RequireLowercase = false,
                 RequireUppercase = false,
             };
+
+            manager.EmailService = new Services.EmailServices();
+
             var dataProtectionProvider = options.DataProtectionProvider;
             if (dataProtectionProvider != null)
             {
-                manager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser>(dataProtectionProvider.Create("ASP.NET Identity"));
+                manager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser>(dataProtectionProvider.Create("ASP.NET Identity"))
+                {
+                    TokenLifespan = TimeSpan.FromHours(6)
+                };
             }
             return manager;
         }

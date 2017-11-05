@@ -135,9 +135,13 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
         [Route("ChangePassword")]
         public async Task<IHttpActionResult> ChangePassword(ChangePasswordBindingModel model)
         {
+            Response response = new Response();
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                response.code = "400";
+                response.status = "Mật khẩu không hợp lệ";
+                response.results = ModelState;
+                return Content<Response>(HttpStatusCode.BadRequest, response);
             }
 
             IdentityResult result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword,
@@ -145,29 +149,43 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
             
             if (!result.Succeeded)
             {
-                return GetErrorResult(result);
+                response.code = "500";
+                response.status = "Internal Error Can't Change New Password";
+                response.results = result;
+                return Content<Response>(HttpStatusCode.InternalServerError, response);
             }
 
-            return Ok();
+            response.code = "200";
+            response.status = "Đổi mật khẩu thành công";
+            return Content<Response>(HttpStatusCode.OK, response);
         }
 
         // POST api/Account/SetPassword
         [Route("SetPassword")]
         public async Task<IHttpActionResult> SetPassword(SetPasswordBindingModel model)
         {
+            Response response = new Response();
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                response.code = "400";
+                response.status = "Mật khẩu không hợp lệ";
+                response.results = ModelState;
+                return Content<Response>(HttpStatusCode.BadRequest, response);
             }
 
             IdentityResult result = await UserManager.AddPasswordAsync(User.Identity.GetUserId(), model.NewPassword);
 
             if (!result.Succeeded)
             {
-                return GetErrorResult(result);
+                response.code = "500";
+                response.status = "Internal Error Can't Set New Password";
+                response.results = result;
+                return Content<Response>(HttpStatusCode.InternalServerError, response);
             }
 
-            return Ok();
+            response.code = "200";
+            response.status = "Đặt lại mật khẩu thành công";
+            return Content<Response>(HttpStatusCode.OK, response);
         }
 
         // POST api/Account/AddExternalLogin
@@ -338,6 +356,7 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
         // POST api/Account/Register
         [AllowAnonymous]//khong can dang nhap
         [Route("Register")]
+        [System.Web.Mvc.ValidateAntiForgeryToken]
         public async Task<IHttpActionResult> Register([FromBody]RegisterBindingModel model)
         {
             if (!ModelState.IsValid)
@@ -347,14 +366,15 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
 
             Response response = new Response();
 
-            UserInfo createUserInfo = userInfoDao.checkExist("identityNumber", model.identityNumber);
-            if (createUserInfo != null)
+            UserInfo checkUser = userInfoDao.checkExist("identityNumber", model.identityNumber);
+            if (checkUser != null)
             {
                 response.code = "409";
                 response.status = "Số chứng minh nhân dân đã được đăng ký";
                 return Content<Response>(HttpStatusCode.Conflict, response);
             }
 
+            UserInfo createUserInfo = new UserInfo();
             createUserInfo.firstName = model.firstName;
             createUserInfo.lastName = model.lastName;
             createUserInfo.identityNumber = model.identityNumber;
@@ -369,10 +389,17 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
             {
                 return GetErrorResult(result);
             }
-
-            response.code = "200";
-            response.status = "Đăng ký thành công";
-            return Content<Response>(HttpStatusCode.Created, response);
+            else
+            {
+                string code = await this.UserManager.GenerateEmailConfirmationTokenAsync(identityUser.Id);
+                var callbackUrl = new Uri(Url.Link("ConfirmEmail", new { userId = identityUser.Id, code = code }));
+                await this.UserManager.SendEmailAsync(identityUser.Id,"Xác thực tài khoản của bạn","Vui lòng nhấn vào link sau: <a href=\""+ callbackUrl + "\">link</a>");
+                var message = "Chúng tôi đã gửi email xác thực tài khoản vào mail " + identityUser.Email + " . Vui lòng kiểm tra email để xác thực.";
+                response.code = "201";
+                response.status = "Đăng ký thành công";
+                response.results = message;
+                return Content<Response>(HttpStatusCode.Created, response);
+            }
         }
 
         // POST api/Account/RegisterExternal
@@ -525,5 +552,86 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
         }
 
         #endregion
+
+        // GET: /Account/ConfirmEmail
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("ConfirmEmail", Name = "ConfirmEmail")]
+        public async Task<IHttpActionResult> ConfirmEmail(string userId, string code)
+        {
+            Response response = new Response();
+            if (userId == null || code == null)
+            {
+                response.code = "400";
+                response.status = "Missing Required fields";
+                return Content<Response>(HttpStatusCode.BadRequest, response);
+            }
+            var result = await UserManager.ConfirmEmailAsync(userId, code);
+            if (result.Succeeded)
+            {
+                return Redirect("http://www.google.com");
+            }
+
+            response.code = "500";
+            response.status = "Không thể xác thực tài khoản";
+            return Content<Response>(HttpStatusCode.BadRequest, response);
+        }
+
+        // POST: /Account/ForgotPassword
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("ForgotPassword", Name = "ForgotPasswordRoute")]
+        public async Task<IHttpActionResult> ForgotPassword([FromBody]RegisterExternalBindingModel registerExternalBindingModel)
+        {
+            Response response = new Response();
+            var user = await UserManager.FindByEmailAsync(registerExternalBindingModel.Email);
+            if(user == null)
+            {
+                response.code = "404";
+                response.status = "Email không tồn tại";
+                Content<Response>(HttpStatusCode.NotFound, response);
+            }
+
+            var userConfirmed = await UserManager.IsEmailConfirmedAsync(user.Id);
+            if(!userConfirmed)
+            {
+                response.code = "403";
+                response.status = "Email chưa được xác thực";
+                Content<Response>(HttpStatusCode.Forbidden, response);
+            }
+ 
+            string code = await this.UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+            var callbackUrl = new Uri(Url.Link("ForgotPassword", new { userId = user.Id, code = code }));
+            await this.UserManager.SendEmailAsync(user.Id, "Lấy lại mật khẩu", "Vui lòng nhấn vào link sau: <a href=\"" + callbackUrl + "\">link</a>");
+            var message = "Chúng tôi đã gửi email lấy lại mật khẩu tài khoản vào mail " + user.Email + " . Vui lòng kiểm tra email để xác thực.";
+            response.code = "200";
+            response.status = "Thành công";
+            response.results = message;
+            return Content<Response>(HttpStatusCode.OK, response);
+        }
+
+        // GET: /Account/ForgotPasswordConfirm
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("ForgotPassword", Name = "ForgotPassword")]
+        public async Task<IHttpActionResult> ForgotPasswordEmail(string userId, string code)
+        {
+            Response response = new Response();
+            if (userId == null || code == null)
+            {
+                response.code = "400";
+                response.status = "Missing Required fields";
+                return Content<Response>(HttpStatusCode.BadRequest, response);
+            }
+            var result = await UserManager.ConfirmEmailAsync(userId, code);
+            if (result.Succeeded)
+            {
+                return Redirect("http://www.google.com");
+            }
+
+            response.code = "500";
+            response.status = "Không thể xác thực tài khoản";
+            return Content<Response>(HttpStatusCode.BadRequest, response);
+        }
     }
 }
