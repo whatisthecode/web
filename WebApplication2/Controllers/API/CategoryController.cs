@@ -84,6 +84,8 @@ namespace WebApplication2.Controllers.API
             response.status = "Xóa loại sản phẩm thành công";
             return Content<Response>(HttpStatusCode.OK, response);
         }
+
+        
         [Route("api/category/{id}")]
         [HttpGet]
         public IHttpActionResult getCategory(short id)
@@ -103,6 +105,8 @@ namespace WebApplication2.Controllers.API
                 return Content<Response>(HttpStatusCode.OK, response);
                 
         }
+
+        [Authorize(Roles = "Merchant")]
         [Route("api/category/")]
         [HttpGet]
         public IHttpActionResult getCategories()

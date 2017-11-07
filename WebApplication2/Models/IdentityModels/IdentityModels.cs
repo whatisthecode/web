@@ -20,4 +20,10 @@ namespace WebApplication2.Models
             return userIdentity;
         }
     }
+
+    public class ApplicationRole : IdentityRole
+    {
+        public ApplicationRole() : base() { }
+        public ApplicationRole(string roleName) : base(roleName) { }
+    }
 }

@@ -29,6 +29,7 @@ namespace WebApplication2.Models
 
         public class UserInfoViewModel
         {
+            public string _id { get; set; }
             public string Email { get; set; }
 
             public bool HasRegistered { get; set; }
@@ -53,7 +54,7 @@ namespace WebApplication2.Models
             public string lastName { get; set; }
             public DateTime? dob { get; set; }
             public string identityNumber { get; set; }
-            public Int16 type { get; set; }
+            public List<string> roles { get; set; }
         }
     }
 }

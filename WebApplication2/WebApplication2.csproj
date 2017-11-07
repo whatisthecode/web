@@ -203,6 +203,7 @@
     <Compile Include="Controllers\API\InvoiceController.cs" />
     <Compile Include="Controllers\API\ProductAttributeController.cs" />
     <Compile Include="Controllers\API\ProductController.cs" />
+    <Compile Include="Controllers\API\RoleController.cs" />
     <Compile Include="Controllers\API\UserController.cs" />
     <Compile Include="Controllers\Base.cs" />
     <Compile Include="Controllers\Client\HomeController.cs" />
@@ -236,6 +237,7 @@
     <Compile Include="Models\Base.cs" />
     <Compile Include="Models\CategoryProduct.cs" />
     <Compile Include="Models\IdentityModels\IdentityModels.cs" />
+    <Compile Include="Models\IdentityModels\RoleViewModel.cs" />
     <Compile Include="Models\Invoice.cs" />
     <Compile Include="Models\InvoiceDetail.cs" />
     <Compile Include="Models\Mapping\PagedResult.cs" />
