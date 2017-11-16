@@ -1,30 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
 namespace WebApplication2.Models
 {
-    public class ProductAttribute : Base
+    public class Image
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Int16 id { get; set; }
+        public String url { get; set; }
         [ForeignKey("Product")]
         [Column("product_id")]
-        [Index(IsUnique = true)]
         public Int16 productId { get; set; }
-        [Index(IsUnique = true)]
-        [StringLength(128)]
-        public String key { get; set; }
-        public String value { get; set; }
-        public Product Product { get; set; }
-        public ProductAttribute(Int16 productId, String key, String value)
+        public Product product { get; set; }
+        public Image()
         {
+            
+        }
+        public Image(String url, Int16 productId)
+        {
+            this.url = url;
             this.productId = productId;
-            this.key = key;
-            this.value = value;
         }
     }
 }

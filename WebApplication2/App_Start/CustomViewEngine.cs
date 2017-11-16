@@ -23,7 +23,7 @@ namespace WebApplication2
         protected override IView CreatePartialView(ControllerContext controllerContext, string partialPath)
         {
             var type = controllerContext.RouteData.Values["type"].ToString();
-            if (type == "")
+            if (type == "" || type != "Admin")
                 type = "Client";
             else
                 type = "Admin";
@@ -33,7 +33,7 @@ namespace WebApplication2
         protected override IView CreateView(ControllerContext controllerContext, string viewPath, string masterPath)
         {
             var type = controllerContext.RouteData.Values["type"].ToString();
-            if (type == "")
+            if (type == "" || type !="Admin")
                 type = "Client";
             else
                 type = "Admin";
@@ -43,7 +43,7 @@ namespace WebApplication2
         protected override bool FileExists(ControllerContext controllerContext, string virtualPath)
         {
             var type = controllerContext.RouteData.Values["type"].ToString();
-            if (type == "")
+            if (type == "" || type != "Admin")
                 type = "Client";
             else
                 type = "Admin";
