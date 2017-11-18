@@ -601,10 +601,6 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
             var result = await UserManager.ConfirmEmailAsync(userId, code);
             if (result.Succeeded)
             {
-                UserInfo userInfo = new UserInfo();
-                userInfo.status = false;
-                userInfoDao.updateUserInfo(userInfo);
-                userInfoDao.saveUserinfo();
                 return Redirect("http://www.google.com");
             }
 
