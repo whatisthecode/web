@@ -7,12 +7,12 @@ using System.Web;
 
 namespace WebApplication2.Models
 {
+    public enum BaseAttribute
+    {
+        price, color, amount, discount, size
+    }
     public class ProductAttribute : Base
     {
-        public enum attributes
-        {
-            price, color, amount, discount, size
-        }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Int16 id { get; set; }
@@ -24,6 +24,10 @@ namespace WebApplication2.Models
 
         [Index(IsUnique = true)]
         [StringLength(128)]
+
+        [NotMapped]
+        public BaseAttribute attributes { get; set; }
+
         public String key { get; set; }
 
         public String value { get; set; }

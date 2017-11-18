@@ -10,6 +10,9 @@
         }).when("/404", {
             controller: "ErrorController",
             templateUrl: "./Scripts/Client/View/error.html"
+        }).when("account/confirm", {
+            controller: "IndexController",
+            templateUrl: "./Scripts/Client/View/confirmEmail.html"
         }).when("/:category", {
             controller: "ProductController",
             templateUrl: "./Scripts/Client/View/product.html"
