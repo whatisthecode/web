@@ -408,7 +408,6 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
             createUserInfo.firstName = model.firstName;
             createUserInfo.lastName = model.lastName;
             createUserInfo.identityNumber = model.identityNumber;
-            createUserInfo.type = model.type;
             createUserInfo.dob = model.dob;
             
             var identityUser = new ApplicationUser() { UserName = model.Email, Email = model.Email};
@@ -421,11 +420,9 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
             }
             else
             {
-                for(var i = 0; i < model.roleNames.Count; i++)
-                {
-                    string roleName = model.roleNames[i];
-                    result = await UserManager.AddToRoleAsync(identityUser.Id, roleName);
-                }
+
+                string roleName = model.roleNames;
+                result = await UserManager.AddToRoleAsync(identityUser.Id, roleName);
                 string code = await this.UserManager.GenerateEmailConfirmationTokenAsync(identityUser.Id);
                 var callbackUrl = new Uri(Url.Link("ConfirmEmail", new { userId = identityUser.Id, code = code }));
                 await this.UserManager.SendEmailAsync(identityUser.Id,"Xác thực tài khoản của bạn","Vui lòng nhấn vào link sau: <a href=\""+ callbackUrl + "\">link</a>");
@@ -597,7 +594,7 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
             Response response = new Response();
             if (userId == null || code == null)
             {
-                response.code = "400";
+                response.code = "422";
                 response.status = "Missing Required fields";
                 return Content<Response>(HttpStatusCode.BadRequest, response);
             }
@@ -658,7 +655,7 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
             Response response = new Response();
             if (userId == null || code == null)
             {
-                response.code = "400";
+                response.code = "422";
                 response.status = "Missing Required fields";
                 return Content<Response>(HttpStatusCode.BadRequest, response);
             }

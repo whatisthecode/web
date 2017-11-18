@@ -24,25 +24,19 @@ namespace WebApplication2.Models
         [Column("identity_number")]
         public String identityNumber { get; set; }
 
-        [Column("type")]
-        public Int16 type { get; set; }
-
-        public UserType UserType { get; set; }
-
         public virtual ICollection<Invoice> buyerInvoices { get; set; }
 
         public virtual ICollection<Invoice> salerInvoices { get; set; }
 
         public virtual ICollection<Product> products { get; set; }
 
-        public UserInfo(bool status, string firstName, string lastName, DateTime dob, string identityNumber, short type)
+        public UserInfo(bool status, string firstName, string lastName, DateTime dob, string identityNumber)
         {
             this.status = status;
             this.firstName = firstName;
             this.lastName = lastName;
             this.dob = dob;
             this.identityNumber = identityNumber;
-            this.type = type;
         }
 
         public UserInfo()

@@ -17,9 +17,6 @@ namespace WebApplication2.DAO
         }
 
         public DbSet<UserInfo> userInfos { get; set; }
-        public DbSet<UserType> userTypes { get; set; }
-        public DbSet<UserRole> userRoles { get; set; }
-        public DbSet<UserTypeRole> userTypesRoles { get; set; }
         public DbSet<Rating> ratings { get; set; }
 
         public DbSet<Category> categories { get; set; }
@@ -54,12 +51,6 @@ namespace WebApplication2.DAO
             modelBuilder.Entity<Invoice>().HasRequired(n => n.saler)
                         .WithMany(a => a.salerInvoices)
                         .HasForeignKey(n => n.salerId)
-                        .WillCascadeOnDelete(false);
-
-
-            modelBuilder.Entity<UserInfo>().HasRequired(n => n.UserType)
-                        .WithMany(a => a.userInfo)
-                        .HasForeignKey(n => n.type)
                         .WillCascadeOnDelete(false);
 
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();

@@ -59,9 +59,7 @@ namespace WebApplication2.Models
             [Required]
             public string identityNumber { get; set; }
             [Required]
-            public Int16 type { get; set; }
-            [Required]
-            public List<string> roleNames { get; set; }
+            public string roleNames { get; set; }
         }
     }
 
