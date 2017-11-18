@@ -30,8 +30,6 @@ namespace WebApplication2.DAO
 
         public void insertProductAttribute(ProductAttribute proat)
         {
-            ProductAttribute productAttribute = new ProductAttribute();
-            productAttribute.key = productAttribute.
         }
 
         public void updateProductAttribute(ProductAttribute proat, short id)
