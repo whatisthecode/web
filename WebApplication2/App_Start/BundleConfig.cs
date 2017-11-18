@@ -29,7 +29,10 @@ namespace WebApplication2
             bundles.Add(new ScriptBundle("~/bundles/client_controller").Include(
                        "~/Scripts/Client/Shared/Top.js",
                        "~/Scripts/Client/Shared/Error.js",
-                       "~/Scripts/Client/Controller/Index.js"));
+                       "~/Scripts/Client/Controller/Index.js",
+                       "~/Scripts/Client/Controller/Cart.js",
+                       "~/Scripts/Client/Controller/Product.js",
+                       "~/Scripts/Client/Controller/ProductDetail.js"));
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
             // ready for production, use the build tool at https://modernizr.com to pick only the tests you need.

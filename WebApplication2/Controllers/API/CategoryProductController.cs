@@ -13,13 +13,18 @@ namespace WebApplication2.Controllers.API
     public class CategoryProductController : ApiController
     {
         private CategoryProductDAO categoryProductDAO;
-     
+            
+        public CategoryProductController()
+        {
+            this.categoryProductDAO = new CategoryProductDAOImpl();
+        }
+
         public void insertCategoryProduct(CategoryProduct catepro)
         {
             Response response = new Response();
             response.code = "200";
             response.status = "Thành Công";
-            categoryProductDAO.insertCategoryProduct(catepro);
+            this.categoryProductDAO.insertCategoryProduct(catepro);
             Content<Response>(HttpStatusCode.OK, response);
         }
 

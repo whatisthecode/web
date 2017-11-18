@@ -212,7 +212,7 @@
     <Compile Include="DAO\CategoryDAO.cs" />
     <Compile Include="DAO\CategoryDAOImpl.cs" />
     <Compile Include="DAO\CategoryProductDAO.cs" />
-    <Compile Include="DAO\CategoryProductImplDAO.cs" />
+    <Compile Include="DAO\CategoryProductDAOImpl.cs" />
     <Compile Include="DAO\DatabaseFactory.cs" />
     <Compile Include="DAO\DBContext.cs" />
     <Compile Include="DAO\InvoiceDAO.cs" />
@@ -220,7 +220,7 @@
     <Compile Include="DAO\InvoiceDetailDAO.cs" />
     <Compile Include="DAO\InvoiceDetailDAOImpl.cs" />
     <Compile Include="DAO\ProductAttributeDAO.cs" />
-    <Compile Include="DAO\ProductAttributeImplDAO.cs" />
+    <Compile Include="DAO\ProductAttributeDAOImpl.cs" />
     <Compile Include="DAO\ProductDAO.cs" />
     <Compile Include="DAO\ProductDAOImpl.cs" />
     <Compile Include="DAO\UserTypeDAO.cs" />
@@ -232,11 +232,13 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\CategoryType.cs" />
     <Compile Include="Models\IdentityModels\AccountBindingModels.cs" />
     <Compile Include="Models\IdentityModels\AccountViewModels.cs" />
     <Compile Include="Models\Base.cs" />
     <Compile Include="Models\CategoryProduct.cs" />
     <Compile Include="Models\IdentityModels\IdentityModels.cs" />
+    <Compile Include="Models\Image.cs" />
     <Compile Include="Models\IdentityModels\RoleViewModel.cs" />
     <Compile Include="Models\Invoice.cs" />
     <Compile Include="Models\InvoiceDetail.cs" />
@@ -246,7 +248,10 @@
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\ProductAttribute.cs" />
     <Compile Include="Models\Category.cs" />
+    <Compile Include="Models\Rating.cs" />
     <Compile Include="Models\RequestModel\CreateProductModel.cs" />
+    <Compile Include="Models\RequestModel\Customer.cs" />
+    <Compile Include="Models\RequestModel\Merchant.cs" />
     <Compile Include="Models\UserInfo.cs" />
     <Compile Include="Models\UserRole.cs" />
     <Compile Include="Models\UserType.cs" />
@@ -365,8 +370,11 @@
     <Content Include="Scripts\Client\Provider\Helper.js" />
     <Content Include="Scripts\Client\Shared\Error.js" />
     <Content Include="Scripts\Client\Shared\Top.js" />
+    <Content Include="Scripts\Client\View\cart.html" />
     <Content Include="Scripts\Client\View\error.html" />
     <Content Include="Scripts\Client\View\index.html" />
+    <Content Include="Scripts\Client\View\product-detail.html" />
+    <Content Include="Scripts\Client\View\product.html" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

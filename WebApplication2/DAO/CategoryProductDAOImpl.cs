@@ -7,9 +7,9 @@ using WebApplication2.Models;
 
 namespace WebApplication2.DAO
 {
-    public class CategoryProductImplDAO : BaseImpl<CategoryProduct, Int16>, CategoryProductDAO, IDisposable
+    public class CategoryProductDAOImpl : BaseImpl<CategoryProduct, Int16>, CategoryProductDAO, IDisposable
     {
-        public CategoryProductImplDAO():base()
+        public CategoryProductDAOImpl():base()
         {
             
         }

@@ -58,7 +58,8 @@ namespace WebApplication2.Controllers.API
             {
                 invoice1 = this.invoiceDao.getInvoiceById(invoice.id);
                 invoice1.code = invoice.code;
-                invoice1.buyer = invoice.buyer;
+                invoice1.buyerId = invoice.buyerId;
+                invoice1.salerId = invoice.salerId;
                 invoice1.total = invoice.total;
                 this.invoiceDao.updateInvoice(invoice1);
                 this.invoiceDao.saveInvoice();

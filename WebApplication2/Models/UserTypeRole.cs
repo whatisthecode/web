@@ -13,11 +13,15 @@ namespace WebApplication2.Models
         [ForeignKey("UserType")]
         [Column("type")]
         public Int16 type { get; set; }
+
         [ForeignKey("UserRole")]
         [Column("role")]
         public Int16 role { get; set; }
+
         public UserType UserType { get; set; }
+
         public UserRole UserRole { get; set; }
+
         public UserTypeRole(short type, short role)
         {
             this.type = type;

@@ -10,17 +10,26 @@ namespace WebApplication2.Models
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Int16 id { get; set; }
+
         Boolean status { get; set; }
+
         public String code { get; set; }
+
         public String name { get; set; }
+
         [Column("short_description")]
         public String shortDescription { get; set; }
+
         [Column("long_description")]
         public String longDescription { get; set; }
+
         [Column("created_by")]
         public Int16 createdBy { get; set; }
+
         public virtual UserInfo userInfo { get; set; }
+
         public ICollection<ProductAttribute> attributes { get; set; }
+
         public Product(string code, string name, string shortDescription, string longDescription, Int16 createdBy)
         {
             this.code = code;

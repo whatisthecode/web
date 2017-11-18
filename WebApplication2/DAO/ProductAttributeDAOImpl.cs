@@ -6,14 +6,14 @@ using WebApplication2.Models;
 
 namespace WebApplication2.DAO
 {
-    public class ProductAttributeImplDAO : BaseImpl<ProductAttribute, Int16>,ProductAttributeDAO, IDisposable
+    public class ProductAttributeDAOImpl : BaseImpl<ProductAttribute, Int16>,ProductAttributeDAO, IDisposable
     {
         public void deleteProductAttribute(short id)
         {
             throw new NotImplementedException();
         }
 
-        public void Dispose()
+        public void dispose()
         {
             throw new NotImplementedException();
         }
