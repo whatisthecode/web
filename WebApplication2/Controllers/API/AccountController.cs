@@ -21,6 +21,7 @@ using WebApplication2.Models;
 using WebApplication2.DAO;
 using WebApplication2.Models.Mapping;
 using System.Net;
+using System.Linq;
 
 namespace WebAPI_NG_TokenbasedAuth.Controllers
 {
@@ -30,18 +31,20 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
     {
         private const string LocalLoginProvider = "Local";
         private ApplicationUserManager _userManager;
-        private UserInfoDAO userDao;
+        private ApplicationRoleManager _roleManager;
+        private UserInfoDAO userInfoDao;
 
         public AccountController()
         {
-            userDao = new UserInfoDAOImpl();
+            userInfoDao = new UserInfoDAOImpl();
         }
 
-        public AccountController(ApplicationUserManager userManager,
+        public AccountController(ApplicationUserManager userManager, ApplicationRoleManager roleManager,
             ISecureDataFormat<AuthenticationTicket> accessTokenFormat)
         {
             UserManager = userManager;
             AccessTokenFormat = accessTokenFormat;
+            RoleManager = roleManager;
         }
 
         public ApplicationUserManager UserManager
@@ -56,21 +59,58 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
             }
         }
 
+        public ApplicationRoleManager RoleManager
+        {
+            get
+            {
+                return _roleManager ?? Request.GetOwinContext().GetUserManager<ApplicationRoleManager>();
+            }
+            private set
+            {
+                _roleManager = value;
+            }
+        }
+
         public ISecureDataFormat<AuthenticationTicket> AccessTokenFormat { get; private set; }
 
         // GET api/Account/UserInfo
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [Route("UserInfo")]
-        public UserInfoViewModel GetUserInfo()
+        public IHttpActionResult GetUserInfo()
         {
             ExternalLoginData externalLogin = ExternalLoginData.FromIdentity(User.Identity as ClaimsIdentity);
-
-            return new UserInfoViewModel
+            UserInfo userInfo = new UserInfo();
+            var user = UserManager.FindById(User.Identity.GetUserId());
+            CurrentUserInfoLogin currentUserInfoLogin = new CurrentUserInfoLogin();
+            currentUserInfoLogin.dob = user.userInfo.dob;
+            currentUserInfoLogin.lastName = user.userInfo.lastName;
+            currentUserInfoLogin.firstName = user.userInfo.firstName;
+            currentUserInfoLogin.status = user.userInfo.status;
+            currentUserInfoLogin.id = user.userInfo.id;
+            currentUserInfoLogin.identityNumber = user.userInfo.identityNumber;
+            //Get User Roles
+            var currentRoles = new List<IdentityUserRole>();
+            List<string> roles = new List<string>();
+            currentRoles.AddRange(user.Roles);
+            for(int i = 0; i < currentRoles.Count; i++)
             {
-                Email = User.Identity.GetUserName(),
-                HasRegistered = externalLogin == null,
-                LoginProvider = externalLogin != null ? externalLogin.LoginProvider : null
-            };
+                var roleId = currentRoles[i].RoleId;
+                var role = RoleManager.FindById(roleId);
+                roles.Add(role.Name.ToString());
+            }
+            currentUserInfoLogin.roles = roles;
+
+            UserInfoViewModel userInfoModel = new UserInfoViewModel();
+            userInfoModel._id = user.Id;
+            userInfoModel.Email = User.Identity.GetUserName();
+            userInfoModel.HasRegistered = externalLogin == null;
+            userInfoModel.LoginProvider = externalLogin != null ? externalLogin.LoginProvider : null;
+            userInfoModel.userInfo = currentUserInfoLogin;
+            Response response = new Response();
+            response.code = "200";
+            response.status = "Success";
+            response.results = userInfoModel;
+            return Content<Response>(HttpStatusCode.OK, response);
         }
 
         // POST api/Account/Logout
@@ -125,9 +165,13 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
         [Route("ChangePassword")]
         public async Task<IHttpActionResult> ChangePassword(ChangePasswordBindingModel model)
         {
+            Response response = new Response();
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                response.code = "400";
+                response.status = "Mật khẩu không hợp lệ";
+                response.results = ModelState;
+                return Content<Response>(HttpStatusCode.BadRequest, response);
             }
 
             IdentityResult result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword,
@@ -135,29 +179,43 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
             
             if (!result.Succeeded)
             {
-                return GetErrorResult(result);
+                response.code = "500";
+                response.status = "Internal Error Can't Change New Password";
+                response.results = result;
+                return Content<Response>(HttpStatusCode.InternalServerError, response);
             }
 
-            return Ok();
+            response.code = "200";
+            response.status = "Đổi mật khẩu thành công";
+            return Content<Response>(HttpStatusCode.OK, response);
         }
 
         // POST api/Account/SetPassword
         [Route("SetPassword")]
         public async Task<IHttpActionResult> SetPassword(SetPasswordBindingModel model)
         {
+            Response response = new Response();
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                response.code = "400";
+                response.status = "Mật khẩu không hợp lệ";
+                response.results = ModelState;
+                return Content<Response>(HttpStatusCode.BadRequest, response);
             }
 
             IdentityResult result = await UserManager.AddPasswordAsync(User.Identity.GetUserId(), model.NewPassword);
 
             if (!result.Succeeded)
             {
-                return GetErrorResult(result);
+                response.code = "500";
+                response.status = "Internal Error Can't Set New Password";
+                response.results = result;
+                return Content<Response>(HttpStatusCode.InternalServerError, response);
             }
 
-            return Ok();
+            response.code = "200";
+            response.status = "Đặt lại mật khẩu thành công";
+            return Content<Response>(HttpStatusCode.OK, response);
         }
 
         // POST api/Account/AddExternalLogin
@@ -326,9 +384,10 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
         }
 
         // POST api/Account/Register
-        [AllowAnonymous]
+        [AllowAnonymous]//khong can dang nhap
         [Route("Register")]
-        public async Task<IHttpActionResult> Register(RegisterBindingModel model)
+        [System.Web.Mvc.ValidateAntiForgeryToken]
+        public async Task<IHttpActionResult> Register([FromBody]RegisterBindingModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -337,31 +396,21 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
 
             Response response = new Response();
 
-            UserInfo createUserInfo = new UserInfo();
-            createUserInfo.firstName = model.firstName;
-            createUserInfo.lastName = model.lastName;
-            createUserInfo.identityNumber = model.identityNumber;
-            createUserInfo.type = model.type;
-
-            UserInfo userInfo = userDao.findByIdentityNumber(createUserInfo);
-            if (userInfo != null)
+            UserInfo checkUser = userInfoDao.checkExist("identityNumber", model.identityNumber);
+            if (checkUser != null)
             {
                 response.code = "409";
                 response.status = "Số chứng minh nhân dân đã được đăng ký";
                 return Content<Response>(HttpStatusCode.Conflict, response);
             }
 
-            //this.userDao.insertUserInfo(createUserInfo);
-            //this.userDao.saveUserinfo();
-
-            //UserInfo newUserInfo = this.userDao.findByIdentityNumber(createUserInfo);
+            UserInfo createUserInfo = new UserInfo();
+            createUserInfo.firstName = model.firstName;
+            createUserInfo.lastName = model.lastName;
+            createUserInfo.identityNumber = model.identityNumber;
+            createUserInfo.type = model.type;
+            createUserInfo.dob = model.dob;
             
-            //if(newUserInfo == null)
-            //{
-            //    response.code = "500";
-            //    response.status = "Lưu thông tin thất bại";
-            //    return Content<Response>(HttpStatusCode.InternalServerError, response);
-            //}
             var identityUser = new ApplicationUser() { UserName = model.Email, Email = model.Email};
             identityUser.userInfo = createUserInfo;
             IdentityResult result = await UserManager.CreateAsync(identityUser, model.Password);
@@ -370,10 +419,22 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
             {
                 return GetErrorResult(result);
             }
-
-            response.code = "200";
-            response.status = "Đăng ký thành công";
-            return Content<Response>(HttpStatusCode.Created, response);
+            else
+            {
+                for(var i = 0; i < model.roleNames.Count; i++)
+                {
+                    string roleName = model.roleNames[i];
+                    result = await UserManager.AddToRoleAsync(identityUser.Id, roleName);
+                }
+                string code = await this.UserManager.GenerateEmailConfirmationTokenAsync(identityUser.Id);
+                var callbackUrl = new Uri(Url.Link("ConfirmEmail", new { userId = identityUser.Id, code = code }));
+                await this.UserManager.SendEmailAsync(identityUser.Id,"Xác thực tài khoản của bạn","Vui lòng nhấn vào link sau: <a href=\""+ callbackUrl + "\">link</a>");
+                var message = "Chúng tôi đã gửi email xác thực tài khoản vào mail " + identityUser.Email + " . Vui lòng kiểm tra email để xác thực.";
+                response.code = "201";
+                response.status = "Đăng ký thành công";
+                response.results = message;
+                return Content<Response>(HttpStatusCode.Created, response);
+            }
         }
 
         // POST api/Account/RegisterExternal
@@ -526,5 +587,168 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
         }
 
         #endregion
+
+        // GET: /Account/ConfirmEmail
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("ConfirmEmail", Name = "ConfirmEmail")]
+        public async Task<IHttpActionResult> ConfirmEmail(string userId, string code)
+        {
+            Response response = new Response();
+            if (userId == null || code == null)
+            {
+                response.code = "400";
+                response.status = "Missing Required fields";
+                return Content<Response>(HttpStatusCode.BadRequest, response);
+            }
+            var result = await UserManager.ConfirmEmailAsync(userId, code);
+            if (result.Succeeded)
+            {
+                UserInfo userInfo = new UserInfo();
+                userInfo.status = false;
+                userInfoDao.updateUserInfo(userInfo);
+                userInfoDao.saveUserinfo();
+                return Redirect("http://www.google.com");
+            }
+
+            response.code = "500";
+            response.status = "Không thể xác thực tài khoản";
+            return Content<Response>(HttpStatusCode.BadRequest, response);
+        }
+
+        // POST: /Account/ForgotPassword
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("ForgotPassword", Name = "ForgotPasswordRoute")]
+        public async Task<IHttpActionResult> ForgotPassword([FromBody]RegisterExternalBindingModel registerExternalBindingModel)
+        {
+            Response response = new Response();
+            var user = await UserManager.FindByEmailAsync(registerExternalBindingModel.Email);
+            if(user == null)
+            {
+                response.code = "404";
+                response.status = "Email không tồn tại";
+                Content<Response>(HttpStatusCode.NotFound, response);
+            }
+
+            var userConfirmed = await UserManager.IsEmailConfirmedAsync(user.Id);
+            if(!userConfirmed)
+            {
+                response.code = "403";
+                response.status = "Email chưa được xác thực";
+                Content<Response>(HttpStatusCode.Forbidden, response);
+            }
+ 
+            string code = await this.UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+            var callbackUrl = new Uri(Url.Link("ForgotPassword", new { userId = user.Id, code = code }));
+            await this.UserManager.SendEmailAsync(user.Id, "Lấy lại mật khẩu", "Vui lòng nhấn vào link sau: <a href=\"" + callbackUrl + "\">link</a>");
+            var message = "Chúng tôi đã gửi email lấy lại mật khẩu tài khoản vào mail " + user.Email + " . Vui lòng kiểm tra email để xác thực.";
+            response.code = "200";
+            response.status = "Thành công";
+            response.results = message;
+            return Content<Response>(HttpStatusCode.OK, response);
+        }
+
+        // GET: /Account/ForgotPasswordConfirm
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("ForgotPassword", Name = "ForgotPassword")]
+        public async Task<IHttpActionResult> ForgotPasswordEmail(string userId, string code)
+        {
+            Response response = new Response();
+            if (userId == null || code == null)
+            {
+                response.code = "400";
+                response.status = "Missing Required fields";
+                return Content<Response>(HttpStatusCode.BadRequest, response);
+            }
+            var result = await UserManager.ConfirmEmailAsync(userId, code);
+            if (result.Succeeded)
+            {
+                return Redirect("http://www.google.com");
+            }
+
+            response.code = "500";
+            response.status = "Không thể xác thực tài khoản";
+            return Content<Response>(HttpStatusCode.BadRequest, response);
+        }
+
+        /**
+         *  Update UserInfo
+         *  Method PUT: /api/account/{id}
+         *  Body : {
+         *      "dob" : "",
+         *      "identityNumber" : "",
+         *      "firstName" : "",
+         *      "lastName" : "",
+         *      "roles" : []
+         *  }
+         *  Update cái gì thì truyền params đó vào
+         */
+        [Route("{id}")]
+        [HttpPut]
+        public async Task<IHttpActionResult> updateAccountInfo([FromUri]string id, [FromBody]CurrentUserInfoLogin currentUserInfoLogin)
+        {
+            Response response = new Response();
+            if(id == null)
+            {
+                response.code = "400";
+                response.status = "Missing Required fields";
+                return Content<Response>(HttpStatusCode.BadRequest, response);
+            }
+
+            var flag = 0;
+            var user = UserManager.FindById(id);
+            var userInfoId = user.userInfo.id;
+            UserInfo userInfo = new UserInfo();
+            if(currentUserInfoLogin.identityNumber != null)
+            {
+                userInfo.identityNumber = currentUserInfoLogin.identityNumber;
+                flag++;
+            }
+            if(currentUserInfoLogin.firstName != null)
+            {
+                userInfo.firstName = currentUserInfoLogin.firstName;
+                flag++;
+            }
+            if(currentUserInfoLogin.lastName != null)
+            {
+                userInfo.lastName = currentUserInfoLogin.lastName;
+                flag++;
+            }
+            if(currentUserInfoLogin.status != null)
+            {
+                userInfo.status = currentUserInfoLogin.status;
+                flag++;
+            }
+            if(currentUserInfoLogin.dob != null)
+            {
+                userInfo.dob = currentUserInfoLogin.dob;
+            }
+            if(flag > 0)
+            {
+                userInfoDao.updateUserInfo(userInfo);
+                userInfoDao.saveUserinfo();
+            }
+            
+            if(currentUserInfoLogin.roles != null && currentUserInfoLogin.roles.Count > 0)
+            {
+                var currentRoles = new List<IdentityUserRole>();
+
+                currentRoles.AddRange(user.Roles);
+                foreach (var role in currentRoles)
+                {
+                    var roleName = RoleManager.FindById(role.RoleId);
+                    var result = UserManager.RemoveFromRole(id, roleName.Name.ToString());
+                }
+                foreach (var role in currentUserInfoLogin.roles)
+                {
+                    var result = await UserManager.AddToRoleAsync(id, role);
+                }
+            }
+            response.code = "200";
+            response.status = "Success";
+            return Content<Response>(HttpStatusCode.OK, response);
+        }
     }
 }

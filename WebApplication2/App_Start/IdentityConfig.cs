@@ -5,6 +5,9 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using WebApplication2.Models;
 using WebApplication2.DAO;
+using System;
+using Microsoft.Owin.Security;
+using System.Security.Claims;
 
 namespace WebApplication2
 {
@@ -26,6 +29,7 @@ namespace WebApplication2
                 AllowOnlyAlphanumericUserNames = false,
                 RequireUniqueEmail = true
             };
+            // condition of pass word
             // Configure validation logic for passwords
             manager.PasswordValidator = new PasswordValidator
             {
@@ -35,12 +39,28 @@ namespace WebApplication2
                 RequireLowercase = false,
                 RequireUppercase = false,
             };
+
+            manager.EmailService = new Services.EmailServices();
+
             var dataProtectionProvider = options.DataProtectionProvider;
             if (dataProtectionProvider != null)
             {
-                manager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser>(dataProtectionProvider.Create("ASP.NET Identity"));
+                manager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser>(dataProtectionProvider.Create("ASP.NET Identity"))
+                {
+                    TokenLifespan = TimeSpan.FromHours(6)
+                };
             }
             return manager;
+        }
+    }
+
+    public class ApplicationRoleManager : RoleManager<ApplicationRole>
+    {
+        public ApplicationRoleManager(IRoleStore<ApplicationRole,string> roleStore) : base(roleStore){ }
+        public static ApplicationRoleManager Create(IdentityFactoryOptions<ApplicationRoleManager> options, IOwinContext context)
+        {
+            var applicationRoleManager = new ApplicationRoleManager(new RoleStore<ApplicationRole>(context.Get<DBContext>()));
+            return applicationRoleManager;
         }
     }
 }

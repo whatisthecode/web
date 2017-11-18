@@ -10,12 +10,17 @@ namespace WebApplication2.Models
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Int16 id { get; set; }
+
         [ForeignKey("Category")]
         public Int16 categoryId { get; set; }
+
         [ForeignKey("Product")]
         public Int16 productId { get; set; }
+
         public Category Category { get; set; }
+
         public Product Product { get; set; }
+
         public CategoryProduct()
         {
 

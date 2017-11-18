@@ -34,12 +34,12 @@ namespace WebApplication2.DAO
         {
             return base.get();
         }
-        public Product checkexist(Product product)
+        public Product checkexist(string code)
         {
-            Product product2compare = base.context.products.Where(p=> p.code == product.code).FirstOrDefault();
+            Product product2compare = base.context.products.Where(p=> p.code == code).FirstOrDefault();
             if (product2compare != null)
             {
-                return product;
+                return product2compare;
             }
             return null;
                 
@@ -94,5 +94,18 @@ namespace WebApplication2.DAO
         {
             base.update(product);
         }
+
+        public void checkProductCode(Product Product)
+        {
+            throw new NotImplementedException();
+        }
+
+        /* public void checkProductCode(Product product)
+         {
+             var query = from p in base.getContext().products select p;
+             query = query.Where(p => p.code == product.code);
+             Product pro = base.checkColumnExists(query);  
+
+         }*/
     }
 }

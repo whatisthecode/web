@@ -15,9 +15,9 @@ namespace WebApplication2.DAO
         void insertProduct(Product product);
         void deleteProduct(Int16 id);
         void save();
-        
+        void checkProductCode(Product Product);
         void dispose();
-        Product checkexist(Product product);
+        Product checkexist(string code);
         PagedResult<Product> PageView(Int16 indexnum, Int16 pagesize, String Orderby);
         PagedResult<Product> PageView(Int16 indexnum, Int16 pagesize, String Orderby, Boolean ascending);
     }

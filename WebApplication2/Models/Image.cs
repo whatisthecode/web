@@ -10,11 +10,14 @@ namespace WebApplication2.Models
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Int16 id { get; set; }
+
         public String url { get; set; }
         [ForeignKey("Product")]
         [Column("product_id")]
         public Int16 productId { get; set; }
-        public Product product { get; set; }
+
+        public Product Product { get; set; }
+
         public Image()
         {
             

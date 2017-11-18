@@ -199,8 +199,11 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\API\AccountController.cs" />
     <Compile Include="Controllers\API\CategoryController.cs" />
+    <Compile Include="Controllers\API\CategoryProductController.cs" />
     <Compile Include="Controllers\API\InvoiceController.cs" />
+    <Compile Include="Controllers\API\ProductAttributeController.cs" />
     <Compile Include="Controllers\API\ProductController.cs" />
+    <Compile Include="Controllers\API\RoleController.cs" />
     <Compile Include="Controllers\API\UserController.cs" />
     <Compile Include="Controllers\Base.cs" />
     <Compile Include="Controllers\Client\HomeController.cs" />
@@ -208,12 +211,16 @@
     <Compile Include="DAO\BaseImpl.cs" />
     <Compile Include="DAO\CategoryDAO.cs" />
     <Compile Include="DAO\CategoryDAOImpl.cs" />
+    <Compile Include="DAO\CategoryProductDAO.cs" />
+    <Compile Include="DAO\CategoryProductImplDAO.cs" />
     <Compile Include="DAO\DatabaseFactory.cs" />
     <Compile Include="DAO\DBContext.cs" />
     <Compile Include="DAO\InvoiceDAO.cs" />
     <Compile Include="DAO\InvoiceDAOImpl.cs" />
     <Compile Include="DAO\InvoiceDetailDAO.cs" />
     <Compile Include="DAO\InvoiceDetailDAOImpl.cs" />
+    <Compile Include="DAO\ProductAttributeDAO.cs" />
+    <Compile Include="DAO\ProductAttributeImplDAO.cs" />
     <Compile Include="DAO\ProductDAO.cs" />
     <Compile Include="DAO\ProductDAOImpl.cs" />
     <Compile Include="DAO\UserTypeDAO.cs" />
@@ -225,12 +232,15 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\CategoryRelation.cs" />
+    <Compile Include="Models\CategoryType.cs" />
     <Compile Include="Models\IdentityModels\AccountBindingModels.cs" />
     <Compile Include="Models\IdentityModels\AccountViewModels.cs" />
     <Compile Include="Models\Base.cs" />
     <Compile Include="Models\CategoryProduct.cs" />
     <Compile Include="Models\IdentityModels\IdentityModels.cs" />
     <Compile Include="Models\Image.cs" />
+    <Compile Include="Models\IdentityModels\RoleViewModel.cs" />
     <Compile Include="Models\Invoice.cs" />
     <Compile Include="Models\InvoiceDetail.cs" />
     <Compile Include="Models\Mapping\PagedResult.cs" />
@@ -239,6 +249,8 @@
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\ProductAttribute.cs" />
     <Compile Include="Models\Category.cs" />
+    <Compile Include="Models\Rating.cs" />
+    <Compile Include="Models\RequestModel\CreateProductModel.cs" />
     <Compile Include="Models\UserInfo.cs" />
     <Compile Include="Models\UserRole.cs" />
     <Compile Include="Models\UserType.cs" />
@@ -246,6 +258,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
+    <Compile Include="Services\EmailServices.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>

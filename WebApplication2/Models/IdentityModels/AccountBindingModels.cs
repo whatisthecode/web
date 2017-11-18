@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace WebApplication2.Models
@@ -59,6 +60,8 @@ namespace WebApplication2.Models
             public string identityNumber { get; set; }
             [Required]
             public Int16 type { get; set; }
+            [Required]
+            public List<string> roleNames { get; set; }
         }
     }
 

@@ -10,9 +10,20 @@ namespace WebApplication2.Models
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Int16 id { get; set; }
+
         public String code { get; set; }
+
         public String name { get; set; }
+
+        [ForeignKey("CategoryType")]
+        public Int16 typeId { get; set; }
+
         public virtual ICollection<CategoryProduct> products { get; set; }
+
+        public virtual ICollection<CategoryRelation> childs { get; set; }
+
+        public CategoryType CategoryType { get; set; }
+
         public Category(string code, string name)
         {
             this.code = code;

@@ -50,11 +50,17 @@ namespace WebApplication2.DAO
             base.save();
         }
 
-        public UserInfo findByIdentityNumber(UserInfo userInfo)
+        public UserInfo checkExist(string field, string value)
         {
-            var query = from u in base.getContext().userInfos
-                        where u.identityNumber == userInfo.identityNumber
-                        select u;
+            var query = from u in base.getContext().userInfos select u;
+            switch(field)
+            {
+                case "identityNumber":
+                   query = query.Where(q => q.identityNumber == value);
+                break;
+                default:
+                break;
+            }
             var user = query.FirstOrDefault();
             if (user != null)
             {
