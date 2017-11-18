@@ -597,7 +597,7 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
             Response response = new Response();
             if (userId == null || code == null)
             {
-                response.code = "400";
+                response.code = "422";
                 response.status = "Missing Required fields";
                 return Content<Response>(HttpStatusCode.BadRequest, response);
             }
@@ -658,7 +658,7 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
             Response response = new Response();
             if (userId == null || code == null)
             {
-                response.code = "400";
+                response.code = "422";
                 response.status = "Missing Required fields";
                 return Content<Response>(HttpStatusCode.BadRequest, response);
             }
