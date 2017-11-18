@@ -9,17 +9,27 @@ namespace WebApplication2.Models
 {
     public class ProductAttribute : Base
     {
+        public enum attributes
+        {
+            price, color, amount, discount, size
+        }
+
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Int16 id { get; set; }
+
         [ForeignKey("Product")]
         [Column("product_id")]
         [Index(IsUnique = true)]
         public Int16 productId { get; set; }
+
         [Index(IsUnique = true)]
         [StringLength(128)]
         public String key { get; set; }
+
         public String value { get; set; }
+
         public Product Product { get; set; }
+
         public ProductAttribute(Int16 productId, String key, String value)
         {
             this.productId = productId;
@@ -29,11 +39,6 @@ namespace WebApplication2.Models
         public ProductAttribute()
         {
 
-        }
-
-        public enum Attribute
-        {
-            price, color, amount, discount, size
         }
     }
 }

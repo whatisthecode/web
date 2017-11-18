@@ -12,9 +12,11 @@ namespace WebApplication2.Models
         public Int16 id { get; set; }
 
         [ForeignKey("Category")]
+        [Column("category_id")]
         public Int16 categoryId { get; set; }
 
         [ForeignKey("Product")]
+        [Column("product_id")]
         public Int16 productId { get; set; }
 
         public Category Category { get; set; }

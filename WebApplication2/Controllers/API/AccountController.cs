@@ -716,11 +716,6 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
                 userInfo.lastName = currentUserInfoLogin.lastName;
                 flag++;
             }
-            if(currentUserInfoLogin.status != null)
-            {
-                userInfo.status = currentUserInfoLogin.status;
-                flag++;
-            }
             if(currentUserInfoLogin.dob != null)
             {
                 userInfo.dob = currentUserInfoLogin.dob;

@@ -10,15 +10,32 @@ namespace WebApplication2.Models
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Int16 id { get; set; }
+
+        [Column("saler_id")]
+        public Int16 salerId { get; set; }
+
+        [Column("buyer_id")]
+        public Int16 buyerId { get; set; }
+
         public Int16 status { get; set; }
+
         public String code { get; set; }
-        public Int16 buyer { get; set; }
+
         public Double total { get; set; }
-        public UserInfo userInfo { get; set; }
-        public Invoice(string code, Int16 buyer, Double total)
+
+        [ForeignKey("salerId")]
+        [InverseProperty("salerInvoices")]
+        public virtual UserInfo saler { get; set; }
+
+        [ForeignKey("buyerId")]
+        [InverseProperty("buyerInvoices")]
+        public virtual UserInfo buyer { get; set; }
+
+        public Invoice(string code, Int16 buyerId, Int16 salerId, Double total)
         {
             this.code = code;
-            this.buyer = buyer;
+            this.buyerId = buyerId;
+            this.salerId = salerId;
             this.total = total;
             this.status = 0;
         }

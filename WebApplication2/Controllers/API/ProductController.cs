@@ -18,11 +18,13 @@ namespace WebApplication2.Controllers.API
         private UserInfoDAO userInfoDAO;
         private CategoryDAO categoryDAO;
         private CategoryProductDAO categoryProductDAO;
+
         public ProductController()
         {
             this.productDao = new ProductDAOImpl();
             this.userInfoDAO = new UserInfoDAOImpl();
-            this.categoryProductDAO = new CategoryProductImplDAO();
+            this.categoryDAO = new CategoryDAOImpl();
+            this.categoryProductDAO = new CategoryProductDAOImpl();
         }
        
         [Route("api/product")]

@@ -14,8 +14,7 @@ namespace WebApplication2.DAO
         void insertProductAttribute(ProductAttribute proat);
         void updateProductAttribute(ProductAttribute proat, Int16 id);
         void deleteProductAttribute(Int16 id);
-
-
+        void dispose();
 
     }
 }

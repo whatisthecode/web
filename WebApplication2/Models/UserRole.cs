@@ -10,8 +10,11 @@ namespace WebApplication2.Models
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Int16 id { get; set; }
+
         public String code { get; set; }
+
         public String name { get; set; }
+
         public ICollection<UserTypeRole> types { get; set; }
 
         public UserRole(string code, string name)

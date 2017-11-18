@@ -16,11 +16,16 @@ namespace WebApplication2.Models
         public String name { get; set; }
 
         [ForeignKey("CategoryType")]
+        [Column("type_id")]
         public Int16 typeId { get; set; }
 
-        public virtual ICollection<CategoryProduct> products { get; set; }
+        [ForeignKey("parent")]
+        [Column("parent_id")]
+        public Int16 parentId { get; set; }
 
-        public virtual ICollection<CategoryRelation> childs { get; set; }
+        public Category parent { get; set; }
+
+        public virtual ICollection<Category> subCategories { get; set; }
 
         public CategoryType CategoryType { get; set; }
 

@@ -13,14 +13,17 @@ namespace WebApplication2.Models
 
         [Column("user_id")]
         [ForeignKey("UserInfo")]
-        [Index(IsUnique = true)]
         public Int16 userId { get; set; }
 
-        [Index(IsUnique = true)]
         public String type { get; set; }
 
         public Double point { get; set; }
 
         public UserInfo UserInfo { get; set; }
+
+        public Rating()
+        {
+            this.point = 2.5;
+        }
     }
 }
