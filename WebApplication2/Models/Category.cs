@@ -21,7 +21,7 @@ namespace WebApplication2.Models
 
         [ForeignKey("parent")]
         [Column("parent_id")]
-        public Int16 parentId { get; set; }
+        public Int16? parentId { get; set; }
 
         public Category parent { get; set; }
 

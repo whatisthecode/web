@@ -30,6 +30,7 @@ namespace WebApplication2.DAO
 
         public void insertProductAttribute(ProductAttribute proat)
         {
+
         }
 
         public void updateProductAttribute(ProductAttribute proat, short id)
