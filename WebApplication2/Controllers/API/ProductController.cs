@@ -64,16 +64,23 @@ namespace WebApplication2.Controllers.API
                 product.longDescription = createProductModel.longDescription;
                 product.name = createProductModel.name;
                 product.createdBy = createProductModel.createdBy;
+                product.status = createProductModel.status;
                 this.productDao.insertProduct(product);
-                this.productDao.save();
 
+                this.productDao.save();
                 //insert data to category product
                 Product newProduct = productDao.checkexist(product.code);
                 for(int i = 0; i < createProductModel.categoryId.Length; i++)
                 {
                     catepro.categoryId = createProductModel.categoryId[i];
                     catepro.productId = newProduct.id;
+                    this.categoryProductDAO.insertCategoryProduct(catepro);
                 }
+                
+                this.categoryProductDAO.save();
+               
+
+
 
                 response.code = "201";
                 response.results = "Thêm sản phẩm thành công";
@@ -117,7 +124,7 @@ namespace WebApplication2.Controllers.API
   
         [Route("api/product/{id}")]
         [HttpPut]
-        public IHttpActionResult updateProduct([FromBody]Product product, Int16 id)
+        public IHttpActionResult updateProduct([FromBody]CreateProductModel updateProductModel, Int16 id)
         {
             Response response = new Response();
             Product productcheck = this.productDao.getProduct(id);
@@ -130,15 +137,35 @@ namespace WebApplication2.Controllers.API
 
             }
             else
+            if (productcheck.status == 1)
             {
-
+                response.code = "409";
+                response.status = "Không thể cập nhật sản phẩm khi bài đăng đã được công khai";
+                return Content<Response>(HttpStatusCode.Conflict, response);
+            }
+            else
+            {
+                DateTime now = DateTime.Now;
+                updateProductModel.updateAt = now;
                 response.code = "200";
                 response.status = "Cập nhật sản phẩm thành công";
 
-                productcheck.name = product.name;
-                productcheck.shortDescription = product.shortDescription;
-                productcheck.longDescription = product.longDescription;
-                productcheck.updatedAt = product.updatedAt;
+                
+                
+                Int16[] listCategoryId = productDao.getProductCategoriesId(id);
+                for (int i = 0; i < updateProductModel.categoryId.Length; i++)
+                {
+                    CategoryProduct catepro = this.categoryProductDAO.getCategoryProduct(listCategoryId[i]);
+                    catepro.categoryId = updateProductModel.categoryId[i];
+                    catepro.productId = id;
+                    this.categoryProductDAO.updateCategoryProduct(catepro);
+                }
+                categoryProductDAO.save();
+
+                productcheck.name = updateProductModel.name;
+                productcheck.shortDescription = updateProductModel.shortDescription;
+                productcheck.longDescription = updateProductModel.longDescription;
+                productcheck.updatedAt = updateProductModel.updateAt ;
                 this.productDao.updateProduct(productcheck);
                 this.productDao.save();
                 return Content<Response>(HttpStatusCode.OK, response);
