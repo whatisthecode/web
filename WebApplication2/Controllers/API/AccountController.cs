@@ -46,7 +46,7 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
             AccessTokenFormat = accessTokenFormat;
             RoleManager = roleManager;
         }
-
+        
         public ApplicationUserManager UserManager
         {
             get
@@ -421,8 +421,8 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
             else
             {
 
-                string roleName = model.roleNames;
-                result = await UserManager.AddToRoleAsync(identityUser.Id, roleName);
+                //string roleName = model.roleNames;
+                //result = await UserManager.AddToRoleAsync(identityUser.Id, roleName);
                 string code = await this.UserManager.GenerateEmailConfirmationTokenAsync(identityUser.Id);
                 var callbackUrl = new Uri(Url.Link("ConfirmEmail", new { userId = identityUser.Id, code = code }));
                 await this.UserManager.SendEmailAsync(identityUser.Id,"Xác thực tài khoản của bạn","Vui lòng nhấn vào link sau: <a href=\""+ callbackUrl + "\">link</a>");
@@ -694,6 +694,7 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
             var user = UserManager.FindById(id);
             var userInfoId = user.userInfo.id;
             UserInfo userInfo = new UserInfo();
+            userInfo = userInfoDao.getUserInfo(userInfoId);
             if(currentUserInfoLogin.identityNumber != null)
             {
                 userInfo.identityNumber = currentUserInfoLogin.identityNumber;

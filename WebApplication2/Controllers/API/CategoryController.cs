@@ -85,7 +85,6 @@ namespace WebApplication2.Controllers.API
             return Content<Response>(HttpStatusCode.OK, response);
         }
 
-        
         [Route("api/category/{id}")]
         [HttpGet]
         public IHttpActionResult getCategory(short id)
@@ -106,7 +105,7 @@ namespace WebApplication2.Controllers.API
                 
         }
 
-        [Authorize(Roles = "Merchant")]
+        [Authorize(Roles = "Admin, CanEditGroup")]
         [Route("api/category/")]
         [HttpGet]
         public IHttpActionResult getCategories()

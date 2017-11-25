@@ -58,8 +58,8 @@ namespace WebApplication2.Models
             public string lastName { get; set; }
             [Required]
             public string identityNumber { get; set; }
-            [Required]
-            public string roleNames { get; set; }
+            //[Required]
+            //public string roleNames { get; set; }
         }
     }
 
