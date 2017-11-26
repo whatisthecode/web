@@ -1,4 +1,4 @@
-﻿f("undefined" !== typeof app){
+﻿if("undefined" !== typeof app){
     app.provider('Helper', function Helper(CONFIG) {
         this.fixUrlAPI = function (apiName, variables) {
             var url = apiName;
@@ -18,7 +18,7 @@
         };
 
         this.toRealObject = function (object) {
-            return JSON.parse(JSON.stringify(object));
+            return Object.assign({}, object);
         };
 
         this.$get = function Helper() {
