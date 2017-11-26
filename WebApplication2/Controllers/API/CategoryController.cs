@@ -97,12 +97,12 @@ namespace WebApplication2.Controllers.API
                 response.status = ("Không tìm thấy loại sản phẩm");
                 return Content<Response>(HttpStatusCode.NotFound, response);
             }
-            
-                response.code="200";
-                response.status = "Loại sản phẩm cần tìm";
-                response.results = categorytemp;
-                return Content<Response>(HttpStatusCode.OK, response);
-                
+
+            response.code = "200";
+            response.status = "Loại sản phẩm cần tìm";
+            response.results = categorytemp;
+            return Content<Response>(HttpStatusCode.OK, response);
+
         }
 
         [Authorize(Roles = "Admin, CanEditGroup")]

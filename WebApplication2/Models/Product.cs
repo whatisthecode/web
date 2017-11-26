@@ -28,7 +28,7 @@ namespace WebApplication2.Models
 
         public virtual UserInfo userInfo { get; set; }
 
-        public ICollection<ProductAttribute> attributes { get; set; }
+        public virtual ICollection<ProductAttribute> attributes { get; set; }
 
         public Product(string code, string name, Int16 status, string shortDescription, string longDescription, Int16 createdBy)
         {

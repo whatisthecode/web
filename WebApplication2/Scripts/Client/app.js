@@ -16,6 +16,9 @@
         }).when("/account/set-password", {
             controller: "SetPasswordController",
             templateUrl: "./Scripts/Client/View/set-password.html"
+        }).when("/register", {
+            controller: "RegisterController",
+             templateUrl: "./Scripts/Client/View/register.html"
         }).when("/:category", {
             controller: "ProductController",
             templateUrl: "./Scripts/Client/View/product.html"

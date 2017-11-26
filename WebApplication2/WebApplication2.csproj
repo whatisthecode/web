@@ -230,10 +230,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\ApplicationRoleGroup.cs" />
-    <Compile Include="Models\ApplicationUserGroup.cs" />
     <Compile Include="Models\CategoryType.cs" />
-    <Compile Include="Models\Group.cs" />
     <Compile Include="Models\IdentityModels\AccountBindingModels.cs" />
     <Compile Include="Models\IdentityModels\AccountViewModels.cs" />
     <Compile Include="Models\Base.cs" />
@@ -258,6 +255,7 @@
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
     <Compile Include="Services\EmailServices.cs" />
+    <Compile Include="Services\Utils.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -367,6 +365,7 @@
     <Content Include="Scripts\Client\Factory\Product.js" />
     <Content Include="Scripts\Client\Factory\ProductDetail.js" />
     <Content Include="Scripts\Client\Factory\Register.js" />
+    <Content Include="Scripts\Client\Provider\API.js" />
     <Content Include="Scripts\Client\Provider\Helper.js" />
     <Content Include="Scripts\Client\Shared\Error.js" />
     <Content Include="Scripts\Client\Shared\Top.js" />
@@ -377,6 +376,7 @@
     <Content Include="Scripts\Client\View\product-detail.html" />
     <Content Include="Scripts\Client\View\product.html" />
     <Content Include="Scripts\Client\View\set-password.html" />
+    <Content Include="Scripts\Client\View\register.html" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

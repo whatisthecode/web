@@ -19,16 +19,15 @@ namespace WebApplication2.Models
 
         [ForeignKey("Product")]
         [Column("product_id")]
-        [Index(IsUnique = true)]
+        [Index("IX_productId_key", 1, IsUnique = true)]
         public Int16 productId { get; set; }
 
-        [Index(IsUnique = true)]
+        [Index("IX_productId_key", 2, IsUnique = true)]
         [StringLength(128)]
+        public String key { get; set; }
 
         [NotMapped]
         public BaseAttribute attributes { get; set; }
-
-        public String key { get; set; }
 
         public String value { get; set; }
 

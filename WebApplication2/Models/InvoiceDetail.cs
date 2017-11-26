@@ -13,11 +13,11 @@ namespace WebApplication2.Models
         public Int16 id { get; set; }
 
         [ForeignKey("Invoice")]
-        [Index(IsUnique = true)]
+        [Index("IX_invoiceId_productId", 1, IsUnique = true)]
         public Int16 invoice { get; set; }
 
         [ForeignKey("Product")]
-        [Index(IsUnique = true)]
+        [Index("IX_invoiceId_productId", 2, IsUnique = true)]
         public Int16 product { get; set; }
 
         public Int16 amount { get; set; }

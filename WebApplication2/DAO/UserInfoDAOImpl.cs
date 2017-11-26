@@ -68,5 +68,10 @@ namespace WebApplication2.DAO
             }
             return null;
         }
+
+        public Boolean isAdmin(UserInfo userInfo)
+        {
+            return true;
+        }
     }
 }

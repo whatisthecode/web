@@ -100,6 +100,10 @@ namespace WebApplication2.DAO
             throw new NotImplementedException();
         }
 
+        public void saveProduct()
+        {
+            base.save();
+        }
         public Int16[] getProductCategoriesId(short idProduct)
         {
             var query = from c in base.context.categoryProducts
@@ -107,8 +111,6 @@ namespace WebApplication2.DAO
                         select c.id;
             return query.ToArray();
         }
-      
-
 
         /* public void checkProductCode(Product product)
          {
