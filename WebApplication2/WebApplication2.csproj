@@ -215,8 +215,8 @@
     <Compile Include="DAO\CategoryProductDAOImpl.cs" />
     <Compile Include="DAO\DatabaseFactory.cs" />
     <Compile Include="DAO\DBContext.cs" />
-    <Compile Include="DAO\GroupRoleManagerDao.cs" />
-    <Compile Include="DAO\GroupRoleManagerDaoImp.cs" />
+    <Compile Include="DAO\GroupRoleManagerDAO.cs" />
+    <Compile Include="DAO\GroupRoleManagerDAOImp.cs" />
     <Compile Include="DAO\InvoiceDAO.cs" />
     <Compile Include="DAO\InvoiceDAOImpl.cs" />
     <Compile Include="DAO\InvoiceDetailDAO.cs" />

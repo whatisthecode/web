@@ -21,11 +21,11 @@ namespace WebApplication2.Controllers.API
         private ApplicationUserManager _userManager;
         private ApplicationRoleManager _roleManager;
 
-        private GroupRoleManagerDao groupRoleManagerDao;
+        private GroupRoleManagerDAO groupRoleManagerDao;
 
         public RoleController()
         {
-            this.groupRoleManagerDao = new GroupRoleManagerDaoImp();
+            this.groupRoleManagerDao = new GroupRoleManagerDAOImp();
         }
 
         public RoleController(ApplicationUserManager userManager, ApplicationRoleManager roleManager,

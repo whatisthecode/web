@@ -32,13 +32,13 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
         private const string LocalLoginProvider = "Local";
         private ApplicationUserManager _userManager;
         private ApplicationRoleManager _roleManager;
-        private GroupRoleManagerDao groupRoleManagerDao;
+        private GroupRoleManagerDAO groupRoleManagerDAO;
         private UserInfoDAO userInfoDao;
 
         public AccountController()
         {
             userInfoDao = new UserInfoDAOImpl();
-            this.groupRoleManagerDao = new GroupRoleManagerDaoImp();
+            this.groupRoleManagerDAO = new GroupRoleManagerDAOImp();
         }
 
         public AccountController(ApplicationUserManager userManager, ApplicationRoleManager roleManager,
@@ -424,8 +424,8 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
             {
                 foreach (var group in model.groups)
                 {
-                    Group gr = groupRoleManagerDao.findByName(group);
-                    groupRoleManagerDao.AddUserToGroup(identityUser.Id, gr.id);
+                    Group gr = groupRoleManagerDAO.findByName(group);
+                    groupRoleManagerDAO.AddUserToGroup(identityUser.Id, gr.id);
                 }
                 string code = await this.UserManager.GenerateEmailConfirmationTokenAsync(identityUser.Id);
                 var callbackUrl = new Uri(Url.Link("ConfirmEmail", new { userId = identityUser.Id, code = code }));

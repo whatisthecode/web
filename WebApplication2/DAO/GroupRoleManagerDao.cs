@@ -7,7 +7,7 @@ using WebApplication2.Models;
 
 namespace WebApplication2.DAO
 {
-    interface GroupRoleManagerDao
+    interface GroupRoleManagerDAO
     {
         bool RoleExists(string name);
 
