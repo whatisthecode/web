@@ -41,6 +41,7 @@ namespace WebApplication2.DAO
 
         public void updateCategoryProduct(CategoryProduct catepro)
         {
+            catepro.updatedAt = DateTime.Now;
             base.update(catepro);
         }
         PagedResult<CategoryProduct> pageView(Int16 pageindex, Int16 pagesize, string orderBy, Boolean ascending)

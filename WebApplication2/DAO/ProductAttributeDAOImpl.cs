@@ -45,6 +45,7 @@ namespace WebApplication2.DAO
 
         public void updateProductAttribute(ProductAttribute proat)
         {
+            proat.updatedAt = DateTime.Now;
             base.update(proat);
         }
     }

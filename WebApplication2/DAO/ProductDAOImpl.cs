@@ -92,6 +92,7 @@ namespace WebApplication2.DAO
 
         public void updateProduct(Product product)
         {
+            product.updatedAt = DateTime.Now;
             base.update(product);
         }
 

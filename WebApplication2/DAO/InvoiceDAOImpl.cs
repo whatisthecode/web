@@ -76,6 +76,7 @@ namespace WebApplication2.DAO
 
         public void updateInvoice(Invoice invoice)
         {
+            invoice.updatedAt = DateTime.Now;
             base.update(invoice);
         }
     }

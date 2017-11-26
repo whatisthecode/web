@@ -43,6 +43,7 @@ namespace WebApplication2.DAO
 
         public void updateCategory(Category category)
         {
+            category.updatedAt = DateTime.Now;
             base.update(category);
         }
 
