@@ -11,7 +11,7 @@ namespace WebApplication2.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Int16 id { get; set; }
 
-        Boolean status { get; set; }
+        public Int16 status { get; set; }
 
         public String code { get; set; }
 
@@ -30,13 +30,14 @@ namespace WebApplication2.Models
 
         public virtual ICollection<ProductAttribute> attributes { get; set; }
 
-        public Product(string code, string name, string shortDescription, string longDescription, Int16 createdBy)
+        public Product(string code, string name, Int16 status, string shortDescription, string longDescription, Int16 createdBy)
         {
             this.code = code;
             this.name = name;
             this.shortDescription = shortDescription;
             this.longDescription = longDescription;
             this.createdBy = createdBy;
+            this.status = status;
         }
         public Product()
         {

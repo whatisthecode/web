@@ -361,6 +361,7 @@
     <Content Include="Scripts\Client\Factory\Product.js" />
     <Content Include="Scripts\Client\Factory\ProductDetail.js" />
     <Content Include="Scripts\Client\Factory\Register.js" />
+    <Content Include="Scripts\Client\Provider\API.js" />
     <Content Include="Scripts\Client\Provider\Helper.js" />
     <Content Include="Scripts\Client\Shared\Error.js" />
     <Content Include="Scripts\Client\Shared\Top.js" />

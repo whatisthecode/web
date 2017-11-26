@@ -30,14 +30,14 @@ namespace WebApplication2.Controllers.API
             this.categoryDAO = new CategoryDAOImpl();
             this.categoryProductDAO = new CategoryProductDAOImpl();
         }
-       
+
         [Route("api/product")]
         [HttpPost]
         [Authorize(Roles = "Merchant")]
         public IHttpActionResult insertNewProduct([FromBody]CreateProductModel createProductModel)
         {
             Response response = Utils.checkInput(createProductModel, CreateProductModel.required);
-            if(response.code != "422")
+            if (response.code != "422")
             {
                 Product productcheck = this.productDao.checkexist(createProductModel.code);
                 UserInfo user = this.userInfoDAO.getUserInfo(createProductModel.createdBy);
@@ -72,7 +72,7 @@ namespace WebApplication2.Controllers.API
                     {
                         Category category = new Category();
                         category.id = createProductModel.categories[i];
-                        if(this.categoryDAO.checkExist(category) != null)
+                        if (this.categoryDAO.checkExist(category) != null)
                         {
                             CategoryProduct catepro = new CategoryProduct();
                             catepro.categoryId = createProductModel.categories[i];
@@ -81,7 +81,7 @@ namespace WebApplication2.Controllers.API
                             this.categoryProductDAO.save();
                         }
                     }
-                    foreach(var attribute in createProductModel.attributes)
+                    foreach (var attribute in createProductModel.attributes)
                     {
                         ProductAttribute productAttribute = new ProductAttribute(product.id, attribute.Key, attribute.Value.ToString());
                         this.productAttributeDAO.insertProductAttribute(productAttribute);
@@ -91,11 +91,13 @@ namespace WebApplication2.Controllers.API
                     response.code = "201";
                     response.results = "Thêm sản phẩm thành công";
                     return Content<Response>(HttpStatusCode.OK, response);
-
                 }
+
             }
+
             return Content<Response>(HttpStatusCode.OK, response);
         }
+
         [Route("api/product/{id}")]
         [HttpGet]
         public IHttpActionResult getProductWithConditions(short id)
@@ -129,10 +131,10 @@ namespace WebApplication2.Controllers.API
             return Content<Response>(HttpStatusCode.OK, response);
 
         }
-  
+
         [Route("api/product/{id}")]
         [HttpPut]
-        public IHttpActionResult updateProduct([FromBody]Product product, Int16 id)
+        public IHttpActionResult updateProduct([FromBody]CreateProductModel updateProductModel, Int16 id)
         {
             Response response = new Response();
             Product productcheck = this.productDao.getProduct(id);
@@ -145,33 +147,50 @@ namespace WebApplication2.Controllers.API
 
             }
             else
+            if (productcheck.status == 1)
+            {
+                response.code = "409";
+                response.status = "Không thể cập nhật sản phẩm khi bài đăng đã được công khai";
+                return Content<Response>(HttpStatusCode.Conflict, response);
+            }
+            else
             {
 
                 response.code = "200";
                 response.status = "Cập nhật sản phẩm thành công";
 
-                productcheck.name = product.name;
-                productcheck.shortDescription = product.shortDescription;
-                productcheck.longDescription = product.longDescription;
-                productcheck.updatedAt = product.updatedAt;
+                Int16[] listCategoryId = productDao.getProductCategoriesId(id);
+                Int16 updateProductModelLength = (Int16)updateProductModel.categories.Length;
+                for (Int16 i = 0; i < updateProductModelLength; i++)
+                {
+                    CategoryProduct catepro = this.categoryProductDAO.getCategoryProduct(listCategoryId[i]);
+                    catepro.categoryId = updateProductModel.categories[i];
+                    catepro.productId = id;
+                    this.categoryProductDAO.updateCategoryProduct(catepro);
+                }
+                categoryProductDAO.save();
+
+                productcheck.name = updateProductModel.name;
+                productcheck.shortDescription = updateProductModel.shortDescription;
+                productcheck.longDescription = updateProductModel.longDescription;
                 this.productDao.updateProduct(productcheck);
                 this.productDao.saveProduct();
                 return Content<Response>(HttpStatusCode.OK, response);
             }
 
         }
-        
+
         [HttpDelete]
         [Route("api/product/{id}")]
         public IHttpActionResult deleteProduct(Int16 iddel)
-        { 
+        {
             Response response = new Response();
             Product productcheck = this.productDao.getProduct(iddel);
             if (productcheck == null)
             {
                 response.code = "404";
                 response.status = "không tồn tại sản phẩm cần xóa";
-                return Content<Response>(HttpStatusCode.NotFound,response);
+                return Content<Response>(HttpStatusCode.NotFound, response);
             }
             else
             {

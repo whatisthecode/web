@@ -104,6 +104,13 @@ namespace WebApplication2.DAO
         {
             base.save();
         }
+        public Int16[] getProductCategoriesId(short idProduct)
+        {
+            var query = from c in base.context.categoryProducts
+                        where c.productId == idProduct
+                        select c.id;
+            return query.ToArray();
+        }
 
         /* public void checkProductCode(Product product)
          {

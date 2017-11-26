@@ -10,6 +10,7 @@ namespace WebApplication2.DAO
     public interface ProductDAO
     {
         IEnumerable<Product> getProducts();
+        Int16[] getProductCategoriesId(short idProduct);
         Product getProduct(Int16 id);
         void updateProduct(Product product);
         void insertProduct(Product product);

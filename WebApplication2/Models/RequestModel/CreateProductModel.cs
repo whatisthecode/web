@@ -18,6 +18,7 @@ namespace WebApplication2.Models.RequestModel
         public String shortDescription { get; set; }
         public String longDescription { get; set; }
         public Int16 createdBy { get; set; }
+
         public Int16[] categories { get; set; }
 
         public JObject attributes { get; set; }
