@@ -33,9 +33,10 @@ namespace WebApplication2
                        "~/Scripts/Client/Controller/Cart.js",
                        "~/Scripts/Client/Controller/Product.js",
                        "~/Scripts/Client/Controller/ProductDetail.js",
+                       "~/Scripts/Client/Controller/AccountConfirm.js",
+                       "~/Scripts/Client/Controller/SetPassword.js",
                        "~/Scripts/Client/Controller/Login.js",
                        "~/Scripts/Client/Controller/Register.js"));
-
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
             // ready for production, use the build tool at https://modernizr.com to pick only the tests you need.
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(

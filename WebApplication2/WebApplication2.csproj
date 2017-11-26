@@ -215,6 +215,8 @@
     <Compile Include="DAO\CategoryProductDAOImpl.cs" />
     <Compile Include="DAO\DatabaseFactory.cs" />
     <Compile Include="DAO\DBContext.cs" />
+    <Compile Include="DAO\GroupRoleManagerDAO.cs" />
+    <Compile Include="DAO\GroupRoleManagerDAOImp.cs" />
     <Compile Include="DAO\InvoiceDAO.cs" />
     <Compile Include="DAO\InvoiceDAOImpl.cs" />
     <Compile Include="DAO\InvoiceDetailDAO.cs" />
@@ -340,6 +342,7 @@
     <Content Include="Scripts\Admin\app.js" />
     <Content Include="Scripts\Client\app.config.js" />
     <Content Include="Scripts\Client\app.js" />
+    <Content Include="Scripts\Client\Controller\AccountConfirm.js" />
     <Content Include="Scripts\Client\Controller\Cart.js" />
     <Content Include="Scripts\Client\Controller\Category.js" />
     <Content Include="Scripts\Client\Controller\CategoryDetail.js" />
@@ -351,6 +354,7 @@
     <Content Include="Scripts\Client\Controller\Product.js" />
     <Content Include="Scripts\Client\Controller\ProductDetail.js" />
     <Content Include="Scripts\Client\Controller\Register.js" />
+    <Content Include="Scripts\Client\Controller\SetPassword.js" />
     <Content Include="Scripts\Client\Factory\Cart.js" />
     <Content Include="Scripts\Client\Factory\Category.js" />
     <Content Include="Scripts\Client\Factory\CategoryDetail.js" />
@@ -366,10 +370,12 @@
     <Content Include="Scripts\Client\Shared\Error.js" />
     <Content Include="Scripts\Client\Shared\Top.js" />
     <Content Include="Scripts\Client\View\cart.html" />
+    <Content Include="Scripts\Client\View\confirm-email.html" />
     <Content Include="Scripts\Client\View\error.html" />
     <Content Include="Scripts\Client\View\index.html" />
     <Content Include="Scripts\Client\View\product-detail.html" />
     <Content Include="Scripts\Client\View\product.html" />
+    <Content Include="Scripts\Client\View\set-password.html" />
     <Content Include="Scripts\Client\View\register.html" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

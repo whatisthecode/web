@@ -32,11 +32,13 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
         private const string LocalLoginProvider = "Local";
         private ApplicationUserManager _userManager;
         private ApplicationRoleManager _roleManager;
+        private GroupRoleManagerDAO groupRoleManagerDAO;
         private UserInfoDAO userInfoDao;
 
         public AccountController()
         {
             userInfoDao = new UserInfoDAOImpl();
+            this.groupRoleManagerDAO = new GroupRoleManagerDAOImp();
         }
 
         public AccountController(ApplicationUserManager userManager, ApplicationRoleManager roleManager,
@@ -420,9 +422,11 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
             }
             else
             {
-
-                //string roleName = model.roleNames;
-                //result = await UserManager.AddToRoleAsync(identityUser.Id, roleName);
+                foreach (var group in model.groups)
+                {
+                    Group gr = groupRoleManagerDAO.findByName(group);
+                    groupRoleManagerDAO.AddUserToGroup(identityUser.Id, gr.id);
+                }
                 string code = await this.UserManager.GenerateEmailConfirmationTokenAsync(identityUser.Id);
                 var callbackUrl = new Uri(Url.Link("ConfirmEmail", new { userId = identityUser.Id, code = code }));
                 await this.UserManager.SendEmailAsync(identityUser.Id,"Xác thực tài khoản của bạn","Vui lòng nhấn vào link sau: <a href=\""+ callbackUrl + "\">link</a>");
@@ -601,7 +605,7 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
             var result = await UserManager.ConfirmEmailAsync(userId, code);
             if (result.Succeeded)
             {
-                return Redirect("http://www.google.com");
+                return Redirect("http://localhost:54962/account/confirm");
             }
 
             response.code = "500";

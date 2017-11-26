@@ -8,6 +8,11 @@ namespace WebApplication2.DAO
 {
     public class ProductAttributeDAOImpl : BaseImpl<ProductAttribute, Int16>, ProductAttributeDAO, IDisposable
     {
+        public ProductAttributeDAOImpl(): base() 
+        {
+
+        }
+
         public void deleteProductAttribute(short id)
         {
             base.delete(id);

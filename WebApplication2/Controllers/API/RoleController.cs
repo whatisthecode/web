@@ -21,11 +21,11 @@ namespace WebApplication2.Controllers.API
         private ApplicationUserManager _userManager;
         private ApplicationRoleManager _roleManager;
 
-        private GroupRoleManagerDao groupRoleManagerDao;
+        private GroupRoleManagerDAO groupRoleManagerDao;
 
         public RoleController()
         {
-            this.groupRoleManagerDao = new GroupRoleManagerDaoImp();
+            this.groupRoleManagerDao = new GroupRoleManagerDAOImp();
         }
 
         public RoleController(ApplicationUserManager userManager, ApplicationRoleManager roleManager,
@@ -142,7 +142,7 @@ namespace WebApplication2.Controllers.API
         }
 
         [HttpPost]
-        [Route("add/user-to-group")]
+        [Route("group/add/user-to-group")]
         public async Task<IHttpActionResult> AddUserToGroup([FromBody]RoleViewModel roleViewModel)
         {
             ApplicationUser user = await UserManager.FindByNameAsync(roleViewModel.username);
@@ -153,6 +153,15 @@ namespace WebApplication2.Controllers.API
             }
             Response response = new Response("200", "created", "");
             return Content<Response>(HttpStatusCode.Created, response);
+        }
+
+        [HttpDelete]
+        [Route("delete-user-group/{id}")]
+        public IHttpActionResult DeleteUserGroup([FromUri]string id)
+        {
+            groupRoleManagerDao.ClearUserGroups(id);
+            Response response = new Response("200", "Clear user groups success", "");
+            return Content<Response>(HttpStatusCode.OK, response);
         }
     }
 }

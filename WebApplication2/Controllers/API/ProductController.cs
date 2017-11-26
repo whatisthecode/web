@@ -158,7 +158,6 @@ namespace WebApplication2.Controllers.API
 
                 response.code = "200";
                 response.status = "Cập nhật sản phẩm thành công";
-
                 Int16[] listCategoryId = productDao.getProductCategoriesId(id);
                 Int16 updateProductModelLength = (Int16)updateProductModel.categories.Length;
                 for (Int16 i = 0; i < updateProductModelLength; i++)
@@ -173,6 +172,7 @@ namespace WebApplication2.Controllers.API
                 productcheck.name = updateProductModel.name;
                 productcheck.shortDescription = updateProductModel.shortDescription;
                 productcheck.longDescription = updateProductModel.longDescription;
+                productcheck.updatedAt = updateProductModel.updateAt;
                 this.productDao.updateProduct(productcheck);
                 this.productDao.saveProduct();
                 return Content<Response>(HttpStatusCode.OK, response);

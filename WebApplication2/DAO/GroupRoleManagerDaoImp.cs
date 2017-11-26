@@ -9,7 +9,7 @@ using System.Runtime.Serialization;
 
 namespace WebApplication2.DAO
 {
-    public class GroupRoleManagerDaoImp : BaseImpl<Group, Int16>, GroupRoleManagerDao, IDisposable
+    public class GroupRoleManagerDAOImp : BaseImpl<Group, Int16>, GroupRoleManagerDAO, IDisposable
     {
         private readonly RoleManager<ApplicationRole> _roleManager = new RoleManager<ApplicationRole>(
             new RoleStore<ApplicationRole>(new DBContext()));
@@ -17,7 +17,7 @@ namespace WebApplication2.DAO
         private readonly UserManager<ApplicationUser> _userManager = new UserManager<ApplicationUser>(
             new UserStore<ApplicationUser>(new DBContext()));
 
-        public GroupRoleManagerDaoImp() :base()
+        public GroupRoleManagerDAOImp() :base()
         {
             
         }
