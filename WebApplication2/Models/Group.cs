@@ -17,6 +17,7 @@ namespace WebApplication2.Models
 
 
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Required]
         public virtual Int16 id { get; set; }
 
