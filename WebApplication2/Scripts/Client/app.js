@@ -10,9 +10,12 @@
         }).when("/404", {
             controller: "ErrorController",
             templateUrl: "./Scripts/Client/View/error.html"
-        }).when("account/confirm", {
-            controller: "IndexController",
-            templateUrl: "./Scripts/Client/View/confirmEmail.html"
+        }).when("/account/confirm", {
+            controller: "AccountConfirmController",
+            templateUrl: "./Scripts/Client/View/confirm-email.html"
+        }).when("/account/set-password", {
+            controller: "SetPasswordController",
+            templateUrl: "./Scripts/Client/View/set-password.html"
         }).when("/:category", {
             controller: "ProductController",
             templateUrl: "./Scripts/Client/View/product.html"

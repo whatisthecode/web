@@ -8,6 +8,11 @@ namespace WebApplication2.DAO
 {
     public class ProductAttributeDAOImpl : BaseImpl<ProductAttribute, Int16>,ProductAttributeDAO, IDisposable
     {
+        public ProductAttributeDAOImpl(): base() 
+        {
+
+        }
+
         public void deleteProductAttribute(short id)
         {
             throw new NotImplementedException();
@@ -15,7 +20,7 @@ namespace WebApplication2.DAO
 
         public void dispose()
         {
-            throw new NotImplementedException();
+            base.Dispose();
         }
 
         public IEnumerable<ProductAttribute> getProductAttributeAll()

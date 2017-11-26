@@ -26,7 +26,7 @@ namespace WebApplication2.Controllers.API
             this.categoryDAO = new CategoryDAOImpl();
             this.categoryProductDAO = new CategoryProductDAOImpl();
         }
-       
+
         [Route("api/product")]
         [HttpPost]
         public IHttpActionResult insertNewProduct([FromBody]CreateProductModel createProductModel)
@@ -35,7 +35,7 @@ namespace WebApplication2.Controllers.API
             Response response = new Response();
             Product productcheck = this.productDao.checkexist(createProductModel.code);
             UserInfo user = this.userInfoDAO.getUserInfo(createProductModel.createdBy);
-            if(createProductModel.categoryId.Length < 1)
+            if (createProductModel.categoryId.Length < 1)
             {
                 response.code = "400";
                 response.status = "Missing require fields";
@@ -70,15 +70,15 @@ namespace WebApplication2.Controllers.API
                 this.productDao.save();
                 //insert data to category product
                 Product newProduct = productDao.checkexist(product.code);
-                for(int i = 0; i < createProductModel.categoryId.Length; i++)
+                for (int i = 0; i < createProductModel.categoryId.Length; i++)
                 {
                     catepro.categoryId = createProductModel.categoryId[i];
                     catepro.productId = newProduct.id;
                     this.categoryProductDAO.insertCategoryProduct(catepro);
                 }
-                
+
                 this.categoryProductDAO.save();
-               
+
 
 
 
@@ -121,7 +121,7 @@ namespace WebApplication2.Controllers.API
             return Content<Response>(HttpStatusCode.OK, response);
 
         }
-  
+
         [Route("api/product/{id}")]
         [HttpPut]
         public IHttpActionResult updateProduct([FromBody]CreateProductModel updateProductModel, Int16 id)
@@ -150,8 +150,8 @@ namespace WebApplication2.Controllers.API
                 response.code = "200";
                 response.status = "Cập nhật sản phẩm thành công";
 
-                
-                
+
+
                 Int16[] listCategoryId = productDao.getProductCategoriesId(id);
                 for (int i = 0; i < updateProductModel.categoryId.Length; i++)
                 {
@@ -165,25 +165,25 @@ namespace WebApplication2.Controllers.API
                 productcheck.name = updateProductModel.name;
                 productcheck.shortDescription = updateProductModel.shortDescription;
                 productcheck.longDescription = updateProductModel.longDescription;
-                productcheck.updatedAt = updateProductModel.updateAt ;
+                productcheck.updatedAt = updateProductModel.updateAt;
                 this.productDao.updateProduct(productcheck);
                 this.productDao.save();
                 return Content<Response>(HttpStatusCode.OK, response);
             }
 
         }
-        
+
         [HttpDelete]
         [Route("api/product/{id}")]
         public IHttpActionResult deleteProduct(Int16 iddel)
-        { 
+        {
             Response response = new Response();
             Product productcheck = this.productDao.getProduct(iddel);
             if (productcheck == null)
             {
                 response.code = "404";
                 response.status = "không tồn tại sản phẩm cần xóa";
-                return Content<Response>(HttpStatusCode.NotFound,response);
+                return Content<Response>(HttpStatusCode.NotFound, response);
             }
             else
             {
