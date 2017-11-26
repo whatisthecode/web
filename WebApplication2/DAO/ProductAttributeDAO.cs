@@ -9,11 +9,12 @@ namespace WebApplication2.DAO
 {
     interface ProductAttributeDAO
     {
-        Product getProductAttributeById();
+        ProductAttribute getProductAttributeById(Int16 id);
         IEnumerable<ProductAttribute> getProductAttributeAll();
         void insertProductAttribute(ProductAttribute proat);
-        void updateProductAttribute(ProductAttribute proat, Int16 id);
+        void updateProductAttribute(ProductAttribute proat);
         void deleteProductAttribute(Int16 id);
+        void saveProductAttribute();
         void dispose();
 
     }

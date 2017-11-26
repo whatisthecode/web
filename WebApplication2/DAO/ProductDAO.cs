@@ -14,7 +14,7 @@ namespace WebApplication2.DAO
         void updateProduct(Product product);
         void insertProduct(Product product);
         void deleteProduct(Int16 id);
-        void save();
+        void saveProduct();
         void checkProductCode(Product Product);
         void dispose();
         Product checkexist(string code);

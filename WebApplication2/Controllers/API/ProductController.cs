@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -8,6 +9,7 @@ using WebApplication2.DAO;
 using WebApplication2.Models;
 using WebApplication2.Models.Mapping;
 using WebApplication2.Models.RequestModel;
+using WebApplication2.Services;
 
 namespace WebApplication2.Controllers.API
 {
@@ -15,6 +17,7 @@ namespace WebApplication2.Controllers.API
     public class ProductController : ApiController
     {
         private ProductDAO productDao;
+        private ProductAttributeDAO productAttributeDAO;
         private UserInfoDAO userInfoDAO;
         private CategoryDAO categoryDAO;
         private CategoryProductDAO categoryProductDAO;
@@ -22,6 +25,7 @@ namespace WebApplication2.Controllers.API
         public ProductController()
         {
             this.productDao = new ProductDAOImpl();
+            this.productAttributeDAO = new ProductAttributeDAOImpl();
             this.userInfoDAO = new UserInfoDAOImpl();
             this.categoryDAO = new CategoryDAOImpl();
             this.categoryProductDAO = new CategoryProductDAOImpl();
@@ -29,57 +33,68 @@ namespace WebApplication2.Controllers.API
        
         [Route("api/product")]
         [HttpPost]
+        [Authorize(Roles = "Merchant")]
         public IHttpActionResult insertNewProduct([FromBody]CreateProductModel createProductModel)
         {
-            CategoryProduct catepro = new CategoryProduct();
-            Response response = new Response();
-            Product productcheck = this.productDao.checkexist(createProductModel.code);
-            UserInfo user = this.userInfoDAO.getUserInfo(createProductModel.createdBy);
-            if(createProductModel.categoryId.Length < 1)
+            Response response = Utils.checkInput(createProductModel, CreateProductModel.required);
+            if(response.code != "422")
             {
-                response.code = "400";
-                response.status = "Missing require fields";
-                return Content<Response>(HttpStatusCode.BadRequest, response);
-            }
-            if (user == null)
-            {
-                response.code = "404";
-                response.status = "Người dùng hiện tại chưa có quyền thêm sản phẩm";
-                return Content<Response>(HttpStatusCode.NotFound, response);
-
-            }
-            else if (productcheck != null)
-            {
-                response.code = "409";
-                response.status = "Trùng sản phẩm, xin nhập lại";
-                return Content<Response>(HttpStatusCode.Conflict, response);
-
-            }
-            else
-            {
-                //create Product object to insert data
-                Product product = new Product();
-                product.code = createProductModel.code;
-                product.shortDescription = createProductModel.shortDescription;
-                product.longDescription = createProductModel.longDescription;
-                product.name = createProductModel.name;
-                product.createdBy = createProductModel.createdBy;
-                this.productDao.insertProduct(product);
-                this.productDao.save();
-
-                //insert data to category product
-                Product newProduct = productDao.checkexist(product.code);
-                for(int i = 0; i < createProductModel.categoryId.Length; i++)
+                Product productcheck = this.productDao.checkexist(createProductModel.code);
+                UserInfo user = this.userInfoDAO.getUserInfo(createProductModel.createdBy);
+                if (user == null)
                 {
-                    catepro.categoryId = createProductModel.categoryId[i];
-                    catepro.productId = newProduct.id;
+                    response.code = "404";
+                    response.status = "Người dùng hiện tại chưa có quyền thêm sản phẩm";
+                    return Content<Response>(HttpStatusCode.NotFound, response);
+
                 }
+                else if (productcheck != null)
+                {
+                    response.code = "409";
+                    response.status = "Trùng sản phẩm, xin nhập lại";
+                    return Content<Response>(HttpStatusCode.Conflict, response);
+                }
+                else
+                {
+                    //create Product object to insert data
+                    Product product = new Product();
+                    product.code = createProductModel.code;
+                    product.shortDescription = createProductModel.shortDescription;
+                    product.longDescription = createProductModel.longDescription;
+                    product.name = createProductModel.name;
+                    product.createdBy = createProductModel.createdBy;
+                    this.productDao.insertProduct(product);
+                    this.productDao.saveProduct();
 
-                response.code = "201";
-                response.results = "Thêm sản phẩm thành công";
-                return Content<Response>(HttpStatusCode.OK, response);
+                    //insert data to category product
+                    Product newProduct = productDao.checkexist(product.code);
+                    for (int i = 0; i < createProductModel.categories.Length; i++)
+                    {
+                        Category category = new Category();
+                        category.id = createProductModel.categories[i];
+                        if(this.categoryDAO.checkExist(category) != null)
+                        {
+                            CategoryProduct catepro = new CategoryProduct();
+                            catepro.categoryId = createProductModel.categories[i];
+                            catepro.productId = newProduct.id;
+                            this.categoryProductDAO.insertCategoryProduct(catepro);
+                            this.categoryProductDAO.save();
+                        }
+                    }
+                    foreach(var attribute in createProductModel.attributes)
+                    {
+                        ProductAttribute productAttribute = new ProductAttribute(product.id, attribute.Key, attribute.Value.ToString());
+                        this.productAttributeDAO.insertProductAttribute(productAttribute);
+                        this.productAttributeDAO.saveProductAttribute();
+                    }
 
+                    response.code = "201";
+                    response.results = "Thêm sản phẩm thành công";
+                    return Content<Response>(HttpStatusCode.OK, response);
+
+                }
             }
+            return Content<Response>(HttpStatusCode.OK, response);
         }
         [Route("api/product/{id}")]
         [HttpGet]
@@ -140,7 +155,7 @@ namespace WebApplication2.Controllers.API
                 productcheck.longDescription = product.longDescription;
                 productcheck.updatedAt = product.updatedAt;
                 this.productDao.updateProduct(productcheck);
-                this.productDao.save();
+                this.productDao.saveProduct();
                 return Content<Response>(HttpStatusCode.OK, response);
             }
 

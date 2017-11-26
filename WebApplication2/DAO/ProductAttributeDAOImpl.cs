@@ -6,36 +6,41 @@ using WebApplication2.Models;
 
 namespace WebApplication2.DAO
 {
-    public class ProductAttributeDAOImpl : BaseImpl<ProductAttribute, Int16>,ProductAttributeDAO, IDisposable
+    public class ProductAttributeDAOImpl : BaseImpl<ProductAttribute, Int16>, ProductAttributeDAO, IDisposable
     {
         public void deleteProductAttribute(short id)
         {
-            throw new NotImplementedException();
+            base.delete(id);
         }
 
         public void dispose()
         {
-            throw new NotImplementedException();
+            base.Dispose();
         }
 
         public IEnumerable<ProductAttribute> getProductAttributeAll()
         {
-            throw new NotImplementedException();
+            return base.get();
         }
 
-        public Product getProductAttributeById()
+        public ProductAttribute getProductAttributeById(Int16 id)
         {
-            throw new NotImplementedException();
+            return base.getById(id);
         }
 
         public void insertProductAttribute(ProductAttribute proat)
         {
-
+            base.insert(proat);
         }
 
-        public void updateProductAttribute(ProductAttribute proat, short id)
+        public void saveProductAttribute()
         {
-            throw new NotImplementedException();
+            base.save();
+        }
+
+        public void updateProductAttribute(ProductAttribute proat)
+        {
+            base.update(proat);
         }
     }
 }

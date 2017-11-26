@@ -1,0 +1,90 @@
+﻿<div id="content">
+    <div class="container">
+
+        <div class="col-md-12">
+
+            <ul class="breadcrumb">
+                <li>
+                    <a href="/">Trang chủ</a>
+                </li>
+                <li>Đăng ký tài khoản mới / Đăng nhập</li>
+            </ul>
+
+        </div>
+        <div class="col-md-6" data-ng-controller="RegisterController">
+            <div class="box">
+                <h1>Tài khoản mới</h1>
+
+                <p class="lead">Bạn chưa có tài khoản?</p>
+                <p>Hãy tạo tài khoản của riêng bạn. Để có một trải nghiệm tốt hơn!</p>
+                <p class="text-muted">Nếu có bất cứ thắc mắc nào xin hãy <a href="./contact">liên hệ chúng tôi</a>, dịch vụ tư vấn khách hàng của chúng tôi luôn luôn mở 24/7.</p>
+
+                <hr>
+
+                <form action="customer-orders.html" method="post">
+                    <div class="form-group">
+                        <label>Địa chỉ email</label>
+                        <input type="text" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Mật khẩu</label>
+                        <input type="password" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Xác nhận mật khẩu</label>
+                        <input type="password" class="form-control">
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-sm-5">
+                            <label>Họ</label>
+                            <input type="text" class="form-control">
+                        </div>
+                        <div class="form-group col-sm-7">
+                            <label>Tên</label>
+                            <input type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Số CMND</label>
+                        <input type="text" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Ngày sinh</label>
+                        <input type="date" class="form-control">
+                    </div>
+                    <div class="text-center">
+                        <button data-ng-click="register()" class="btn btn-primary"><i class="fa fa-user-md"></i> Đăng ký</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-md-6" data-ng-controller="LoginController">
+            <div class="box">
+                <h1>Đăng nhập</h1>
+
+                <p class="lead">Bạn đã có tài khoản?</p>
+
+                <hr>
+
+                <form>
+                    <div class="form-group">
+                        <label for="email">Địa chỉ email</label>
+                        <input type="text" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Mật khẩu</label>
+                        <input type="password" class="form-control">
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" data-ng-click="login()" class="btn btn-primary"><i class="fa fa-sign-in"></i> Đăng nhập</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+    </div>
+    <!-- /.container -->
+</div>
+<!-- /#content -->

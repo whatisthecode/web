@@ -253,6 +253,7 @@
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
     <Compile Include="Services\EmailServices.cs" />
+    <Compile Include="Services\Utils.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -368,6 +369,7 @@
     <Content Include="Scripts\Client\View\index.html" />
     <Content Include="Scripts\Client\View\product-detail.html" />
     <Content Include="Scripts\Client\View\product.html" />
+    <Content Include="Scripts\Client\View\register.html" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

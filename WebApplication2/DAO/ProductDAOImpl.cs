@@ -100,6 +100,11 @@ namespace WebApplication2.DAO
             throw new NotImplementedException();
         }
 
+        public void saveProduct()
+        {
+            base.save();
+        }
+
         /* public void checkProductCode(Product product)
          {
              var query = from p in base.getContext().products select p;
