@@ -172,7 +172,6 @@ namespace WebApplication2.Controllers.API
                 productcheck.name = updateProductModel.name;
                 productcheck.shortDescription = updateProductModel.shortDescription;
                 productcheck.longDescription = updateProductModel.longDescription;
-                productcheck.updatedAt = updateProductModel.updateAt;
                 this.productDao.updateProduct(productcheck);
                 this.productDao.saveProduct();
                 return Content<Response>(HttpStatusCode.OK, response);

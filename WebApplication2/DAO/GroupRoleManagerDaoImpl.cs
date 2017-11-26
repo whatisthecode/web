@@ -9,7 +9,7 @@ using System.Runtime.Serialization;
 
 namespace WebApplication2.DAO
 {
-    public class GroupRoleManagerDAOImp : BaseImpl<Group, Int16>, GroupRoleManagerDAO, IDisposable
+    public class GroupRoleManagerDAOImpl : BaseImpl<Group, Int16>, GroupRoleManagerDAO, IDisposable
     {
         private readonly RoleManager<ApplicationRole> _roleManager = new RoleManager<ApplicationRole>(
             new RoleStore<ApplicationRole>(new DBContext()));
@@ -17,9 +17,9 @@ namespace WebApplication2.DAO
         private readonly UserManager<ApplicationUser> _userManager = new UserManager<ApplicationUser>(
             new UserStore<ApplicationUser>(new DBContext()));
 
-        public GroupRoleManagerDAOImp() :base()
+        public GroupRoleManagerDAOImpl() : base()
         {
-            
+
         }
 
         public void AddRoleToGroup(Int16 groupId, string roleName)
@@ -34,7 +34,7 @@ namespace WebApplication2.DAO
             };
 
             //make sure the groupRole is not already present
-            if(!group.roles.Contains(newGroupRole))
+            if (!group.roles.Contains(newGroupRole))
             {
                 group.roles.Add(newGroupRole);
                 base.getContext().SaveChanges();
@@ -42,9 +42,9 @@ namespace WebApplication2.DAO
 
             //Add all of the users in this group to the new role:
             IQueryable<ApplicationUser> groupUsers = base.getContext().Users.Where(u => u.groups.Any(g => g.groupId.Equals(group.id)));
-            foreach(ApplicationUser user in groupUsers)
+            foreach (ApplicationUser user in groupUsers)
             {
-                if(!(_userManager.IsInRole(user.Id, roleName)))
+                if (!(_userManager.IsInRole(user.Id, roleName)))
                 {
                     AddUserToRole(user.Id, role.Name);
                 }
@@ -79,7 +79,7 @@ namespace WebApplication2.DAO
         {
             Group group = base.getById(groupId);
             IQueryable<ApplicationUser> groupsUsers = base.getContext().Users.Where(u => u.groups.Any(g => g.groupId.Equals(group.id)));
-            
+
             foreach (ApplicationRoleGroup role in group.roles)
             {
                 string currentRoleId = role.roleId;

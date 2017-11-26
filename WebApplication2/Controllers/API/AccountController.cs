@@ -38,7 +38,7 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
         public AccountController()
         {
             userInfoDao = new UserInfoDAOImpl();
-            this.groupRoleManagerDAO = new GroupRoleManagerDAOImp();
+            this.groupRoleManagerDAO = new GroupRoleManagerDAOImpl();
         }
 
         public AccountController(ApplicationUserManager userManager, ApplicationRoleManager roleManager,

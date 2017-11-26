@@ -25,7 +25,7 @@ namespace WebApplication2.Controllers.API
 
         public RoleController()
         {
-            this.groupRoleManagerDao = new GroupRoleManagerDAOImp();
+            this.groupRoleManagerDao = new GroupRoleManagerDAOImpl();
         }
 
         public RoleController(ApplicationUserManager userManager, ApplicationRoleManager roleManager,

@@ -6,9 +6,11 @@
     "\\WebApplication2\\Controllers",
     "\\WebApplication2\\Controllers\\API",
     "\\WebApplication2\\DAO",
-    "\\WebApplication2\\DAO\\IdentityModels",
-    "\\WebApplication2\\Providers",
-    "\\WebApplication2\\Results"
+    "\\WebApplication2\\Models",
+    "\\WebApplication2\\Scripts",
+    "\\WebApplication2\\Scripts\\Client",
+    "\\WebApplication2\\Views\\Client"
   ],
+  "SelectedNode": "\\WebApplication2",
   "PreviewInSolutionExplorer": false
 }
