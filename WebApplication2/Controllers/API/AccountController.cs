@@ -205,15 +205,25 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
                 return Content<Response>(HttpStatusCode.BadRequest, response);
             }
 
-            IdentityResult result = await UserManager.AddPasswordAsync(User.Identity.GetUserId(), model.NewPassword);
-
-            if (!result.Succeeded)
+            IdentityUser user = await UserManager.FindByEmailAsync(model.email);
+            if(user.Id != null)
             {
-                response.code = "500";
-                response.status = "Internal Error Can't Set New Password";
-                response.results = result;
-                return Content<Response>(HttpStatusCode.InternalServerError, response);
+                IdentityResult result = await UserManager.AddPasswordAsync(user.Id, model.newPassword);
+                if (!result.Succeeded)
+                {
+                    response.code = "500";
+                    response.status = "Internal Error Can't Set New Password";
+                    response.results = result;
+                    return Content<Response>(HttpStatusCode.InternalServerError, response);
+                }
             }
+            else
+            {
+                response.code = "404";
+                response.status = "Email không tồn tại";
+                return Content<Response>(HttpStatusCode.NotFound, response);
+            }
+            
 
             response.code = "200";
             response.status = "Đặt lại mật khẩu thành công";
@@ -636,10 +646,10 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
                 Content<Response>(HttpStatusCode.Forbidden, response);
             }
  
-            string code = await this.UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+            string code = await this.UserManager.GeneratePasswordResetTokenAsync(user.Id);
             var callbackUrl = new Uri(Url.Link("ForgotPassword", new { userId = user.Id, code = code }));
             await this.UserManager.SendEmailAsync(user.Id, "Lấy lại mật khẩu", "Vui lòng nhấn vào link sau: <a href=\"" + callbackUrl + "\">link</a>");
-            var message = "Chúng tôi đã gửi email lấy lại mật khẩu tài khoản vào mail " + user.Email + " . Vui lòng kiểm tra email để xác thực.";
+            var message = "Chúng tôi đã gửi email lấy lại mật khẩu tài khoản vào mail " + user.Email + " . Vui lòng kiểm tra email để đặt lại mật khẩu mới.";
             response.code = "200";
             response.status = "Thành công";
             response.results = message;
@@ -659,15 +669,8 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
                 response.status = "Missing Required fields";
                 return Content<Response>(HttpStatusCode.BadRequest, response);
             }
-            var result = await UserManager.ConfirmEmailAsync(userId, code);
-            if (result.Succeeded)
-            {
-                return Redirect("http://www.google.com");
-            }
-
-            response.code = "500";
-            response.status = "Không thể xác thực tài khoản";
-            return Content<Response>(HttpStatusCode.BadRequest, response);
+            var result = await UserManager.FindByIdAsync(userId);
+            return Redirect("http://localhost:54962/account/set-password");
         }
 
         /**
