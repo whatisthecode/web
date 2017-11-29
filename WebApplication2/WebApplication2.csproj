@@ -197,6 +197,8 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\Admin\AdminHomeController.cs" />
+    <Compile Include="Controllers\Admin\AdminLoginController.cs" />
     <Compile Include="Controllers\API\AccountController.cs" />
     <Compile Include="Controllers\API\CategoryController.cs" />
     <Compile Include="Controllers\API\CategoryProductController.cs" />
@@ -204,6 +206,7 @@
     <Compile Include="Controllers\API\ProductAttributeController.cs" />
     <Compile Include="Controllers\API\ProductController.cs" />
     <Compile Include="Controllers\API\RoleController.cs" />
+    <Compile Include="Controllers\API\TestController.cs" />
     <Compile Include="Controllers\API\UserController.cs" />
     <Compile Include="Controllers\Base.cs" />
     <Compile Include="Controllers\Client\HomeController.cs" />
@@ -262,6 +265,11 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\CSS\Admin\demo.css" />
+    <Content Include="Assets\CSS\Admin\login-style.css" />
+    <Content Include="Assets\CSS\Admin\paper-dashboard.css" />
+    <Content Include="Assets\CSS\Admin\themify-icons.css" />
+    <Content Include="Assets\CSS\animate.min.css" />
     <Content Include="Assets\CSS\bootstrap.min.css" />
     <Content Include="Assets\CSS\Client\animate.min.css" />
     <Content Include="Assets\CSS\Client\custom.css" />
@@ -269,12 +277,17 @@
     <Content Include="Assets\CSS\font-awesome.css" />
     <Content Include="Assets\CSS\Client\owl.carousel.css" />
     <Content Include="Assets\CSS\Client\owl.theme.css" />
+    <Content Include="Assets\CSS\jquery-confirm.min.css" />
     <Content Include="Assets\FONT\flexslider-icon.svg" />
     <Content Include="Assets\FONT\fontawesome-webfont.svg" />
+    <Content Include="Assets\FONT\themify.svg" />
     <Content Include="Assets\IMG\AjaxLoader.gif" />
+    <Content Include="Assets\IMG\aletaobao.ico" />
+    <Content Include="Assets\IMG\background.jpg" />
     <Content Include="Assets\IMG\banner.jpg" />
     <Content Include="Assets\IMG\banner2.jpg" />
     <Content Include="Assets\IMG\basketsquare.jpg" />
+    <Content Include="Assets\IMG\bg.jpg" />
     <Content Include="Assets\IMG\blog-avatar.jpg" />
     <Content Include="Assets\IMG\blog-avatar2.jpg" />
     <Content Include="Assets\IMG\blog.jpg" />
@@ -290,6 +303,7 @@
     <Content Include="Assets\IMG\getinspired3.jpg" />
     <Content Include="Assets\IMG\grabbing.png" />
     <Content Include="Assets\IMG\logo-small.png" />
+    <Content Include="Assets\IMG\logo.jpg" />
     <Content Include="Assets\IMG\logo.png" />
     <Content Include="Assets\IMG\main-slider1.jpg" />
     <Content Include="Assets\IMG\main-slider2.jpg" />
@@ -301,16 +315,23 @@
     <Content Include="Assets\IMG\product2_2.jpg" />
     <Content Include="Assets\IMG\product3.jpg" />
     <Content Include="Assets\IMG\product3_2.jpg" />
+    <Content Include="Assets\IMG\signup_back.png" />
     <Content Include="Assets\IMG\slider1.jpg" />
     <Content Include="Assets\IMG\slider2.jpg" />
     <Content Include="Assets\IMG\slider3.jpg" />
     <Content Include="Assets\IMG\slider4.jpg" />
+    <Content Include="Assets\JS\Admin\bootstrap-checkbox-radio.js" />
+    <Content Include="Assets\JS\Admin\bootstrap-notify.js" />
+    <Content Include="Assets\JS\Admin\chartist.min.js" />
+    <Content Include="Assets\JS\Admin\demo.js" />
+    <Content Include="Assets\JS\Admin\paper-dashboard.js" />
     <Content Include="Assets\JS\bootstrap.min.js" />
     <Content Include="Assets\JS\Client\bootstrap-hover-dropdown.js" />
     <Content Include="Assets\JS\Client\front.js" />
     <Content Include="Assets\JS\Client\jquery.cookie.js" />
     <Content Include="Assets\JS\Client\owl.carousel.min.js" />
     <Content Include="Assets\JS\Client\waypoints.min.js" />
+    <Content Include="Assets\JS\jquery-confirm.min.js" />
     <Content Include="Content\Site.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -330,6 +351,9 @@
     <Content Include="Assets\FONT\fontawesome-webfont.ttf" />
     <Content Include="Assets\FONT\fontawesome-webfont.woff" />
     <Content Include="Assets\FONT\FontAwesome.otf" />
+    <Content Include="Assets\FONT\themify.eot" />
+    <Content Include="Assets\FONT\themify.ttf" />
+    <Content Include="Assets\FONT\themify.woff" />
     <None Include="Assets\JS\jquery-1.10.2.intellisense.js" />
     <Content Include="Assets\JS\jquery-1.10.2.js" />
     <Content Include="Assets\JS\jquery-1.10.2.min.js" />
@@ -400,9 +424,7 @@
     <Content Include="Views\Client\Home\Contact.cshtml" />
     <Content Include="Views\Client\Home\Index.cshtml" />
     <Content Include="Views\Admin\_ViewStart.cshtml" />
-    <Content Include="Views\Admin\Home\About.cshtml" />
-    <Content Include="Views\Admin\Home\Contact.cshtml" />
-    <Content Include="Views\Admin\Home\Index.cshtml" />
+    <Content Include="Views\Admin\AdminHome\Index.cshtml" />
     <Content Include="Views\Admin\Shared\Error.cshtml" />
     <Content Include="Views\Layouts\_Layout_Admin.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
@@ -410,14 +432,20 @@
     <Content Include="Views\Client\Shared\Header.cshtml" />
     <Content Include="Views\Client\Shared\Footer.cshtml" />
     <Content Include="Views\Client\Shared\Top.cshtml" />
+    <Content Include="Views\Admin\AdminLogin\Index.cshtml" />
+    <Content Include="Views\Layouts\_Layout_Blank.cshtml" />
+    <Content Include="Views\Admin\Shared\Sidebar.cshtml" />
+    <Content Include="Views\Admin\Shared\Header.cshtml" />
+    <Content Include="Views\Admin\Shared\Footer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Controllers\Admin\" />
     <Folder Include="Scripts\Admin\Controller\" />
     <Folder Include="Scripts\Admin\Factory\" />
     <Folder Include="Scripts\Admin\Provider\" />
     <Folder Include="Scripts\Admin\Shared\" />
+    <Folder Include="Views\Default\" />
+    <Folder Include="Views\Test\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

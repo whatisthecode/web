@@ -77,6 +77,7 @@ namespace WebApplication2.Controllers.API
             groupRoleManagerDao.createRole("CanEditGroup", "Add, modify, and delete Groups");
             groupRoleManagerDao.createRole("CanEditRole", "Add, modify, and delete roles");
             groupRoleManagerDao.createRole("User", "Restricted to business domain activity");
+            groupRoleManagerDao.createRole("Merchant", "");
 
             response.code = "201";
             response.status = "Create Success";
@@ -101,7 +102,7 @@ namespace WebApplication2.Controllers.API
         public IHttpActionResult AddRoleToGroup()
         {
             string[] _superAdminRoleNames =
-                new string[] { "Admin", "CanEditUser", "CanEditGroup", "CanEditRole", "User" };
+                new string[] { "Admin", "CanEditUser", "CanEditGroup", "CanEditRole", "User", "Merchant" };
             string[] _groupAdminRoleNames =
                 new string[] { "CanEditUser", "CanEditGroup", "User" };
             string[] _userAdminRoleNames =

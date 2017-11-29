@@ -1,16 +1,29 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
+    <title>@ViewBag.Title</title>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
-
-    @Scripts.Render("~/bundles/modernizr")
+    <link rel="shortcut icon" href="~/Assets/IMG/aletaobao.ico">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+    @Styles.Render("~/Content/admin_template")
+    <!--webfonts-->
+    <link href='http://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900' rel='stylesheet' type='text/css'>
+    <link href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css' rel='stylesheet' type='text/css' />
+    <!--/webfonts-->
 </head>
 <body>
-    @RenderBody()
-
-    @Scripts.Render("~/bundles/angularjs")
-    @RenderSection("scripts", required: false)
+    <div class="wrapper">
+        @Html.Partial("~/Views/Admin/Shared/Sidebar.cshtml")
+        <div class="main-panel">
+            @Html.Partial("~/Views/Admin/Shared/Header.cshtml")
+            <div class="content">
+                @RenderBody()
+            </div>
+             @Html.Partial("~/Views/Admin/Shared/Footer.cshtml")
+        </div> 
+    </div>
+    @Scripts.Render("~/bundles/admin_js")
 </body>
 </html>
