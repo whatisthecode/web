@@ -8,9 +8,8 @@
     "\\WebApplication2\\DAO",
     "\\WebApplication2\\Models",
     "\\WebApplication2\\Scripts",
-    "\\WebApplication2\\Scripts\\Client",
-    "\\WebApplication2\\Views\\Client"
+    "\\WebApplication2\\Scripts\\Client"
   ],
-  "SelectedNode": "\\WebApplication2",
+  "SelectedNode": "\\WebApplication2\\Models",
   "PreviewInSolutionExplorer": false
 }
