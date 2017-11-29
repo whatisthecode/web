@@ -9,6 +9,7 @@ namespace WebApplication2.DAO
 {
     interface CategoryProductDAO
     {
+        Int16 getProductCategoriesID(short idCategory, short idProduct);
         CategoryProduct getCategoryProduct(Int16 idcatepro);
         IEnumerable<CategoryProduct> getListCategoryProduct();
         void insertCategoryProduct(CategoryProduct catepro);

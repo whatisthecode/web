@@ -327,6 +327,7 @@
     <Content Include="Assets\JS\Admin\paper-dashboard.js" />
     <Content Include="Assets\JS\bootstrap.min.js" />
     <Content Include="Assets\JS\Client\bootstrap-hover-dropdown.js" />
+    <Content Include="Assets\JS\Client\custom.js" />
     <Content Include="Assets\JS\Client\front.js" />
     <Content Include="Assets\JS\Client\jquery.cookie.js" />
     <Content Include="Assets\JS\Client\owl.carousel.min.js" />
@@ -395,6 +396,7 @@
     <Content Include="Scripts\Client\Service\Product.js" />
     <Content Include="Scripts\Client\Service\ProductDetail.js" />
     <Content Include="Scripts\Client\Service\Register.js" />
+    <Content Include="Scripts\Client\Service\User.js" />
     <Content Include="Scripts\Client\Shared\Error.js" />
     <Content Include="Scripts\Client\Shared\Top.js" />
     <Content Include="Scripts\Client\View\cart.html" />

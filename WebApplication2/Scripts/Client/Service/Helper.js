@@ -19,6 +19,57 @@
             },
             toRealObject: function (object) {
                 return Object.assign({}, object);
+            },
+            validateEmail: function (email) {
+                if (notEmpty(email) == true)
+                {
+                    var pattern = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
+                    if (pattern.test(value))
+                        return true;
+                    else
+                        return false;
+                }
+            },
+            validateConfirmPassword: function (password1, password2)
+            {
+                if (notEmpty(password1) == true && notEmpty(password2) == true)
+                {
+                    if (password1 === password2)
+                        return true;
+                    else
+                        return false;
+                }
+            },
+            notEmpty: function (value) {
+                if (value == "" || value == null || typeof (value) == "undefined")
+                    return false;
+                else
+                    return true;
+            },
+            isNumber: function (value)
+            {
+                if (typeof (value) == "number")
+                    return true;
+                else
+                    return false;
+            },
+            lengthOfString: function (max = 10, min = 1, value)
+            {
+                if (value.length <= max && value.length >= min)
+                    return true;
+                else
+                    return false;
+            },
+            isValidNumber: function (value)
+            {
+                if (notEmpty(value) == true)
+                {
+                    var pattern = /^\d+$/;
+                    if (pattern.test(value))
+                        return true;
+                    else
+                        return false;
+                }
             }
         };
     });

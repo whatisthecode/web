@@ -1,5 +1,5 @@
 ﻿if ("undefined" !== typeof app) {
-    app.controller("SetPasswordController", function ($scope, $http) {
+    app.controller("SetPasswordController", function ($scope, User) {
         $scope.data = {
             "email" : "",
             "newPassword": "",
@@ -19,19 +19,17 @@
         }
 
         $scope.setPassword = function () {
-            var req = {
-                method: 'POST',
-                url: 'http://localhost:54962/api/Account/SetPassword',
-                headers: {
-                    'Content-Type': "application/json"
-                },
-                data: $scope.data
-            }
-            $http(req).then(function (response) {
-                console.log(response);
-            }, function (response) {
-                console.log(response);
-            });
+            User.setPassword(data, function (data) {
+                if (data)
+                {
+                    console.log(data);
+                }
+            }, function (err) {
+                if (err.status == 400)
+                {
+                    console.log(err);
+                }
+            })
         }
     });
 }
