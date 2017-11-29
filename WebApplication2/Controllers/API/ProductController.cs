@@ -159,13 +159,31 @@ namespace WebApplication2.Controllers.API
                 response.code = "200";
                 response.status = "Cập nhật sản phẩm thành công";
                 Int16[] listCategoryId = productDao.getProductCategoriesId(id);
+
+                for (int i = 0; i < listCategoryId.Length; i++)
+                {
+                    
+                    Int16 idCatPro = categoryProductDAO.getProductCategoriesID(listCategoryId[i], id);
+                    categoryProductDAO.deleteCategoryProduct(idCatPro);
+                    categoryProductDAO.save();
+                }
+
                 Int16 updateProductModelLength = (Int16)updateProductModel.categories.Length;
                 for (Int16 i = 0; i < updateProductModelLength; i++)
                 {
-                    CategoryProduct catepro = this.categoryProductDAO.getCategoryProduct(listCategoryId[i]);
-                    catepro.categoryId = updateProductModel.categories[i];
-                    catepro.productId = id;
-                    this.categoryProductDAO.updateCategoryProduct(catepro);
+                    
+                        Category category = new Category();
+                        category.id = updateProductModel.categories[i];
+                        if (this.categoryDAO.checkExist(category) != null)
+                        {
+                            CategoryProduct catepro = new CategoryProduct();
+                            catepro.categoryId = updateProductModel.categories[i];
+                            catepro.productId = id;
+                            this.categoryProductDAO.insertCategoryProduct(catepro);
+                            this.categoryProductDAO.save();
+                        }
+                    
+
                 }
                 categoryProductDAO.save();
 
@@ -179,9 +197,9 @@ namespace WebApplication2.Controllers.API
 
         }
 
+        [Route("api/product/{iddel}")]
         [HttpDelete]
-        [Route("api/product/{id}")]
-        public IHttpActionResult deleteProduct(Int16 iddel)
+        public IHttpActionResult deleteProduct([FromUri]short iddel)
         {
             Response response = new Response();
             Product productcheck = this.productDao.getProduct(iddel);
@@ -193,10 +211,14 @@ namespace WebApplication2.Controllers.API
             }
             else
             {
-                this.productDao.deleteProduct(iddel);
+                Product productDel = this.productDao.getProduct(iddel);
+                productDel.status = -1;
                 response.code = "200";
-                response.status = "Xóa thành công";
-                return Content<Response>(HttpStatusCode.OK, response);
+                response.status = "Xóa sản phẩm thành công";
+                this.productDao.updateProduct(productDel);
+                this.productDao.saveProduct();
+                return Content<Response>(HttpStatusCode.NotFound, response);
+
             }
 
         }
