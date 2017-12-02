@@ -156,10 +156,10 @@ namespace WebApplication2.Controllers.API
         }
 
         [HttpDelete]
-        [Route("delete-user-group/{id}")]
-        public IHttpActionResult DeleteUserGroup([FromUri]string id)
+        [Route("delete-user-group/{userId}")]
+        public IHttpActionResult DeleteUserGroup([FromUri]string userId)
         {
-            groupRoleManagerDao.ClearUserGroups(id);
+            groupRoleManagerDao.ClearUserGroups(userId);
             Response response = new Response("200", "Clear user groups success", "");
             return Content<Response>(HttpStatusCode.OK, response);
         }

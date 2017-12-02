@@ -178,10 +178,6 @@ namespace WebApplication2.DAO
             _userManager.RemoveFromRole(userId, roleName);
         }
 
-        public void removeUserRole()
-        {
-            throw new NotImplementedException();
-        }
 
         public bool RoleExists(string name)
         {

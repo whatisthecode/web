@@ -1,26 +1,21 @@
 ﻿if ("undefined" !== typeof app) {
-    app.controller("SetPasswordController", function ($scope, User) {
+    app.controller("SetPasswordController", function ($scope, User, Helper) {
         $scope.data = {
             "email" : "",
             "newPassword": "",
             "confirmPassword" : ""
         }
 
-        $scope.confirmPassword = function (password, confirmPassword) {
-            console.log("a");
-            if (password === confirmPassword)
-            {
-                return true;
-            }
-            else
-            {
-                return false
-            }
-        }
-
         $scope.setPassword = function () {
-            User.setPassword(data, function (data) {
-                if (data)
+            if (!Helper.validateEmail) {
+                return;
+            }
+            if (!Helper.validateConfirmPassword($scope.newPassword, $scope.confirmPassword))
+            {
+                return;
+            }
+            User.setPassword($scope.data, function (reponse) {
+                if (reponse)
                 {
                     console.log(data);
                 }

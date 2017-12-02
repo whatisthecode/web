@@ -22,6 +22,10 @@ using WebApplication2.DAO;
 using WebApplication2.Models.Mapping;
 using System.Net;
 using System.Linq;
+using Microsoft.Owin.Testing;
+using System.Web.Script.Serialization;
+using Newtonsoft.Json.Linq;
+using System.Text;
 
 namespace WebAPI_NG_TokenbasedAuth.Controllers
 {
@@ -34,11 +38,14 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
         private ApplicationRoleManager _roleManager;
         private GroupRoleManagerDAO groupRoleManagerDAO;
         private UserInfoDAO userInfoDao;
+        private TokenDAO tokenDAO;
+        private object context;
 
         public AccountController()
         {
-            userInfoDao = new UserInfoDAOImpl();
+            this.userInfoDao = new UserInfoDAOImpl();
             this.groupRoleManagerDAO = new GroupRoleManagerDAOImpl();
+            this.tokenDAO = new TokenDAOImpl();
         }
 
         public AccountController(ApplicationUserManager userManager, ApplicationRoleManager roleManager,
@@ -76,49 +83,70 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
         public ISecureDataFormat<AuthenticationTicket> AccessTokenFormat { get; private set; }
 
         // GET api/Account/UserInfo
-        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [Route("UserInfo")]
         public IHttpActionResult GetUserInfo()
         {
-            ExternalLoginData externalLogin = ExternalLoginData.FromIdentity(User.Identity as ClaimsIdentity);
-            UserInfo userInfo = new UserInfo();
-            var user = UserManager.FindById(User.Identity.GetUserId());
-            CurrentUserInfoLogin currentUserInfoLogin = new CurrentUserInfoLogin();
-            currentUserInfoLogin.dob = user.userInfo.dob;
-            currentUserInfoLogin.lastName = user.userInfo.lastName;
-            currentUserInfoLogin.firstName = user.userInfo.firstName;
-            currentUserInfoLogin.status = user.userInfo.status;
-            currentUserInfoLogin.id = user.userInfo.id;
-            currentUserInfoLogin.identityNumber = user.userInfo.identityNumber;
-            //Get User Roles
-            var currentRoles = new List<IdentityUserRole>();
-            List<string> roles = new List<string>();
-            currentRoles.AddRange(user.Roles);
-            for(int i = 0; i < currentRoles.Count; i++)
-            {
-                var roleId = currentRoles[i].RoleId;
-                var role = RoleManager.FindById(roleId);
-                roles.Add(role.Name.ToString());
-            }
-            currentUserInfoLogin.roles = roles;
-
-            UserInfoViewModel userInfoModel = new UserInfoViewModel();
-            userInfoModel._id = user.Id;
-            userInfoModel.Email = User.Identity.GetUserName();
-            userInfoModel.HasRegistered = externalLogin == null;
-            userInfoModel.LoginProvider = externalLogin != null ? externalLogin.LoginProvider : null;
-            userInfoModel.userInfo = currentUserInfoLogin;
             Response response = new Response();
-            response.code = "200";
-            response.status = "Success";
-            response.results = userInfoModel;
-            return Content<Response>(HttpStatusCode.OK, response);
+            ExternalLoginData externalLogin = ExternalLoginData.FromIdentity(User.Identity as ClaimsIdentity);
+            var accessToken = this.tokenDAO.getByUsername(User.Identity.GetUserName());
+            if (accessToken != null)
+            {
+                Token token = accessToken;
+                DateTime currentDate = DateTime.Now;
+                DateTime expiresDate = token.expires;
+                int result = DateTime.Compare(currentDate, expiresDate);
+                if(result <= 0)
+                {
+                    UserInfo userInfo = new UserInfo();
+                    var user = UserManager.FindById(User.Identity.GetUserId());
+                    CurrentUserInfoLogin currentUserInfoLogin = new CurrentUserInfoLogin();
+                    currentUserInfoLogin.dob = user.userInfo.dob;
+                    currentUserInfoLogin.lastName = user.userInfo.lastName;
+                    currentUserInfoLogin.firstName = user.userInfo.firstName;
+                    currentUserInfoLogin.status = user.userInfo.status;
+                    currentUserInfoLogin.id = user.userInfo.id;
+                    currentUserInfoLogin.identityNumber = user.userInfo.identityNumber;
+                    currentUserInfoLogin.groups = user.groups.ToList();
+
+                    UserInfoViewModel userInfoModel = new UserInfoViewModel();
+                    userInfoModel._id = user.Id;
+                    userInfoModel.Email = User.Identity.GetUserName();
+                    userInfoModel.HasRegistered = externalLogin == null;
+                    userInfoModel.LoginProvider = externalLogin != null ? externalLogin.LoginProvider : null;
+                    userInfoModel.userInfo = currentUserInfoLogin;
+                    response.code = "200";
+                    response.status = "Success";
+                    response.results = userInfoModel;
+                    return Content<Response>(HttpStatusCode.OK, response);
+                }
+                else
+                {
+                    this.tokenDAO.delete(token.id);     //remove token from database
+                    this.tokenDAO.save();
+                    response.status = "Phiên đăng nhập của bạn đã hết hạn, vui lòng đăng nhập lại";
+                    response.code = "401";
+                    response.results = "";
+                    return Content<Response>(HttpStatusCode.OK, response);
+                }
+            }
+            else
+            {
+                response.status = "Phiên đăng nhập của bạn đã hết hạn, vui lòng đăng nhập lại";
+                response.code = "401";
+                response.results = "";
+                return Content<Response>(HttpStatusCode.OK, response);
+            }
         }
 
         // POST api/Account/Logout
+        [HttpPost]
         [Route("Logout")]
         public IHttpActionResult Logout()
         {
+            ExternalLoginData externalLogin = ExternalLoginData.FromIdentity(User.Identity as ClaimsIdentity);
+            Token token = this.tokenDAO.getByUsername(User.Identity.GetUserName());
+            this.tokenDAO.delete(token.id);
+            this.tokenDAO.save();
             Authentication.SignOut(CookieAuthenticationDefaults.AuthenticationType);
             return Ok();
         }
@@ -315,12 +343,11 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
             }
 
             ExternalLoginData externalLogin = ExternalLoginData.FromIdentity(User.Identity as ClaimsIdentity);
-
             if (externalLogin == null)
             {
                 return InternalServerError();
             }
-
+            
             if (externalLogin.LoginProvider != provider)
             {
                 Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
@@ -329,7 +356,6 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
 
             ApplicationUser user = await UserManager.FindAsync(new UserLoginInfo(externalLogin.LoginProvider,
                 externalLogin.ProviderKey));
-
             bool hasRegistered = user != null;
 
             if (hasRegistered)
@@ -680,8 +706,7 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
          *      "dob" : "",
          *      "identityNumber" : "",
          *      "firstName" : "",
-         *      "lastName" : "",
-         *      "roles" : []
+         *      "lastName" : ""
          *  }
          *  Update cái gì thì truyền params đó vào
          */
@@ -726,25 +751,92 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
                 userInfoDao.updateUserInfo(userInfo);
                 userInfoDao.saveUserinfo();
             }
-            
-            if(currentUserInfoLogin.roles != null && currentUserInfoLogin.roles.Count > 0)
-            {
-                var currentRoles = new List<IdentityUserRole>();
-
-                currentRoles.AddRange(user.Roles);
-                foreach (var role in currentRoles)
-                {
-                    var roleName = RoleManager.FindById(role.RoleId);
-                    var result = UserManager.RemoveFromRole(id, roleName.Name.ToString());
-                }
-                foreach (var role in currentUserInfoLogin.roles)
-                {
-                    var result = await UserManager.AddToRoleAsync(id, role);
-                }
-            }
             response.code = "200";
             response.status = "Success";
             return Content<Response>(HttpStatusCode.OK, response);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("login")]
+        public async Task<IHttpActionResult> LoginUser(LoginModel loginModel)
+        {
+            Response response = new Response();
+            if (loginModel == null)
+            {
+                return this.BadRequest("Invalid user data");
+            }
+            var session = HttpContext.Current.Session;
+            Token validateToken = tokenDAO.getByUsername(loginModel.email); //user have logined yet?
+            if(validateToken == null)      //User dont have token
+            {
+                var request = HttpContext.Current.Request;
+                var tokenServiceUrl = request.Url.GetLeftPart(UriPartial.Authority) + request.ApplicationPath + "Token";
+                using (var client = new HttpClient())
+                {
+                    var requestParams = new List<KeyValuePair<string, string>>
+                    {
+                        new KeyValuePair<string, string>("grant_type", "password"),
+                        new KeyValuePair<string, string>("username", loginModel.email),
+                        new KeyValuePair<string, string>("password", loginModel.password)
+                    };
+                    var requestParamsFormUrlEncoded = new FormUrlEncodedContent(requestParams);
+                    var tokenServiceResponse = await client.PostAsync(tokenServiceUrl, requestParamsFormUrlEncoded);
+                    if (tokenServiceResponse.StatusCode == HttpStatusCode.OK)
+                    {
+                        var responseString = await tokenServiceResponse.Content.ReadAsStringAsync();
+                        var jsSerializer = new JavaScriptSerializer();
+                        var responseData = jsSerializer.Deserialize<Dictionary<string, string>>(responseString);
+                        Token token = new Token();
+                        token.accessToken = responseData["access_token"];
+                        token.userName = responseData["userName"];
+                        token.expiresIn = int.Parse(responseData["expires_in"]);
+                        token.expires = DateTime.Parse(responseData[".expires"]);
+                        token.tokenType = responseData["token_type"];
+                        token.issued = DateTime.Parse(responseData[".issued"]);
+                        this.tokenDAO.insert(token);
+                        this.tokenDAO.save();
+                        /***Create Sesssion***/
+                        var user = UserManager.FindByEmail(loginModel.email);
+                        //HttpContext context = HttpContext.Current;
+                        //context.Session[user.Id] = token.accessToken;
+                        response.status = "Đăng nhập thành công";
+                        response.code = "200";
+                        response.results = token;
+                        return Content<Response>(HttpStatusCode.OK, response);
+                    }
+                    else
+                    {
+                        response.code = "400";
+                        response.status = "Đăng nhập thất bại";
+                        response.results = "";
+                        return Content<Response>(HttpStatusCode.BadRequest, response);
+                    }
+                }
+            }
+            else  //Have token
+            {
+                DateTime currentDate = DateTime.Now;
+                DateTime expiresDate = validateToken.expires;
+                int result = DateTime.Compare(currentDate, expiresDate);
+                if(result <= 0)      //Token havent expired
+                {
+                    Token token = this.tokenDAO.getById(validateToken.id);
+                    response.status = "Đăng nhập thành công";
+                    response.code = "200";
+                    response.results = token;
+                    return Content<Response>(HttpStatusCode.OK, response);
+                }
+                else        //Token expired
+                {
+                    this.tokenDAO.delete(validateToken.id);     //remove token from database
+                    this.tokenDAO.save();
+                    response.status = "Phiên đăng nhập của bạn đã hết hạn, vui lòng đăng nhập lại";
+                    response.code = "401";
+                    response.results = "";
+                    return Content<Response>(HttpStatusCode.OK, response);
+                }
+            }
         }
     }
 }

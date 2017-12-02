@@ -33,7 +33,7 @@ namespace WebApplication2.DAO
 
         public void delete(Int16 id)
         {
-            T instance = context.Set<T>().Find();
+            T instance = context.Set<T>().Find(id);
             this.context.Set<T>().Remove(instance);
         }
 

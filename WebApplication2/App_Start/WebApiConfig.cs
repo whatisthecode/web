@@ -3,8 +3,13 @@ using Microsoft.Owin.Security.OAuth;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 using System.Web.Http;
+using System.Web.Http.WebHost;
+using System.Web.Routing;
+using System.Web.SessionState;
+using WebApplication2.Controllers.API;
 
 namespace WebApplication2
 {
@@ -12,7 +17,6 @@ namespace WebApplication2
     {
         public static void Register(HttpConfiguration config)
         {
-
             // Web API configuration and services
             // Configure Web API to use only bearer token authentication.
             config.SuppressDefaultHostAuthentication();
@@ -26,9 +30,9 @@ namespace WebApplication2
             json.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
 
             config.Routes.MapHttpRoute(
-                name : "DefaultApi",
-                routeTemplate : "api/{controller}/{id}",
-                defaults : new { id = RouteParameter.Optional }
+                name: "DefaultApi",
+                routeTemplate: "api/{controller}/{id}",
+                defaults: new { id = RouteParameter.Optional }
             );
         }
     }

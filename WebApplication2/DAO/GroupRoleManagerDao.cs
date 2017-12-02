@@ -38,7 +38,5 @@ namespace WebApplication2.DAO
         Group findByName(string name);
 
         List<Group> GetAllGroup();
-
-        void removeUserRole();
     }
 }
