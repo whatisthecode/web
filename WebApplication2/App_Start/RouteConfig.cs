@@ -15,9 +15,19 @@ namespace WebApplication2
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
             routes.MapRoute(
+                name: "Admin-Home",
+                url: "admin",
+                defaults: new { type = "Admin", controller = "AdminHome", action = "Index" }
+            );
+            routes.MapRoute(
+                name: "Admin-Login",
+                url: "admin/login",
+                defaults: new { type = "Admin", controller = "AdminLogin", action = "Index" }
+            );
+            routes.MapRoute(
                 name: "Default",
-                url: "{type}/{*whatever}",
-                defaults: new {type="", controller = "Home", action = "Index"}
+                url: "{*whatever}",
+                defaults: new { type = "Client", controller = "Home", action = "Index" }
             );
         }
     }

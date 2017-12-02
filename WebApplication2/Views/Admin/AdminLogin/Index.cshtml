@@ -1,0 +1,56 @@
+﻿
+@{
+    ViewBag.Title = "Đăng nhập";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewBag.Title</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+    <link rel="shortcut icon" href="~/Assets/IMG/aletaobao.ico">
+    <!--webfonts-->
+    <link href='http://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900' rel='stylesheet' type='text/css'>
+    <link href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css' rel='stylesheet' type='text/css' />
+    <!--/webfonts-->
+    @Styles.Render("~/Content/admin-login")
+</head>
+<body>
+    <div class="background-cover">
+
+    </div>
+    <!--start-main-->
+    <h1>Xin chào !<span>Vui lòng đăng nhập</span></h1>
+    <div class="login-box">
+        <form method="post" action="/admin/">
+            <input type="text" class="text" value="Tên đăng nhập" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Tên đăng nhập';}">
+            <input type="password" value="Mật khẩu" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Mật khẩu';}">
+            <span class="arrow-left-up"></span>
+            <span class="arrow-left-down"></span>
+            <input class="button-login" type="submit" value="Đăng nhập">
+        </form>
+        <div class="remember">
+            <a href="#"><p>Ghi nhớ tôi</p></a>
+            <h4>Bạn quên mật khẩu ? <a href="#"><u>Tìm lại mật khẩu</u></a></h4>
+        </div>
+        <div class="clear"> </div>
+    </div>
+    @section script{
+        <script>
+            $(window).off("load.loginPage");
+            $(window).on("load.loginPage", function () {
+                var height = $(document).outerHeight();
+                $(".background-cover").outerHeight(height);
+            });
+            $(window).off("resize.loginPage");
+            $(window).on("resize.loginPage", function () {
+                var height = $(document).outerHeight();
+                $(".background-cover").outerHeight(height);
+            });
+        </script>
+    }
+
+    <!--//End-login-form-->
+</body>
+</html>

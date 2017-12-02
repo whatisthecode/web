@@ -55,7 +55,7 @@ namespace WebApplication2.DAO
         public Category checkExist(Category category)
         {
             var query = from q in base.getContext().categories select q;
-            query = query.Where(q => q.code == category.code);
+            query = query.Where(q => q.code == category.code||q.id==category.id);
             Category cate = query.FirstOrDefault();
             return cate;
         }

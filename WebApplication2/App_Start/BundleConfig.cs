@@ -12,6 +12,7 @@ namespace WebApplication2
                         "~/Assets/JS/jquery-1.10.2.min.js",
                         "~/Assets/JS/bootstrap.min.js",
                         "~/Assets/JS/respond.js",
+                        "~/Assets/JS/jquery-comfirm.min.js",
                         "~/Assets/JS/Client/jquery.cookie.js",
                         "~/Assets/JS/Client/waypoints.min.js",
                         "~/Assets/JS/modernizr-2.6.2.js",
@@ -20,6 +21,17 @@ namespace WebApplication2
                         "~/Assets/JS/Client/front.js",
                         "~/Scripts/Client/app.js",
                         "~/Scripts/Client/app.config.js"));
+            bundles.Add(new ScriptBundle("~/bundles/admin_js").Include(
+                        "~/Assets/JS/jquery-1.10.2.min.js",
+                        "~/Assets/JS/bootstrap.min.js",
+                        "~/Assets/JS/respond.js",
+                        "~/Assets/JS/jquery-comfirm.min.js",
+                        "~/Assets/JS/modernizr-2.6.2.js"));
+            bundles.Add(new ScriptBundle("~/bundles/blank_js").Include(
+                        "~/Assets/JS/jquery-1.10.2.min.js",
+                        "~/Assets/JS/bootstrap.min.js",
+                        "~/Assets/JS/respond.js",
+                        "~/Assets/JS/modernizr-2.6.2.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/angularjs").Include(
                         "~/Assets/JS/angular.min.js",
@@ -55,11 +67,21 @@ namespace WebApplication2
             bundles.Add(new StyleBundle("~/Content/client_template").Include(
                       "~/Assets/CSS/font-awesome.css",
                       "~/Assets/CSS/bootstrap.min.css",
+                      "~/Assets/CSS/jquery-comfirm.min.css",
                       "~/Assets/CSS/Client/animate.min.css",
                       "~/Assets/CSS/Client/owl.carousel.css",
                       "~/Assets/CSS/Client/owl.theme.css",
                       "~/Assets/CSS/Client/style.default.css",
                       "~/Assets/CSS/Client/custom.css"));
+            bundles.Add(new StyleBundle("~/Content/admin-login").Include(
+                      "~/Assets/CSS/Admin/login-style.css"));
+
+            bundles.Add(new StyleBundle("~/Content/admin_template").Include(
+                     "~/Assets/CSS/bootstrap.min.css",
+                     "~/Assets/CSS/animate.min.css",
+                     "~/Assets/CSS/Admin/paper-dashboard.css",
+                     "~/Assets/CSS/Admin/demo.css",
+                     "~/Assets/CSS/Admin/themify-icons.css"));
         }
     }
 }

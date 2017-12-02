@@ -32,7 +32,8 @@ namespace WebApplication2.DAO
 
         public IEnumerable<Product> getProducts()
         {
-            return base.get();
+
+            return base.get().Where(p => p.status >= 0).ToList();
         }
         public Product checkexist(string code)
         {
@@ -109,12 +110,12 @@ namespace WebApplication2.DAO
         {
             var query = from c in base.context.categoryProducts
                         where c.productId == idProduct
-                        select c.id;
+                        select c.categoryId;
             return query.ToArray();
         }
-
+     
         /* public void checkProductCode(Product product)
-         {
+         {*
              var query = from p in base.getContext().products select p;
              query = query.Where(p => p.code == product.code);
              Product pro = base.checkColumnExists(query);  
