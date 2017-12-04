@@ -64,7 +64,10 @@ namespace WebApplication2.DAO
 
             foreach (ApplicationRoleGroup role in group.roles)
             {
-                _userManager.AddToRole(userId, role.role.Name);
+                if(role.role != null)
+                {
+                    _userManager.AddToRole(userId, role.role.Name);
+                }
             }
             user.groups.Add(userGroup);
             base.getContext().SaveChanges();

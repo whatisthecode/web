@@ -39,7 +39,6 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
         private GroupRoleManagerDAO groupRoleManagerDAO;
         private UserInfoDAO userInfoDao;
         private TokenDAO tokenDAO;
-        private object context;
 
         public AccountController()
         {
@@ -712,7 +711,7 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
          */
         [Route("{id}")]
         [HttpPut]
-        public async Task<IHttpActionResult> updateAccountInfo([FromUri]string id, [FromBody]CurrentUserInfoLogin currentUserInfoLogin)
+        public IHttpActionResult updateAccountInfo([FromUri]string id, [FromBody]CurrentUserInfoLogin currentUserInfoLogin)
         {
             Response response = new Response();
             if(id == null)
