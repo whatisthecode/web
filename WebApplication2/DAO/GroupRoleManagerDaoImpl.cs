@@ -54,7 +54,7 @@ namespace WebApplication2.DAO
         public void AddUserToGroup(string userId, Int16 groupId)
         {
             Group group = base.getById(groupId);
-            ApplicationUser user = base.getContext().Users.Find(userId);
+            ApplicationUser user = _userManager.FindById(userId);
 
             var userGroup = new ApplicationUserGroup
             {
@@ -64,7 +64,17 @@ namespace WebApplication2.DAO
 
             foreach (ApplicationRoleGroup role in group.roles)
             {
-                _userManager.AddToRole(userId, role.role.Name);
+                ApplicationRole roleName;
+                if(role.role == null)
+                {
+                    roleName = _roleManager.FindById(role.roleId);
+                    _userManager.AddToRole(userId, roleName.Name);
+                }
+                else
+                {
+                    _userManager.AddToRole(userId, role.role.Name);
+                }
+                
             }
             user.groups.Add(userGroup);
             base.getContext().SaveChanges();

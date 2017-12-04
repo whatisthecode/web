@@ -6,7 +6,7 @@ using System.Web;
 
 namespace WebApplication2.Models
 {
-    public class CategoryType
+    public class CategoryType : Base
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Int16 id { get; set; }
