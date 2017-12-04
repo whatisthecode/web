@@ -31,7 +31,7 @@ namespace WebApplication2.DAO
         public DbSet<Invoice> invoices { get; set; }
         public DbSet<InvoiceDetail> invoiceDetails { get; set; }
         public DbSet<Group> groups { get; set; }
-
+        public DbSet<Token> token { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             Database.SetInitializer<DBContext>(null);

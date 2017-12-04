@@ -54,7 +54,7 @@ namespace WebApplication2.Models
             public string lastName { get; set; }
             public DateTime? dob { get; set; }
             public string identityNumber { get; set; }
-            public List<string> roles { get; set; }
+            public List<ApplicationUserGroup> groups { get; set; }
         }
     }
 }
