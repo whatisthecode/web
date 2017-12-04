@@ -765,77 +765,93 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
             {
                 return this.BadRequest("Invalid user data");
             }
-            var session = HttpContext.Current.Session;
-            Token validateToken = tokenDAO.getByUsername(loginModel.email); //user have logined yet?
-            if(validateToken == null)      //User dont have token
+            ApplicationUser identityUser = _userManager.FindByEmail(loginModel.email);
+            if(identityUser != null)    //validate username
             {
-                var request = HttpContext.Current.Request;
-                var tokenServiceUrl = request.Url.GetLeftPart(UriPartial.Authority) + request.ApplicationPath + "Token";
-                using (var client = new HttpClient())
+                bool result = UserManager.CheckPassword(identityUser, loginModel.password); //validate user password
+                if(result == true)
                 {
-                    var requestParams = new List<KeyValuePair<string, string>>
+                    Token validateToken = tokenDAO.getByUsername(loginModel.email); //user have logined yet?
+                    if (validateToken == null)      //User dont have token
                     {
-                        new KeyValuePair<string, string>("grant_type", "password"),
-                        new KeyValuePair<string, string>("username", loginModel.email),
-                        new KeyValuePair<string, string>("password", loginModel.password)
-                    };
-                    var requestParamsFormUrlEncoded = new FormUrlEncodedContent(requestParams);
-                    var tokenServiceResponse = await client.PostAsync(tokenServiceUrl, requestParamsFormUrlEncoded);
-                    if (tokenServiceResponse.StatusCode == HttpStatusCode.OK)
-                    {
-                        var responseString = await tokenServiceResponse.Content.ReadAsStringAsync();
-                        var jsSerializer = new JavaScriptSerializer();
-                        var responseData = jsSerializer.Deserialize<Dictionary<string, string>>(responseString);
-                        Token token = new Token();
-                        token.accessToken = responseData["access_token"];
-                        token.userName = responseData["userName"];
-                        token.expiresIn = int.Parse(responseData["expires_in"]);
-                        token.expires = DateTime.Parse(responseData[".expires"]);
-                        token.tokenType = responseData["token_type"];
-                        token.issued = DateTime.Parse(responseData[".issued"]);
-                        this.tokenDAO.insert(token);
-                        this.tokenDAO.save();
-                        /***Create Sesssion***/
-                        var user = UserManager.FindByEmail(loginModel.email);
-                        //HttpContext context = HttpContext.Current;
-                        //context.Session[user.Id] = token.accessToken;
-                        response.status = "Đăng nhập thành công";
-                        response.code = "200";
-                        response.results = token;
-                        return Content<Response>(HttpStatusCode.OK, response);
+                        var request = HttpContext.Current.Request;
+                        var tokenServiceUrl = request.Url.GetLeftPart(UriPartial.Authority) + request.ApplicationPath + "Token";
+                        using (var client = new HttpClient())
+                        {
+                            var requestParams = new List<KeyValuePair<string, string>>
+                            {
+                                new KeyValuePair<string, string>("grant_type", "password"),
+                                new KeyValuePair<string, string>("username", loginModel.email),
+                                new KeyValuePair<string, string>("password", loginModel.password)
+                            };
+                            var requestParamsFormUrlEncoded = new FormUrlEncodedContent(requestParams);
+                            var tokenServiceResponse = await client.PostAsync(tokenServiceUrl, requestParamsFormUrlEncoded);
+                            if (tokenServiceResponse.StatusCode == HttpStatusCode.OK)
+                            {
+                                var responseString = await tokenServiceResponse.Content.ReadAsStringAsync();
+                                var jsSerializer = new JavaScriptSerializer();
+                                var responseData = jsSerializer.Deserialize<Dictionary<string, string>>(responseString);
+                                Token token = new Token();
+                                token.accessToken = responseData["access_token"];
+                                token.userName = responseData["userName"];
+                                token.expiresIn = int.Parse(responseData["expires_in"]);
+                                token.expires = DateTime.Parse(responseData[".expires"]);
+                                token.tokenType = responseData["token_type"];
+                                token.issued = DateTime.Parse(responseData[".issued"]);
+                                this.tokenDAO.insert(token);
+                                this.tokenDAO.save();
+                                /***Create Sesssion***/
+                                var user = UserManager.FindByEmail(loginModel.email);
+                                //HttpContext context = HttpContext.Current;
+                                //context.Session[user.Id] = token.accessToken;
+                                response.status = "Đăng nhập thành công";
+                                response.code = "200";
+                                response.results = token;
+                                return Content<Response>(HttpStatusCode.OK, response);
+                            }
+                        }
                     }
-                    else
+                    else //User have token
                     {
-                        response.code = "400";
-                        response.status = "Đăng nhập thất bại";
-                        response.results = "";
-                        return Content<Response>(HttpStatusCode.BadRequest, response);
+                        DateTime currentDate = DateTime.Now;
+                        DateTime expiresDate = validateToken.expires;
+                        int compare = DateTime.Compare(currentDate, expiresDate);
+                        if (compare <= 0)      //Token havent expired
+                        {
+                            Token token = this.tokenDAO.getById(validateToken.id);
+                            response.status = "Đăng nhập thành công";
+                            response.code = "200";
+                            response.results = token;
+                            return Content<Response>(HttpStatusCode.OK, response);
+                        }
+                        else        //Token expired
+                        {
+                            this.tokenDAO.delete(validateToken.id);     //remove token from database
+                            this.tokenDAO.save();
+                            response.status = "Phiên đăng nhập của bạn đã hết hạn, vui lòng đăng nhập lại";
+                            response.code = "401";
+                            response.results = "";
+                            return Content<Response>(HttpStatusCode.OK, response);
+                        }
+                        
                     }
-                }
-            }
-            else  //Have token
-            {
-                DateTime currentDate = DateTime.Now;
-                DateTime expiresDate = validateToken.expires;
-                int result = DateTime.Compare(currentDate, expiresDate);
-                if(result <= 0)      //Token havent expired
+                }   //wrong password
+                else
                 {
-                    Token token = this.tokenDAO.getById(validateToken.id);
-                    response.status = "Đăng nhập thành công";
-                    response.code = "200";
-                    response.results = token;
-                    return Content<Response>(HttpStatusCode.OK, response);
-                }
-                else        //Token expired
-                {
-                    this.tokenDAO.delete(validateToken.id);     //remove token from database
-                    this.tokenDAO.save();
-                    response.status = "Phiên đăng nhập của bạn đã hết hạn, vui lòng đăng nhập lại";
-                    response.code = "401";
+                    response.code = "404";
+                    response.status = "Sai Mật khẩu";
                     response.results = "";
-                    return Content<Response>(HttpStatusCode.OK, response);
+                    return Content<Response>(HttpStatusCode.BadRequest, response);
                 }
             }
+            else  //wrong username
+            {
+                response.code = "404";
+                response.status = "Tài khoản không tồn tại";
+                response.results = "";
+                return Content<Response>(HttpStatusCode.BadRequest, response);
+            }
+            return Ok();
         }
     }
 }
