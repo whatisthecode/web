@@ -220,6 +220,7 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
         }
 
         // POST api/Account/SetPassword
+        [AllowAnonymous]
         [Route("SetPassword")]
         public async Task<IHttpActionResult> SetPassword(SetPasswordBindingModel model)
         {

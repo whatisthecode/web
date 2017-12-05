@@ -342,6 +342,7 @@
     <Content Include="Assets\JS\Client\owl.carousel.min.js" />
     <Content Include="Assets\JS\Client\waypoints.min.js" />
     <Content Include="Assets\JS\jquery-confirm.min.js" />
+    <Content Include="Assets\JS\validator.js" />
     <Content Include="Content\Site.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />

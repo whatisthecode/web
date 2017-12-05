@@ -1,11 +1,11 @@
 ﻿if ("undefined" !== typeof app) {
     app.controller("LoginController", function ($scope, Login, Helper) {
         $scope.login = function () {
-            if (Helper.isNotEmpty($scope.email) {
-
+            if (Helper.isNotEmpty($scope.email)) {
+                dasdasdas;
             }
             if (!$scope.password) {
-
+                dsadsa;
             }
             Login.login($scope.username, $scope.password, function (data) {
                 if (data) {
