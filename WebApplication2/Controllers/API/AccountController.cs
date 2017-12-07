@@ -766,7 +766,7 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
             {
                 return this.BadRequest("Invalid user data");
             }
-            ApplicationUser identityUser = _userManager.FindByEmail(loginModel.email);
+            ApplicationUser identityUser = UserManager.FindByEmail(loginModel.email);
             if(identityUser != null)    //validate username
             {
                 bool result = UserManager.CheckPassword(identityUser, loginModel.password); //validate user password
