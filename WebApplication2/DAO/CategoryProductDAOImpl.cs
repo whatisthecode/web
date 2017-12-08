@@ -15,7 +15,7 @@ namespace WebApplication2.DAO
         }
         public Int16 getProductCategoriesID(short idCategory, short idProduct)
         {
-            var query = from c in base.context.categoryProducts
+            var query = from c in base.getContext().categoryProducts
                         where c.productId == idProduct && c.categoryId == idCategory
                         select c.id;
             return query.FirstOrDefault();

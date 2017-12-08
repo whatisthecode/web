@@ -21,7 +21,7 @@ namespace WebApplication2.Models
         [Column("expires_in")]
         public int expiresIn { get; set; }
 
-        [Column("userName")]
+        [Column("user_name")]
         public string userName { get; set; }
 
         [Column(".issued", TypeName = "datetime2")]

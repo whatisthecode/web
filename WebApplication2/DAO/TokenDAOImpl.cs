@@ -14,7 +14,7 @@ namespace WebApplication2.DAO
 
         }
 
-        public bool checkColumnExists(string column)
+        public new bool checkColumnExists(string column)
         {
             return base.checkColumnExists(column);   
         }

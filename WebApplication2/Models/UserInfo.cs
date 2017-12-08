@@ -15,8 +15,10 @@ namespace WebApplication2.Models
 
         public Boolean status { get; set; }
 
+        [Column("first_name")]
         public String firstName { get; set; }
 
+        [Column("last_name")]
         public String lastName { get; set; }
 
         [Column("dob", TypeName = "datetime2")]
@@ -24,12 +26,6 @@ namespace WebApplication2.Models
 
         [Column("identity_number")]
         public String identityNumber { get; set; }
-
-        public virtual ICollection<Invoice> buyerInvoices { get; set; }
-
-        public virtual ICollection<Invoice> salerInvoices { get; set; }
-
-        public virtual ICollection<Product> products { get; set; }
 
         public UserInfo(bool status, string firstName, string lastName, DateTime dob, string identityNumber)
         {

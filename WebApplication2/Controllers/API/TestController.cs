@@ -16,6 +16,7 @@ namespace WebApplication2.Controllers.API
     public class TestController : ApiController
     {
         private GroupRoleManagerDAO groupRoleManagerDAO;
+        private GroupDAO groupDAO;
         private ProductDAO productDAO;
         private CategoryDAO categoryDAO;
         private CategoryTypeDAO categoryTypeDAO;
@@ -23,20 +24,25 @@ namespace WebApplication2.Controllers.API
         private ProductAttributeDAO productAttributeDAO;
         private InvoiceDAO invoiceDAO;
         private InvoiceDetailDAO invoiceDetailDAO;
-        private UserManager<ApplicationUser> userManager;
+        private UserManager<ApplicationUser> _userManager;
+        private RoleManager<ApplicationRole> _roleManager;
+        private UserGroupDAO userGroupDAO;
 
 
         public TestController()
         {
             this.groupRoleManagerDAO = new GroupRoleManagerDAOImpl();
+            this.groupDAO = new GroupDAOImpl();
             this.productDAO = new ProductDAOImpl();
             this.categoryDAO = new CategoryDAOImpl();
-            this.userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new DBContext()));
+            this._userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(new DBContext()));
+            this._roleManager = new ApplicationRoleManager(new RoleStore<ApplicationRole>(new DBContext()));
             this.categoryProductDAO = new CategoryProductDAOImpl();
             this.productAttributeDAO = new ProductAttributeDAOImpl();
             this.invoiceDAO = new InvoiceDAOImpl();
             this.invoiceDetailDAO = new InvoiceDetailDAOImpl();
             this.categoryTypeDAO = new CategoryTypeDAOImpl();
+            this.userGroupDAO = new UserGroupDAOImpl();
         }
 
 
@@ -44,10 +50,11 @@ namespace WebApplication2.Controllers.API
         [HttpPost]
         public async Task<IHttpActionResult> initializeAsync()
         {
-            this.groupRoleManagerDAO.CreateGroup("SuperAdmin");
-            this.groupRoleManagerDAO.CreateGroup("Admin");
-            this.groupRoleManagerDAO.CreateGroup("Merchant");
-            this.groupRoleManagerDAO.CreateGroup("Customer");
+            this.groupDAO.insertGroup(new Group("SuperAdmin"));
+            this.groupDAO.insertGroup(new Group("Admin"));
+            this.groupDAO.insertGroup(new Group("Merchant"));
+            this.groupDAO.insertGroup(new Group("Customer"));
+            this.groupDAO.saveGroup();
             String[] userRoles = { "CREATE_USER", "VIEW_USER", "DELETE_USER", "UPDATE_USER" };
             String[] productRoles = { "CREATE_PRODUCT", "VIEW_PRODUCT", "DELETE_PRODUCT", "UPDATE_PRODUCT" };
             String[] productAttributeRoles = { "CREATE_PRODUCT_ATTRIBUTE", "VIEW_PRODUCT_ATTRIBUTE", "DELETE_PRODUCT_ATTRIBUTE", "UPDATE_PRODUCT_ATTRIBUTE" };
@@ -67,10 +74,10 @@ namespace WebApplication2.Controllers.API
                                       .Concat(invoiceDetailRoles)
                                       .ToArray();
             Int16 rolesLength = (Int16)roles.Length;
-            Group superAdmin = groupRoleManagerDAO.findByName("SuperAdmin");
+            Group superAdmin = this.groupDAO.getGroupByName("SuperAdmin");
             for (Int16 roleIndex = 0; roleIndex < rolesLength; roleIndex++)
             {
-                this.groupRoleManagerDAO.createRole(roles[roleIndex]);
+                this._roleManager.Create(new ApplicationRole(roles[roleIndex],""));
                 this.groupRoleManagerDAO.AddRoleToGroup(superAdmin.id, roles[roleIndex]);
             }
 
@@ -85,7 +92,7 @@ namespace WebApplication2.Controllers.API
                                                 .ToArray();
 
 
-            Group customer = this.groupRoleManagerDAO.findByName("Customer");
+            Group customer = this.groupDAO.getGroupByName("Customer");
             Int16 customerRolesLength = (Int16)customerRoles.Length;
             for (Int16 customerRoleIndex = 0; customerRoleIndex < customerRolesLength; customerRoleIndex++)
             {
@@ -98,7 +105,7 @@ namespace WebApplication2.Controllers.API
                                                  .Concat(categoryProductRoles.Where(cp => cp != "VIEW_CATEGORY_PRODUCT"))
                                                  .Concat(invoiceRoles.Where(i => i == "UPDATE_INVOICE"))
                                                  .ToArray();
-            Group merchant = this.groupRoleManagerDAO.findByName("Merchant");
+            Group merchant = this.groupDAO.getGroupByName("Merchant");
             Int16 merchantRolesLength = (Int16)merchantRoles.Length;
             for (Int16 merchantRoleIndex = 0; merchantRoleIndex < merchantRolesLength; merchantRoleIndex++)
             {
@@ -114,7 +121,7 @@ namespace WebApplication2.Controllers.API
                                            .Concat(invoiceRoles.Where(i => i == "VIEW_INVOICE"))
                                            .Concat(invoiceDetailRoles.Where(id => id == "VIEW_INVOICE_DETAIL"))
                                            .ToArray();
-            Group admin = this.groupRoleManagerDAO.findByName("Admin");
+            Group admin = this.groupDAO.getGroupByName("Admin");
             Int16 adminRolesLength = (Int16)adminRoles.Length;
             for (Int16 adminRoleIndex = 0; adminRoleIndex < adminRolesLength; adminRoleIndex++)
             {
@@ -136,22 +143,28 @@ namespace WebApplication2.Controllers.API
             uCustomer1.userInfo = new UserInfo(true, "Đoàn", "Dự", new DateTime(1992, 06, 10), "332666999");
             uCustomer2.userInfo = new UserInfo(true, "Đoàn Chính", "Thuần", new DateTime(1993, 11, 11), "272333978");
 
-            IdentityResult userSuperAdmin = await this.userManager.CreateAsync(uSuperAdmin, "123456");
-            IdentityResult userAdmin = await this.userManager.CreateAsync(uAdmin, "123456");
-            IdentityResult userMerchant1 = await this.userManager.CreateAsync(uMerchant1, "123456");
-            IdentityResult userMerchant2 = await this.userManager.CreateAsync(uMerchant2, "123456");
-            IdentityResult userCustomer1 = await this.userManager.CreateAsync(uCustomer1, "123456");
-            IdentityResult userCustomer2 = await this.userManager.CreateAsync(uCustomer2, "123456");
+            IdentityResult userSuperAdmin = await this._userManager.CreateAsync(uSuperAdmin, "123456");
+            IdentityResult userAdmin = await this._userManager.CreateAsync(uAdmin, "123456");
+            IdentityResult userMerchant1 = await this._userManager.CreateAsync(uMerchant1, "123456");
+            IdentityResult userMerchant2 = await this._userManager.CreateAsync(uMerchant2, "123456");
+            IdentityResult userCustomer1 = await this._userManager.CreateAsync(uCustomer1, "123456");
+            IdentityResult userCustomer2 = await this._userManager.CreateAsync(uCustomer2, "123456");
             if (userSuperAdmin.Succeeded && userAdmin.Succeeded && userMerchant1.Succeeded && userMerchant2.Succeeded && userCustomer1.Succeeded && userCustomer2.Succeeded)
             {
-                this.groupRoleManagerDAO.AddUserToGroup(uSuperAdmin.Id, superAdmin.id);
-                this.groupRoleManagerDAO.AddUserToGroup(uAdmin.Id, admin.id);
-                this.groupRoleManagerDAO.AddUserToGroup(uMerchant1.Id, customer.id);
-                this.groupRoleManagerDAO.AddUserToGroup(uMerchant1.Id, merchant.id);
-                this.groupRoleManagerDAO.AddUserToGroup(uMerchant2.Id, customer.id);
-                this.groupRoleManagerDAO.AddUserToGroup(uMerchant2.Id, merchant.id);
-                this.groupRoleManagerDAO.AddUserToGroup(uCustomer1.Id, customer.id);
-                this.groupRoleManagerDAO.AddUserToGroup(uCustomer2.Id, customer.id);
+                this.userGroupDAO.AddUserToGroup(new ApplicationUserGroup(uSuperAdmin.Id, superAdmin.id));
+
+                this.userGroupDAO.AddUserToGroup(new ApplicationUserGroup(uAdmin.Id, admin.id));
+
+                this.userGroupDAO.AddUserToGroup(new ApplicationUserGroup(uMerchant1.Id, customer.id));
+                this.userGroupDAO.AddUserToGroup(new ApplicationUserGroup(uMerchant1.Id, merchant.id));
+
+                this.userGroupDAO.AddUserToGroup(new ApplicationUserGroup(uMerchant2.Id, customer.id));
+                this.userGroupDAO.AddUserToGroup(new ApplicationUserGroup(uMerchant2.Id, merchant.id));
+
+                this.userGroupDAO.AddUserToGroup(new ApplicationUserGroup(uCustomer1.Id, customer.id));
+
+                this.userGroupDAO.AddUserToGroup(new ApplicationUserGroup(uCustomer2.Id, customer.id));
+                this.userGroupDAO.saveUserGroup();
             }
 
             //TODO : CREATE 3 category type brand, product and attribute

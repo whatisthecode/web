@@ -20,7 +20,8 @@ namespace WebApplication2
                         "~/Assets/JS/Client/owl.carousel.min.js",
                         "~/Assets/JS/Client/front.js",
                         "~/Scripts/Client/app.js",
-                        "~/Scripts/Client/app.config.js"));
+                        "~/Scripts/Client/app.config.js",
+                        "~/Assets/JS/validator.js"));
             bundles.Add(new ScriptBundle("~/bundles/admin_js").Include(
                         "~/Assets/JS/jquery-1.10.2.min.js",
                         "~/Assets/JS/bootstrap.min.js",

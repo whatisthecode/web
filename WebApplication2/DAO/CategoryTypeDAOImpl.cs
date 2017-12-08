@@ -44,7 +44,7 @@ namespace WebApplication2.DAO
 
         public CategoryType getCategoryTypeByCode(String code)
         {
-            CategoryType categoryType = base.context.categoryTypes.Where(ct => ct.code == code).FirstOrDefault();
+            CategoryType categoryType = base.getContext().categoryTypes.Where(ct => ct.code == code).FirstOrDefault();
             if(categoryType != null)
             {
                 return categoryType;
