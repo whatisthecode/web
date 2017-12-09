@@ -21,7 +21,8 @@ namespace WebApplication2
                         "~/Assets/JS/Client/front.js",
                         "~/Scripts/Client/app.js",
                         "~/Scripts/Client/app.config.js",
-                        "~/Assets/JS/validator.js"));
+                        "~/Assets/JS/validator.js",
+                        "~/Assets/JS/ui-bootstrap-tpls-2.5.0.min.js"));
             bundles.Add(new ScriptBundle("~/bundles/admin_js").Include(
                         "~/Assets/JS/jquery-1.10.2.min.js",
                         "~/Assets/JS/bootstrap.min.js",
@@ -55,7 +56,8 @@ namespace WebApplication2
                         "~/Scripts/Client/Service/Oauth2.js",
                         "~/Scripts/Client/Service/API.js",
                         "~/Scripts/Client/Service/Login.js",
-                        "~/Scripts/Client/Service/User.js"));
+                        "~/Scripts/Client/Service/User.js",
+                        "~/Scripts/Client/Service/Product.js"));
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
             // ready for production, use the build tool at https://modernizr.com to pick only the tests you need.
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(

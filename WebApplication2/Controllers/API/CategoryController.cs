@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LaptopWebsite.Models.Mapping;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -22,8 +23,16 @@ namespace WebApplication2.Controllers.API
         [HttpPost]
         public IHttpActionResult insert([FromBody]Category category)
         {
+
             Response response = new Response();
-            if (Service.categoryDAO.checkExist(category) != null)
+            if (category.typeId <0 || category.typeId>3)
+            {
+                response.code = "202";
+                response.status = ("Vui lòng chọn loại sản phẩm");
+                return Content<Response>(HttpStatusCode.Conflict, response);
+
+            }
+            else if(Service.categoryDAO.checkExist(category) != null)
             {
                 response = new Response("409", "Loại sản phẩm này đã tồn tại", null);
                 return Content<Response>(HttpStatusCode.Conflict, response);
@@ -43,16 +52,24 @@ namespace WebApplication2.Controllers.API
         {
             Category category1 = Service.categoryDAO.checkExist(category);
             Response response = new Response();
-            if (category1 != null && category1.id != category.id)
-            {
-                response = new Response("409", "Loại sản phẩm đã tồn tại", null);
-                return Content<Response>(HttpStatusCode.NotFound, response);
-            }
-            else if (Service.categoryDAO.getCategoryById(category.id) == null)
+            if (Service.categoryDAO.getCategoryById(category.id) == null)
             {
                 response = new Response("404", "Loại sản phẩm không tồn tại", null);
                 return Content<Response>(HttpStatusCode.NotFound, response);
             }
+            else if (category1 != null && category1.id != category.id)
+            {
+                response = new Response("409", "Loại sản phẩm đã tồn tại", null);
+                return Content<Response>(HttpStatusCode.NotFound, response);
+            }
+            if (category1.typeId < 0 || category1.typeId > 3)
+            {
+                response.code = "202";
+                response.status = ("Vui lòng chọn loại sản phẩm");
+                return Content<Response>(HttpStatusCode.Conflict, response);
+
+            }
+
             else
             {
                 category1 = Service.categoryDAO.getCategoryById(category.id);
@@ -116,6 +133,33 @@ namespace WebApplication2.Controllers.API
             response.results = categories.ToList();
             return Content<Response>(HttpStatusCode.OK, response);
 
+        }
+
+        [Route("api/category/{categoryId}/products/index={pageIndex}size={pageSize}filter={orderBy}")]
+        [HttpGet]
+        [AllowAnonymous]
+        public IHttpActionResult getProductByCategory(Int16 categoryId, Int16 pageIndex, Int16 pageSize, string orderBy)
+        {
+            Response response = new Response();
+            PagedResult<Product> pageResults = Service.categoryProductDAO.pageView(categoryId, pageIndex, pageSize, orderBy, true);
+            response.code = "200";
+            response.status = "Thành công";
+            response.results = pageResults;
+            return Content<Response>(HttpStatusCode.OK, response); ;
+        }
+
+        [Route("api/category/{codeName}")]
+        public IHttpActionResult getCategoryByCode([FromUri]string codeName)
+        {
+            Response response = new Response();
+            if (codeName == "" || codeName == null)
+            {
+                response.code = "400";
+                response.status = "Thiếu mã loại sản phẩm";
+                return Content<Response>(HttpStatusCode.BadRequest, response);
+            }
+
+            return null;
         }
     }
 }

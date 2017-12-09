@@ -9,12 +9,14 @@ namespace WebApplication2.DAO
 {
     public interface CategoryDAO
     {
+
         IEnumerable<Category> getCategory();
         Category getCategoryById(Int16 categoryId);
         Category checkExist(Category category);
         IEnumerable<Product> find(Int16 categoryId);
         void insertCategory(Category category);
-
+        Int16 idCatType(Int16 id);
+            
         void deleteCategory(Int16 CategoryId);
         void updateCategory(Category category);
         void saveCategory();

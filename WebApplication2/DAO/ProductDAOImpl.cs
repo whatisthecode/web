@@ -73,9 +73,10 @@ namespace WebApplication2.DAO
             
         }
 
-        public PagedResult<Product> PageView(short indexnum, short pagesize, string Orderby, bool ascending)
+        public PagedResult<Product> PageView(short indexnum, short pagesize, string Orderby, bool ascending = false)
         {
             var query = from c in base.getContext().products select c;
+            query.Where(p => p.status >= 0);
             if (query != null && ascending)
             {
                 switch (Orderby)
