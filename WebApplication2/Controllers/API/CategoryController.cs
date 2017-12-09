@@ -7,6 +7,8 @@ using System.Web.Http;
 using WebApplication2.DAO;
 using WebApplication2.Models;
 using WebApplication2.Models.Mapping;
+using WebApplication2.Models.RequestModel;
+using static WebApplication2.Models.RequestModel.FromUri;
 
 namespace WebApplication2.Controllers.API
 {
@@ -138,13 +140,13 @@ namespace WebApplication2.Controllers.API
 
         }
 
-        [Route("api/category/{categoryId}/products/index={pageIndex}size={pageSize}filter={orderBy}")]
+        [Route("api/category/{categoryId}/products/")]
         [HttpGet]
         [AllowAnonymous]
-        public IHttpActionResult getProductByCategory(Int16 categoryId, Int16 pageIndex, Int16 pageSize, string orderBy)
+        public IHttpActionResult getProductByCategory(Int16 categoryId, [FromUri] PageRequest pageRequest)
         {
             Response response = new Response();
-            PagedResult<Product> pageResults = this.categoryProductDao.pageView(categoryId, pageIndex, pageSize, orderBy, true);
+            PagedResult<Product> pageResults = this.categoryProductDao.pageView(categoryId, pageRequest.pageIndex, pageRequest.pageSize, pageRequest.order, true);
             response.code = "200";
             response.status = "Thành công";
             response.results = pageResults;

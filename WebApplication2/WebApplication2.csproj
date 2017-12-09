@@ -273,6 +273,7 @@
     <Compile Include="Models\Rating.cs" />
     <Compile Include="Models\RequestModel\CreateProductModel.cs" />
     <Compile Include="Models\RequestModel\Customer.cs" />
+    <Compile Include="Models\RequestModel\FromUri.cs" />
     <Compile Include="Models\RequestModel\Merchant.cs" />
     <Compile Include="Models\Token.cs" />
     <Compile Include="Models\UserInfo.cs" />

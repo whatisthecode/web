@@ -11,6 +11,7 @@ using WebApplication2.Models;
 using WebApplication2.Models.Mapping;
 using WebApplication2.Models.RequestModel;
 using WebApplication2.Services;
+using static WebApplication2.Models.RequestModel.FromUri;
 
 namespace WebApplication2.Controllers.API
 {
@@ -120,13 +121,13 @@ namespace WebApplication2.Controllers.API
             }
 
         }
-        [Route("api/product/{pageSize}/page={pageIndex};filter={orderBy}/")]
+        [Route("api/products/")]
         [HttpGet]
         [AllowAnonymous]
-        public IHttpActionResult getProductslist(short pageSize, short pageIndex, string orderBy)
+        public IHttpActionResult getProductslist([FromUri] PageRequest pageRequest)
         {
             Response response = new Response();
-            PagedResult<Product> pagedResult = this.productDao.PageView(pageIndex, pageSize, orderBy, false);
+            PagedResult<Product> pagedResult = this.productDao.PageView(pageRequest.pageIndex, pageRequest.pageSize, pageRequest.order, false);
             response.code = "200";
             response.status = "Danh sách sản phẩm hiện tại: ";
             response.results = pagedResult;
