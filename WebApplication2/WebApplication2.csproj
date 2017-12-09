@@ -234,6 +234,8 @@
     <Compile Include="DAO\ProductAttributeDAOImpl.cs" />
     <Compile Include="DAO\ProductDAO.cs" />
     <Compile Include="DAO\ProductDAOImpl.cs" />
+    <Compile Include="DAO\RoleDAO.cs" />
+    <Compile Include="DAO\RoleDAOImpl.cs" />
     <Compile Include="DAO\TokenDAO.cs" />
     <Compile Include="DAO\TokenDAOImpl.cs" />
     <Compile Include="DAO\UserInfoDAO.cs" />

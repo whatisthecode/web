@@ -12,28 +12,28 @@
             var validate = true;
             if (!Helper.validateEmail($scope.data.email)) {
                 validator.prototype.showWarning("#email", "validEmail", "Email Không hợp lệ");
-                validate = false;
+                return validate = false;
             } else {
                 validator.prototype.hideWarning("#email", "validEmail", "Email không hợp lệ");
             }
 
             if (!Helper.lengthOfString(20, 6, $scope.data.newPassword)) {
                 validator.prototype.showWarning("#password", "newPassword", "Mật khẩu ít nhất 6 ký tự");
-                validate = false;
+                return validate = false;
             } else {
                 validator.prototype.hideWarning("#password", "newPassword", "Mật khẩu ít nhất 6 ký tự");
             }
 
             if (!Helper.lengthOfString(20, 6, $scope.data.confirmPassword)) {
                 validator.prototype.showWarning("#confirmPassword", "confirmPassword1", "Mật khẩu ít nhất 6 ký tự");
-                validate = false;
+                return validate = false;
             } else {
                 validator.prototype.hideWarning("#confirmPassword", "confirmPassword1", "Mật khẩu ít nhất 6 ký tự");
             }
 
             if (!Helper.validateConfirmPassword($scope.data.newPassword, $scope.data.confirmPassword)) {
                 validator.prototype.showWarning("#confirmPassword", "confirmPassword2", "Mật khẩu xác nhận không chính xác");
-                validate = false;
+                return validate = false;
             } else {
                 validator.prototype.hideWarning("#confirmPassword", "confirmPassword2", "Mật khẩu xác nhận không chính xác");
 

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using LaptopWebsite.Models.Mapping;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -121,13 +122,14 @@ namespace WebApplication2.Controllers.API
         }
         [Route("api/product/")]
         [HttpGet]
+        [AllowAnonymous]
         public IHttpActionResult getProductslist()
         {
             Response response = new Response();
-            IEnumerable<Product> productlist = this.productDao.getProducts().ToList();
+            PagedResult<Product> pagedResult = this.productDao.PageView(1, 10, "name", false);
             response.code = "200";
             response.status = "Danh sách sản phẩm hiện tại: ";
-            response.results = productlist;
+            response.results = pagedResult;
             return Content<Response>(HttpStatusCode.OK, response);
 
         }

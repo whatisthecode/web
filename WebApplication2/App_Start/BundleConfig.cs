@@ -55,7 +55,8 @@ namespace WebApplication2
                         "~/Scripts/Client/Service/Oauth2.js",
                         "~/Scripts/Client/Service/API.js",
                         "~/Scripts/Client/Service/Login.js",
-                        "~/Scripts/Client/Service/User.js"));
+                        "~/Scripts/Client/Service/User.js",
+                        "~/Scripts/Client/Service/Product.js"));
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
             // ready for production, use the build tool at https://modernizr.com to pick only the tests you need.
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
