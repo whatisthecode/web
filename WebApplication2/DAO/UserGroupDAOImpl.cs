@@ -10,15 +10,10 @@ namespace WebApplication2.DAO
 {
     public class UserGroupDAOImpl : BaseImpl<ApplicationUserGroup, Int16>, UserGroupDAO, IDisposable
     {
-        private GroupDAO groupDAO;
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly RoleManager<ApplicationRole> _roleManager;
 
         public UserGroupDAOImpl() : base()
         {
-            this.groupDAO = new GroupDAOImpl();
-            this._userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(new DBContext()));
-            this._roleManager = new ApplicationRoleManager(new RoleStore<ApplicationRole>(new DBContext()));
+
         }
 
         public void deleteUserGroup(String userId, Int16 groupId)
@@ -53,14 +48,15 @@ namespace WebApplication2.DAO
 
         public void AddUserToGroup(ApplicationUserGroup userGroup)
         {
-            Group group = this.groupDAO.getGroupById(userGroup.groupId);
+            Group group = Service.groupDAO.getGroupById(userGroup.groupId);
 
-            ApplicationUser user = _userManager.FindById(userGroup.userId);
+            ApplicationUser user = Service._userManager.FindById(userGroup.userId);
+            ICollection<ApplicationRoleGroup> roleGroups = Service.groupRoleManagerDAO.getGroupRoles(userGroup.groupId);
 
-            foreach (ApplicationRoleGroup roleGroup in group.roles)
+            foreach (ApplicationRoleGroup roleGroup in roleGroups)
             {
-                ApplicationRole role = this._roleManager.FindById(roleGroup.roleId);
-                _userManager.AddToRole(userGroup.userId, role.Name);
+                ApplicationRole role = Service._roleManager.FindById(roleGroup.roleId);
+                Service._userManager.AddToRole(userGroup.userId, role.Name);
             }
 
             base.insert(userGroup);

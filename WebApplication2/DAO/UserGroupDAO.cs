@@ -6,7 +6,7 @@ using WebApplication2.Models;
 
 namespace WebApplication2.DAO
 {
-    interface UserGroupDAO
+    public interface UserGroupDAO
     {
         IEnumerable<ApplicationUserGroup> getUserGroup();
         ApplicationUserGroup getUserGroupById(String userId, Int16 groupId);

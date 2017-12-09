@@ -11,32 +11,25 @@ namespace WebApplication2.DAO
 {
     public class GroupRoleManagerDAOImpl : BaseImpl<ApplicationRoleGroup, Int16>, GroupRoleManagerDAO, IDisposable
     {
-        private readonly RoleManager<ApplicationRole> _roleManager;
-        private readonly UserManager<ApplicationUser> _userManager;
-        private GroupDAO groupDAO;
-        private UserGroupDAO userGroupDAO;
 
         public GroupRoleManagerDAOImpl() : base()
         {
-            this._roleManager = new ApplicationRoleManager(new RoleStore<ApplicationRole>(new DBContext()));
-            this._userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(new DBContext()));
-            this.groupDAO = new GroupDAOImpl();
-            this.userGroupDAO = new UserGroupDAOImpl();
+
         }
 
         public void AddRoleToGroup(Int16 groupId, string roleName)
         {
-            Group group = this.groupDAO.getGroupById(groupId);
-            ApplicationRole role = _roleManager.FindByName(roleName);
+            Group group = Service.groupDAO.getGroupById(groupId);
+            ApplicationRole role = Service._roleManager.FindByName(roleName);
 
             var newGroupRole = new ApplicationRoleGroup
             {
                 groupId = group.id,
                 roleId = role.Id
             };
-
+            ICollection<ApplicationRoleGroup> roleGroups = this.getGroupRoles(groupId);
             //make sure the groupRole is not already present
-            if (!group.roles.Contains(newGroupRole))
+            if (!roleGroups.Contains(newGroupRole))
             {
                 base.insert(newGroupRole);
                 base.save();
@@ -46,33 +39,39 @@ namespace WebApplication2.DAO
             IQueryable<ApplicationUser> groupUsers = base.getContext().Users.Where(u => u.groups.Any(g => g.groupId.Equals(group.id)));
             foreach (ApplicationUser user in groupUsers)
             {
-                if (!(_userManager.IsInRole(user.Id, roleName)))
+                if (!(Service._userManager.IsInRole(user.Id, roleName)))
                 {
-                    _userManager.AddToRole(user.Id, role.Name);
+                    Service._userManager.AddToRole(user.Id, role.Name);
                 }
             }
         }
 
         public void ClearGroupRoles(Int16 groupId)
         {
-            Group group = this.groupDAO.getGroupById(groupId);
+            Group group = Service.groupDAO.getGroupById(groupId);
             IQueryable<ApplicationUser> users = base.getContext().Users.Where(u => u.groups.Any(g => g.groupId.Equals(group.id)));
+            ICollection<ApplicationRoleGroup> roleGroups = this.getGroupRoles(groupId);
 
-            foreach (ApplicationRoleGroup role in group.roles)
+            foreach (ApplicationRoleGroup role in roleGroups)
             {
                 string currentRoleId = role.roleId;
                 foreach (ApplicationUser user in users)
                 {
-                    int groupsWithRole = user.groups.Count(g => g.Group.roles.Any(r => r.roleId == currentRoleId));
+                    int groupsWithRole = roleGroups.Where(gr => gr.groupId == groupId && gr.roleId == currentRoleId).Count();
 
                     if (groupsWithRole == 1)
                     {
-                        _userManager.RemoveFromRole(user.Id, role.ApplicationRole.Name);
+                        Service._userManager.RemoveFromRole(user.Id, role.ApplicationRole.Name);
                     }
                 }
                 base.getContext().roleGroups.Remove(role);
                 base.save();
             }
+        }
+
+        public ICollection<ApplicationRoleGroup> getGroupRoles(Int16 groupId)
+        {
+            return base.get().Where(gr => gr.groupId == groupId).ToList();
         }
 
         [Serializable]

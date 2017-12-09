@@ -5,8 +5,8 @@ using System.Web;
 
 namespace WebApplication2.DAO
 {
-    public class UserRoleDAO
+    public interface UserRoleDAO
     {
-
+        void ClearUserRoles(String userId);
     }
 }

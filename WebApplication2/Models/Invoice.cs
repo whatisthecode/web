@@ -24,10 +24,10 @@ namespace WebApplication2.Models
         public Double total { get; set; }
 
         [ForeignKey("salerId")]
-        public virtual UserInfo saler { get; set; }
+        public UserInfo saler { get; set; }
 
         [ForeignKey("buyerId")]
-        public virtual UserInfo buyer { get; set; }
+        public UserInfo buyer { get; set; }
 
         public Invoice(string code, Int16 buyerId, Int16 salerId, Double total)
         {

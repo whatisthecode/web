@@ -12,11 +12,10 @@ namespace WebApplication2.Controllers.API
 {
     public class CategoryProductController : ApiController
     {
-        private CategoryProductDAO categoryProductDAO;
             
         public CategoryProductController()
         {
-            this.categoryProductDAO = new CategoryProductDAOImpl();
+
         }
 
         public void insertCategoryProduct(CategoryProduct catepro)
@@ -24,7 +23,7 @@ namespace WebApplication2.Controllers.API
             Response response = new Response();
             response.code = "200";
             response.status = "Thành Công";
-            this.categoryProductDAO.insertCategoryProduct(catepro);
+            Service.categoryProductDAO.insertCategoryProduct(catepro);
             Content<Response>(HttpStatusCode.OK, response);
         }
 

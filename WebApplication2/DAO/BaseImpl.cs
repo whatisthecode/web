@@ -51,7 +51,7 @@ namespace WebApplication2.DAO
 
         public IEnumerable<T> get()
         {
-            return this.context.Set<T>().ToList();
+            return this.context.Set<T>().ToList<T>();
         }
 
         public T getById(Int16 id)

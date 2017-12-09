@@ -12,10 +12,8 @@ namespace WebApplication2.Controllers.API
 {
     public class UserController : ApiController
     {
-        private UserInfoDAO userdao;
         public UserController()
         {
-            this.userdao = new UserInfoDAOImpl();
         }
         [Route("api/user/{id}")]
         [HttpGet]
