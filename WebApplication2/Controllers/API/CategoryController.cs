@@ -23,8 +23,16 @@ namespace WebApplication2.Controllers.API
         [HttpPost]
         public IHttpActionResult insert([FromBody]Category category)
         {
+
             Response response = new Response();
-            if (this.categoryDao.checkExist(category) != null)
+            if (category.typeId <0 || category.typeId>3)
+            {
+                response.code = "202";
+                response.status = ("Vui lòng chọn loại sản phẩm");
+                return Content<Response>(HttpStatusCode.Conflict, response);
+
+            }
+            else if(this.categoryDao.checkExist(category) != null)
             {
                 response = new Response("409", "Loại sản phẩm này đã tồn tại", null);
                 return Content<Response>(HttpStatusCode.Conflict, response);
