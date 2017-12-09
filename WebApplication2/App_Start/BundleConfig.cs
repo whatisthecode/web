@@ -21,7 +21,8 @@ namespace WebApplication2
                         "~/Assets/JS/Client/front.js",
                         "~/Scripts/Client/app.js",
                         "~/Scripts/Client/app.config.js",
-                        "~/Assets/JS/validator.js"));
+                        "~/Assets/JS/validator.js",
+                        "~/Assets/JS/ui-bootstrap-tpls-2.5.0.min.js"));
             bundles.Add(new ScriptBundle("~/bundles/admin_js").Include(
                         "~/Assets/JS/jquery-1.10.2.min.js",
                         "~/Assets/JS/bootstrap.min.js",

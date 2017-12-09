@@ -3,34 +3,31 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Web;
 using WebApplication2.Models;
 
 namespace WebApplication2.DAO
 {
-    public class RoleDAOImpl : RoleDAO
+    public class UserRoleDAOImpl : UserRoleDAO
     {
-        private DBContext context;
         private UserManager<ApplicationUser> _userManager;
         private RoleManager<ApplicationRole> _roleManager;
-        public RoleDAOImpl()
+        public UserRoleDAOImpl()
         {
-            this.context = DatabaseFactory.context;
             this._userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(new DBContext()));
             this._roleManager = new ApplicationRoleManager(new RoleStore<ApplicationRole>(new DBContext()));
         }
-        public void DeleteRole(String roleId)
+        public void ClearUserRoles(String userId)
         {
-            IQueryable<ApplicationUser> roleUsers = this.context.Users.Where(u => u.Roles.Any(r => r.RoleId == roleId));
-            ApplicationRole role = this._roleManager.FindById(roleId);
 
-            foreach (ApplicationUser user in roleUsers)
+            ApplicationUser user = this._userManager.FindById(userId);
+            var currentRoles = new List<IdentityUserRole>();
+            currentRoles.AddRange(user.Roles);
+            foreach (IdentityUserRole role in currentRoles)
             {
-                this._userManager.RemoveFromRole(user.Id, role.Name);
+                var roleName = this._roleManager.FindById(role.RoleId);
+                this._userManager.RemoveFromRole(userId, roleName.ToString());
             }
-            this._roleManager.Delete(role);
-            this.context.SaveChanges();
         }
     }
 }

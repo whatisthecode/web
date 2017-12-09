@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LaptopWebsite.Models.Mapping;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -13,10 +14,12 @@ namespace WebApplication2.Controllers.API
     public class CategoryController : ApiController
     {
         private CategoryDAO categoryDao;
+        private CategoryProductDAO categoryProductDao;
 
         public CategoryController()
         {
             this.categoryDao = new CategoryDAOImpl();
+            this.categoryProductDao = new CategoryProductDAOImpl();
         }
 
         [Route("api/category")]
@@ -105,7 +108,7 @@ namespace WebApplication2.Controllers.API
 
         }
 
-        [Authorize(Roles = "Admin, CanEditGroup")]
+        [Authorize(Roles = "VIEW_CATEGORY")]
         [Route("api/category/")]
         [HttpGet]
         public IHttpActionResult getCategories()
@@ -117,6 +120,33 @@ namespace WebApplication2.Controllers.API
             response.results = categories.ToList();
             return Content<Response>(HttpStatusCode.OK, response);
 
+        }
+
+        [Route("api/category/{categoryId}/products/index={pageIndex}size={pageSize}filter={orderBy}")]
+        [HttpGet]
+        [AllowAnonymous]
+        public IHttpActionResult getProductByCategory(Int16 categoryId, Int16 pageIndex, Int16 pageSize, string orderBy)
+        {
+            Response response = new Response();
+            PagedResult<Product> pageResults = this.categoryProductDao.pageView(categoryId, pageIndex, pageSize, orderBy, true);
+            response.code = "200";
+            response.status = "Thành công";
+            response.results = pageResults;
+            return Content<Response>(HttpStatusCode.OK, response); ;
+        }
+
+        [Route("api/category/{codeName}")]
+        public IHttpActionResult getCategoryByCode([FromUri]string codeName)
+        {
+            Response response = new Response();
+            if (codeName == "" || codeName == null)
+            {
+                response.code = "400";
+                response.status = "Thiếu mã loại sản phẩm";
+                return Content<Response>(HttpStatusCode.BadRequest, response);
+            }
+
+            return null;
         }
     }
 }

@@ -34,17 +34,23 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
     public class AccountController : ApiController
     {
         private const string LocalLoginProvider = "Local";
-        private ApplicationUserManager _userManager;
-        private ApplicationRoleManager _roleManager;
+        private UserManager<ApplicationUser> _userManager;
+        private RoleManager<ApplicationRole> _roleManager;
         private GroupRoleManagerDAO groupRoleManagerDAO;
+        private GroupDAO groupDAO;
         private UserInfoDAO userInfoDao;
         private TokenDAO tokenDAO;
+        private UserGroupDAO userGroupDAO;
 
         public AccountController()
         {
             this.userInfoDao = new UserInfoDAOImpl();
             this.groupRoleManagerDAO = new GroupRoleManagerDAOImpl();
             this.tokenDAO = new TokenDAOImpl();
+            this.groupDAO = new GroupDAOImpl();
+            this.userGroupDAO = new UserGroupDAOImpl();
+            this._userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(new DBContext()));
+            this._roleManager = new ApplicationRoleManager(new RoleStore<ApplicationRole>(new DBContext()));
         }
 
         public AccountController(ApplicationUserManager userManager, ApplicationRoleManager roleManager,
@@ -59,7 +65,7 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
         {
             get
             {
-                return _userManager ?? Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
+                return (ApplicationUserManager)_userManager ?? Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
             }
             private set
             {
@@ -71,7 +77,7 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
         {
             get
             {
-                return _roleManager ?? Request.GetOwinContext().GetUserManager<ApplicationRoleManager>();
+                return (ApplicationRoleManager)_roleManager ?? Request.GetOwinContext().GetUserManager<ApplicationRoleManager>();
             }
             private set
             {
@@ -460,8 +466,12 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
             {
                 foreach (var group in model.groups)
                 {
-                    Group gr = groupRoleManagerDAO.findByName(group);
-                    groupRoleManagerDAO.AddUserToGroup(identityUser.Id, gr.id);
+                    Group gr = this.groupDAO.getGroupByName(group);
+                    ApplicationUserGroup userGroup = new ApplicationUserGroup();
+                    userGroup.groupId = gr.id;
+                    userGroup.userId = identityUser.Id;
+                    this.userGroupDAO.AddUserToGroup(userGroup);
+                    this.userGroupDAO.saveUserGroup();
                 }
                 string code = await this.UserManager.GenerateEmailConfirmationTokenAsync(identityUser.Id);
                 var callbackUrl = new Uri(Url.Link("ConfirmEmail", new { userId = identityUser.Id, code = code }));

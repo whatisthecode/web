@@ -9,13 +9,15 @@ namespace WebApplication2.DAO
 {
     public class CategoryProductDAOImpl : BaseImpl<CategoryProduct, Int16>, CategoryProductDAO, IDisposable
     {
+        protected ProductDAO productDAO;
+
         public CategoryProductDAOImpl():base()
         {
-            
+            productDAO = new ProductDAOImpl();
         }
         public Int16 getProductCategoriesID(short idCategory, short idProduct)
         {
-            var query = from c in base.context.categoryProducts
+            var query = from c in base.getContext().categoryProducts
                         where c.productId == idProduct && c.categoryId == idCategory
                         select c.id;
             return query.FirstOrDefault();
@@ -51,32 +53,27 @@ namespace WebApplication2.DAO
             catepro.updatedAt = DateTime.Now;
             base.update(catepro);
         }
-        PagedResult<CategoryProduct> pageView(Int16 pageindex, Int16 pagesize, string orderBy, Boolean ascending)
+
+        PagedResult<Product> CategoryProductDAO.pageView(short categoryId, short pageindex, short pagesize, string orderBy, bool ascending)
         {
             var query = from c in base.getContext().categoryProducts select c;
-            if (query != null && ascending)
-            {
-                switch (orderBy)
-                {
-                    case "id":
-                        query = query.OrderBy(c => c.categoryId);
-                        break;
-                }
-            }
-            if (query != null && !ascending)
-            {
-                switch (orderBy)
-                {
-                    case "id":
-                        query = query.OrderByDescending(c => c.categoryId);
-                        break;
-
-                }
-
-            }
+            query = query.Where(cate => cate.categoryId == categoryId);
+            query = query.OrderBy(o => o.productId);
             PagedResult<CategoryProduct> pv = base.PageView(query, pageindex, pagesize);
-            return pv;
-
+            List<Product> listProducts = new List<Product>();
+            PagedResult<Product> pvProduct = new PagedResult<Product>();
+            pvProduct.rowCount = pv.rowCount;
+            pvProduct.pageSize = pv.pageSize;
+            pvProduct.currentPage = pv.currentPage;
+            pvProduct.pageCount = pv.pageCount;
+            for(var i = 0; i < pv.results.Count(); i++)
+            {
+                CategoryProduct categoryProduct = pv.results[i];
+                Product product = productDAO.getProduct(categoryProduct.productId);
+                listProducts.Add(product);
+            }
+            pvProduct.results = listProducts;
+            return pvProduct;
         }
     }
 }

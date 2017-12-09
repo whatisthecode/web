@@ -34,7 +34,7 @@ namespace WebApplication2.Controllers.API
 
         [Route("api/product")]
         [HttpPost]
-        [Authorize(Roles = "Merchant")]
+        [Authorize(Roles = "CREATE_PRODUCT")]
         public IHttpActionResult insertNewProduct([FromBody]CreateProductModel createProductModel)
         {
             Response response = Utils.checkInput(createProductModel, CreateProductModel.required);
@@ -91,7 +91,7 @@ namespace WebApplication2.Controllers.API
 
                     response.code = "201";
                     response.results = "Thêm sản phẩm thành công";
-                    return Content<Response>(HttpStatusCode.OK, response);
+                    return Content<Response>(HttpStatusCode.Created, response);
                 }
 
             }
@@ -120,13 +120,13 @@ namespace WebApplication2.Controllers.API
             }
 
         }
-        [Route("api/product/")]
+        [Route("api/product/{pageSize}/page={pageIndex};filter={orderBy}/")]
         [HttpGet]
         [AllowAnonymous]
-        public IHttpActionResult getProductslist()
+        public IHttpActionResult getProductslist(short pageSize, short pageIndex, string orderBy)
         {
             Response response = new Response();
-            PagedResult<Product> pagedResult = this.productDao.PageView(1, 10, "name", false);
+            PagedResult<Product> pagedResult = this.productDao.PageView(pageIndex, pageSize, orderBy, false);
             response.code = "200";
             response.status = "Danh sách sản phẩm hiện tại: ";
             response.results = pagedResult;

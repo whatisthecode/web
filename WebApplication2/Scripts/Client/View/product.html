@@ -1,5 +1,5 @@
 ﻿
-<div id="content">
+<div id="content" data-ng-controller="ProductController">
     <div class="container">
 
         <div class="col-md-12">
@@ -180,7 +180,7 @@
             <div class="box info-bar">
                 <div class="row">
                     <div class="col-sm-12 col-md-4 products-showing">
-                        Showing <strong>12</strong> of <strong>25</strong> products
+                        hiển thị <strong>{{pageSize}}</strong> trên <strong>{{rowCount}}</strong> Sản phẩm
                     </div>
 
                     <div class="col-sm-12 col-md-8  products-number-sort">
@@ -188,7 +188,10 @@
                             <form class="form-inline">
                                 <div class="col-md-6 col-sm-6">
                                     <div class="products-number">
-                                        <strong>Show</strong>  <a href="#" class="btn btn-default btn-sm btn-primary">12</a>  <a href="#" class="btn btn-default btn-sm">24</a>  <a href="#" class="btn btn-default btn-sm">All</a> products
+                                        <strong>Hiển thị</strong>
+                                            <a href="#" id="10" class="btn-pageSize btn btn-default btn-sm btn-primary" ng-click="rowChanged(pageIndex, 10, filter)">10</a>
+                                            <a href="#" id="20" class="btn-pageSize btn btn-default btn-sm" ng-click="rowChanged(pageIndex, 20, filter)">20</a>  
+                                            <a href="#" id="50" class="btn-pageSize btn btn-default btn-sm" ng-click="rowChanged(pageIndex, 50, filter)">50</a>
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-sm-6">
@@ -250,29 +253,8 @@
                     <a href="#" class="btn btn-primary btn-lg"><i class="fa fa-chevron-down"></i> Load more</a>
                 </p>
 
-                <ul class="pagination">
-                    <li>
-                        <a href="#">&laquo;</a>
-                    </li>
-                    <li class="active">
-                        <a href="#">1</a>
-                    </li>
-                    <li>
-                        <a href="#">2</a>
-                    </li>
-                    <li>
-                        <a href="#">3</a>
-                    </li>
-                    <li>
-                        <a href="#">4</a>
-                    </li>
-                    <li>
-                        <a href="#">5</a>
-                    </li>
-                    <li>
-                        <a href="#">&raquo;</a>
-                    </li>
-                </ul>
+                <div uib-pagination boundary-links="true" total-items="rowCount" ng-model="pageIndex" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"
+                     ng-change="pageChanged(pageSize, pageIndex, filter)"></div>
             </div>
 
 
