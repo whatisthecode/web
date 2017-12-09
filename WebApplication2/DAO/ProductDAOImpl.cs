@@ -37,7 +37,7 @@ namespace WebApplication2.DAO
         }
         public Product checkexist(string code)
         {
-            Product product2compare = base.context.products.Where(p=> p.code == code).FirstOrDefault();
+            Product product2compare = base.getContext().products.Where(p=> p.code == code).FirstOrDefault();
             if (product2compare != null)
             {
                 return product2compare;
@@ -108,7 +108,7 @@ namespace WebApplication2.DAO
         }
         public Int16[] getProductCategoriesId(short idProduct)
         {
-            var query = from c in base.context.categoryProducts
+            var query = from c in base.getContext().categoryProducts
                         where c.productId == idProduct
                         select c.categoryId;
             return query.ToArray();

@@ -13,7 +13,7 @@ namespace WebApplication2.DAO
     public class BaseImpl<T, Int16> : Base<T, Int16>, IDisposable where T : class
     {
         private Boolean disposed;
-        public DBContext context { get; private set; }
+        private DBContext context;
 
         public BaseImpl()
         {

@@ -10,7 +10,9 @@ namespace WebApplication2.DAO
     public class DBContext : IdentityDbContext<ApplicationUser>
     {
         public DBContext() : base("DBContext")
-        { }
+        {
+            this.Configuration.LazyLoadingEnabled = true;
+        }
 
         public static DBContext Create()
         {
@@ -32,6 +34,9 @@ namespace WebApplication2.DAO
         public DbSet<InvoiceDetail> invoiceDetails { get; set; }
         public DbSet<Group> groups { get; set; }
         public DbSet<Token> token { get; set; }
+        public DbSet<ApplicationUserGroup> userGroups { get; set; } 
+        public DbSet<ApplicationRoleGroup> roleGroups { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             Database.SetInitializer<DBContext>(null);
@@ -40,24 +45,6 @@ namespace WebApplication2.DAO
                         .Property(c => c.id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             modelBuilder.Entity<ApplicationUser>().HasRequired(t => t.userInfo);
 
-            modelBuilder.Entity<Product>().HasRequired(n => n.userInfo)
-                        .WithMany(a => a.products)
-                        .HasForeignKey(n => n.createdBy)
-                        .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<Invoice>().HasRequired(n => n.buyer)
-                        .WithMany(a => a.buyerInvoices)
-                        .HasForeignKey(n => n.buyerId)
-                        .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<Invoice>().HasRequired(n => n.saler)
-                        .WithMany(a => a.salerInvoices)
-                        .HasForeignKey(n => n.salerId)
-                        .WillCascadeOnDelete(false);
-            // Add the group stuff here:
-            modelBuilder.Entity<ApplicationUser>().HasMany<ApplicationUserGroup>((ApplicationUser u) => u.groups);
-            // And here:
-            modelBuilder.Entity<Group>().HasMany<ApplicationRoleGroup>((Group g) => g.roles);
             // And Here:
             EntityTypeConfiguration<Group> groupsConfig = modelBuilder.Entity<Group>().ToTable("Groups");
             groupsConfig.Property((Group r) => r.name).IsRequired();

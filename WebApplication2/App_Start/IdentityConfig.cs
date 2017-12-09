@@ -8,6 +8,8 @@ using WebApplication2.DAO;
 using System;
 using Microsoft.Owin.Security;
 using System.Security.Claims;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace WebApplication2
 {
@@ -56,7 +58,10 @@ namespace WebApplication2
 
     public class ApplicationRoleManager : RoleManager<ApplicationRole>
     {
-        public ApplicationRoleManager(IRoleStore<ApplicationRole,string> roleStore) : base(roleStore){ }
+        private DBContext context;
+        public ApplicationRoleManager(IRoleStore<ApplicationRole,string> roleStore) : base(roleStore){
+            this.context = DatabaseFactory.context;
+        }
         public static ApplicationRoleManager Create(IdentityFactoryOptions<ApplicationRoleManager> options, IOwinContext context)
         {
             var applicationRoleManager = new ApplicationRoleManager(new RoleStore<ApplicationRole>(context.Get<DBContext>()));

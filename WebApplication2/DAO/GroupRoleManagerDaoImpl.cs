@@ -9,22 +9,24 @@ using System.Runtime.Serialization;
 
 namespace WebApplication2.DAO
 {
-    public class GroupRoleManagerDAOImpl : BaseImpl<Group, Int16>, GroupRoleManagerDAO, IDisposable
+    public class GroupRoleManagerDAOImpl : BaseImpl<ApplicationRoleGroup, Int16>, GroupRoleManagerDAO, IDisposable
     {
-        private readonly RoleManager<ApplicationRole> _roleManager = new RoleManager<ApplicationRole>(
-            new RoleStore<ApplicationRole>(new DBContext()));
-
-        private readonly UserManager<ApplicationUser> _userManager = new UserManager<ApplicationUser>(
-            new UserStore<ApplicationUser>(new DBContext()));
+        private readonly RoleManager<ApplicationRole> _roleManager;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private GroupDAO groupDAO;
+        private UserGroupDAO userGroupDAO;
 
         public GroupRoleManagerDAOImpl() : base()
         {
-
+            this._roleManager = new ApplicationRoleManager(new RoleStore<ApplicationRole>(new DBContext()));
+            this._userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(new DBContext()));
+            this.groupDAO = new GroupDAOImpl();
+            this.userGroupDAO = new UserGroupDAOImpl();
         }
 
         public void AddRoleToGroup(Int16 groupId, string roleName)
         {
-            Group group = base.getById(groupId);
+            Group group = this.groupDAO.getGroupById(groupId);
             ApplicationRole role = _roleManager.FindByName(roleName);
 
             var newGroupRole = new ApplicationRoleGroup
@@ -36,8 +38,8 @@ namespace WebApplication2.DAO
             //make sure the groupRole is not already present
             if (!group.roles.Contains(newGroupRole))
             {
-                group.roles.Add(newGroupRole);
-                base.getContext().SaveChanges();
+                base.insert(newGroupRole);
+                base.save();
             }
 
             //Add all of the users in this group to the new role:
@@ -46,142 +48,31 @@ namespace WebApplication2.DAO
             {
                 if (!(_userManager.IsInRole(user.Id, roleName)))
                 {
-                    AddUserToRole(user.Id, role.Name);
+                    _userManager.AddToRole(user.Id, role.Name);
                 }
             }
-        }
-
-        public void AddUserToGroup(string userId, Int16 groupId)
-        {
-            Group group = base.getById(groupId);
-            ApplicationUser user = base.getContext().Users.Find(userId);
-
-            var userGroup = new ApplicationUserGroup
-            {
-                groupId = group.id,
-                userId = user.Id
-            };
-
-            foreach (ApplicationRoleGroup role in group.roles)
-            {
-                _userManager.AddToRole(userId, role.role.Name);
-            }
-            user.groups.Add(userGroup);
-            base.getContext().SaveChanges();
-        }
-
-        public IdentityResult AddUserToRole(string userId, string roleName)
-        {
-            return _userManager.AddToRole(userId, roleName);
         }
 
         public void ClearGroupRoles(Int16 groupId)
         {
-            Group group = base.getById(groupId);
-            IQueryable<ApplicationUser> groupsUsers = base.getContext().Users.Where(u => u.groups.Any(g => g.groupId.Equals(group.id)));
+            Group group = this.groupDAO.getGroupById(groupId);
+            IQueryable<ApplicationUser> users = base.getContext().Users.Where(u => u.groups.Any(g => g.groupId.Equals(group.id)));
 
             foreach (ApplicationRoleGroup role in group.roles)
             {
                 string currentRoleId = role.roleId;
-                foreach (ApplicationUser user in groupsUsers)
+                foreach (ApplicationUser user in users)
                 {
-                    int groupsWithRole = user.groups.Count(g => g.group.roles.Any(r => r.roleId == currentRoleId));
+                    int groupsWithRole = user.groups.Count(g => g.Group.roles.Any(r => r.roleId == currentRoleId));
 
                     if (groupsWithRole == 1)
                     {
-                        RemoveFromRole(user.Id, role.role.Name);
+                        _userManager.RemoveFromRole(user.Id, role.ApplicationRole.Name);
                     }
                 }
+                base.getContext().roleGroups.Remove(role);
+                base.save();
             }
-            group.roles.Clear();
-            base.getContext().SaveChanges();
-        }
-
-        public void ClearUserGroups(string userId)
-        {
-            ClearUserRoles(userId);
-            ApplicationUser user = base.getContext().Users.Find(userId);
-            user.groups.Clear();
-            base.getContext().SaveChanges();
-        }
-
-        public void ClearUserRoles(string userId)
-        {
-            ApplicationUser user = _userManager.FindById(userId);
-            var currentRoles = new List<IdentityUserRole>();
-
-            currentRoles.AddRange(user.Roles);
-            foreach (IdentityUserRole role in currentRoles)
-            {
-                var roleName = _roleManager.FindById(role.RoleId);
-                _userManager.RemoveFromRole(userId, roleName.ToString());
-            }
-        }
-
-        public void CreateGroup(string groupName)
-        {
-            if (GroupNameExists(groupName))
-            {
-                throw new GroupExistsException(
-                    "A group by that name already exists in the database. Please choose another name.");
-            }
-
-            var newGroup = new Group(groupName);
-            base.insert(newGroup);
-            base.save();
-        }
-
-        public IdentityResult createRole(string name, string description = "")
-        {
-            return _roleManager.Create(new ApplicationRole(name, description));
-        }
-
-        public void DeleteGroup(Int16 groupId)
-        {
-            Group group = base.getById(groupId);
-
-            ClearGroupRoles(groupId);
-            base.getContext().groups.Remove(group);
-            base.getContext().SaveChanges();
-        }
-
-        public void DeleteRole(string roleId)
-        {
-            IQueryable<ApplicationUser> roleUsers = base.getContext().Users.Where(u => u.Roles.Any(r => r.RoleId == roleId));
-            ApplicationRole role = _roleManager.FindById(roleId);
-
-            foreach (ApplicationUser user in roleUsers)
-            {
-                RemoveFromRole(user.Id, role.Name);
-            }
-            base.getContext().Roles.Remove(role);
-            base.getContext().SaveChanges();
-        }
-
-        public Group findByName(string name)
-        {
-            return base.getContext().groups.First(g => g.name == name);
-        }
-
-        public List<Group> GetAllGroup()
-        {
-            return base.get().ToList();
-        }
-
-        public bool GroupNameExists(string groupName)
-        {
-            return base.getContext().groups.Any(gr => gr.name == groupName);
-        }
-
-        public void RemoveFromRole(string userId, string roleName)
-        {
-            _userManager.RemoveFromRole(userId, roleName);
-        }
-
-
-        public bool RoleExists(string name)
-        {
-            return _roleManager.RoleExists(name);
         }
 
         [Serializable]

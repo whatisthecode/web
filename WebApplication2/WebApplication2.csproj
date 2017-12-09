@@ -222,8 +222,12 @@
     <Compile Include="DAO\CategoryDAOImpl.cs" />
     <Compile Include="DAO\CategoryProductDAO.cs" />
     <Compile Include="DAO\CategoryProductDAOImpl.cs" />
+    <Compile Include="DAO\CategoryTypeDAO.cs" />
+    <Compile Include="DAO\CategoryTypeDAOImpl.cs" />
     <Compile Include="DAO\DatabaseFactory.cs" />
     <Compile Include="DAO\DBContext.cs" />
+    <Compile Include="DAO\GroupDAO.cs" />
+    <Compile Include="DAO\GroupDAOImpl.cs" />
     <Compile Include="DAO\GroupRoleManagerDAO.cs" />
     <Compile Include="DAO\GroupRoleManagerDAOImpl.cs" />
     <Compile Include="DAO\InvoiceDAO.cs" />
@@ -234,10 +238,16 @@
     <Compile Include="DAO\ProductAttributeDAOImpl.cs" />
     <Compile Include="DAO\ProductDAO.cs" />
     <Compile Include="DAO\ProductDAOImpl.cs" />
+    <Compile Include="DAO\RoleDAO.cs" />
+    <Compile Include="DAO\RoleDAOImpl.cs" />
     <Compile Include="DAO\TokenDAO.cs" />
     <Compile Include="DAO\TokenDAOImpl.cs" />
+    <Compile Include="DAO\UserGroupDAO.cs" />
+    <Compile Include="DAO\UserGroupDAOImpl.cs" />
     <Compile Include="DAO\UserInfoDAO.cs" />
     <Compile Include="DAO\UserInfoDAOImpl.cs" />
+    <Compile Include="DAO\UserRoleDAO.cs" />
+    <Compile Include="DAO\UserRoleDAOImpl.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -342,6 +352,7 @@
     <Content Include="Assets\JS\Client\owl.carousel.min.js" />
     <Content Include="Assets\JS\Client\waypoints.min.js" />
     <Content Include="Assets\JS\jquery-confirm.min.js" />
+    <Content Include="Assets\JS\validator.js" />
     <Content Include="Content\Site.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />

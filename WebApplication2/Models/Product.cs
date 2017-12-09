@@ -24,9 +24,10 @@ namespace WebApplication2.Models
         public String longDescription { get; set; }
 
         [Column("created_by")]
+        [ForeignKey("UserInfo")]
         public Int16 createdBy { get; set; }
 
-        public virtual UserInfo userInfo { get; set; }
+        public virtual UserInfo UserInfo { get; set; }
 
         public virtual ICollection<ProductAttribute> attributes { get; set; }
 

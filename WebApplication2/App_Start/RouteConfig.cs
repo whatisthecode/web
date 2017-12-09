@@ -16,12 +16,12 @@ namespace WebApplication2
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
             routes.MapRoute(
                 name: "Admin-Home",
-                url: "admin",
+                url: "dashboard",
                 defaults: new { type = "Admin", controller = "AdminHome", action = "Index" }
             );
             routes.MapRoute(
                 name: "Admin-Login",
-                url: "admin/login",
+                url: "dashboard/login",
                 defaults: new { type = "Admin", controller = "AdminLogin", action = "Index" }
             );
             routes.MapRoute(

@@ -9,12 +9,25 @@ namespace WebApplication2.Models
 {
     public class ApplicationUserGroup : Base
     {
-        [Key, Column(Order = 0)]
-        public virtual string userId { get; set; }
-        [Key, Column(Order = 1)]
-        public virtual int groupId { get; set; }
+        public ApplicationUserGroup() : base()
+        {
 
-        public virtual ApplicationUser user { get; set; }
-        public virtual Group group { get; set; }
+        }
+
+        public ApplicationUserGroup(String userId, Int16 groupId)
+        {
+            this.userId = userId;
+            this.groupId = groupId;
+        }
+        [Key, Column("user_id", Order = 0)]
+        [ForeignKey("ApplicationUser")]
+        public String userId { get; set; }
+
+        [Key, Column("group_id", Order = 1)]
+        [ForeignKey("Group")]
+        public Int16 groupId { get; set; }
+
+        public virtual ApplicationUser ApplicationUser { get; set; }
+        public virtual Group Group { get; set; }
     }
 }

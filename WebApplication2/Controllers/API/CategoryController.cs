@@ -113,7 +113,7 @@ namespace WebApplication2.Controllers.API
 
         }
 
-        [Authorize(Roles = "Admin, CanEditGroup")]
+        [Authorize(Roles = "VIEW_CATEGORY")]
         [Route("api/category/")]
         [HttpGet]
         public IHttpActionResult getCategories()

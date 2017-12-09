@@ -20,43 +20,29 @@
             toRealObject: function (object) {
                 return Object.assign({}, object);
             },
-            validateEmail: function (email) {
-                if (notEmpty(email) == true) {
-                    var pattern = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
-                    if (pattern.test(value))
-                        return true;
-                    else
-                        return false;
-                }
-            },
-            validateConfirmPassword: function (password1, password2) {
-                if (notEmpty(password1) == true && notEmpty(password2) == true) {
-                    if (password1 === password2)
-                        return true;
-                    else
-                        return false;
-                }
-            },
             notEmpty: function (value) {
-                if (value == "" || value == null || typeof (value) == "undefined")
+                if (value === "" || value === null || typeof value === "undefined")
                     return false;
                 else
                     return true;
             },
             isNumber: function (value) {
-                if (typeof (value) == "number")
+                if (typeof value === "number")
                     return true;
                 else
                     return false;
             },
             lengthOfString: function (max = 10, min = 1, value) {
-                if (value.length <= max && value.length >= min)
-                    return true;
-                else
-                    return false;
+                if (this.notEmpty(value))
+                {
+                    if (value.length <= max && value.length >= min)
+                        return true;
+                    else
+                        return false;
+                }
             },
             isValidNumber: function (value) {
-                if (notEmpty(value) == true) {
+                if (this.notEmpty(value) === true) {
                     var pattern = /^\d+$/;
                     if (pattern.test(value))
                         return true;
@@ -64,8 +50,16 @@
                         return false;
                 }
             },
+            validateConfirmPassword: function (password1, password2) {
+                if (this.notEmpty(password1) === true && this.notEmpty(password2) === true) {
+                    if (password1 === password2)
+                        return true;
+                    else
+                        return false;
+                }
+            },
             convertDate: function (from, to, date) {
-                if (notEmpty(date) == true) {
+                if (this.notEmpty(date) === true) {
                     switch (from) {
                         case "dd/MM/yyyy":
                             var day = date.split("/")[0];
@@ -75,6 +69,7 @@
                                 case "MM/dd/yyyy":
                                     return Date = month + "/" + day + "/" + year;
                             }
+                            break;
                         default:
                             break;
                     }
@@ -87,7 +82,19 @@
                 var year = new Date().getFullYear();
                 return date + "/" + month + "/" + year;
             },
+            validateEmail: function (email) {
+                if (this.notEmpty(email) === true) {
+                    var pattern = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
+                    if (pattern.test(email))
+                        return true;
+                    else
+                        return false;
+                }
+            },
             /***
+            * @param {string} date1 - some date.
+            * @param {string} date2 - some date.
+            * @returns {string} date
             input: date1, date2 :string
             condition: date1 >= date2
             output: return true else return false*
