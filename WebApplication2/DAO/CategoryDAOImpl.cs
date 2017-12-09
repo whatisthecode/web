@@ -118,5 +118,10 @@ namespace WebApplication2.DAO
             PagedResult<Category> pv = base.PageView(query, pageIndex, pageSize);
             return pv;
         }
+
+        public short idCatType(short id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -26,8 +26,16 @@ namespace WebApplication2.Controllers.API
         [HttpPost]
         public IHttpActionResult insert([FromBody]Category category)
         {
+
             Response response = new Response();
-            if (this.categoryDao.checkExist(category) != null)
+            if (category.typeId <0 || category.typeId>3)
+            {
+                response.code = "202";
+                response.status = ("Vui lòng chọn loại sản phẩm");
+                return Content<Response>(HttpStatusCode.Conflict, response);
+
+            }
+            else if(this.categoryDao.checkExist(category) != null)
             {
                 response = new Response("409", "Loại sản phẩm này đã tồn tại", null);
                 return Content<Response>(HttpStatusCode.Conflict, response);
@@ -47,16 +55,24 @@ namespace WebApplication2.Controllers.API
         {
             Category category1 = this.categoryDao.checkExist(category);
             Response response = new Response();
-            if (category1 != null && category1.id != category.id)
-            {
-                response = new Response("409", "Loại sản phẩm đã tồn tại", null);
-                return Content<Response>(HttpStatusCode.NotFound, response);
-            }
-            else if (this.categoryDao.getCategoryById(category.id) == null)
+            if (this.categoryDao.getCategoryById(category.id) == null)
             {
                 response = new Response("404", "Loại sản phẩm không tồn tại", null);
                 return Content<Response>(HttpStatusCode.NotFound, response);
             }
+            else if (category1 != null && category1.id != category.id)
+            {
+                response = new Response("409", "Loại sản phẩm đã tồn tại", null);
+                return Content<Response>(HttpStatusCode.NotFound, response);
+            }
+            if (category1.typeId < 0 || category1.typeId > 3)
+            {
+                response.code = "202";
+                response.status = ("Vui lòng chọn loại sản phẩm");
+                return Content<Response>(HttpStatusCode.Conflict, response);
+
+            }
+
             else
             {
                 category1 = this.categoryDao.getCategoryById(category.id);
