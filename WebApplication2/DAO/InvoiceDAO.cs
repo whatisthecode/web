@@ -8,7 +8,7 @@ using WebApplication2.Models;
 
 namespace WebApplication2.DAO
 {
-    interface InvoiceDAO
+    public interface InvoiceDAO
     {
         IEnumerable<Invoice> getInvoice();
         Invoice getInvoiceById(Int16 invoiceId);

@@ -8,7 +8,7 @@ using WebApplication2.Models;
 
 namespace WebApplication2.DAO
 {
-    interface CategoryTypeDAO
+    public interface CategoryTypeDAO
     {
         IEnumerable<CategoryType> getCategoryType();
         CategoryType getCategoryTypeById(Int16 categoryTypeId);

@@ -12,7 +12,6 @@ namespace WebApplication2.Models
 
         public Group(String name) : base()
         {
-            this.roles = new List<ApplicationRoleGroup>();
             this.name = name;
         }
 
@@ -23,7 +22,5 @@ namespace WebApplication2.Models
         public Int16 id { get; set; }
 
         public String name { get; set; }
-
-        public virtual ICollection<ApplicationRoleGroup> roles { get; set; }
     }
 }

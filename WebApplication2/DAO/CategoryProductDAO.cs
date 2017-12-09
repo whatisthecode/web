@@ -7,7 +7,7 @@ using WebApplication2.Models;
 
 namespace WebApplication2.DAO
 {
-    interface CategoryProductDAO
+    public interface CategoryProductDAO
     {
         Int16 getProductCategoriesID(short idCategory, short idProduct);
         CategoryProduct getCategoryProduct(Int16 idcatepro);

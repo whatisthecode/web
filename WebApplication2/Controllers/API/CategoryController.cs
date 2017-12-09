@@ -12,11 +12,10 @@ namespace WebApplication2.Controllers.API
     [Authorize]
     public class CategoryController : ApiController
     {
-        private CategoryDAO categoryDao;
 
         public CategoryController()
         {
-            this.categoryDao = new CategoryDAOImpl();
+
         }
 
         [Route("api/category")]
@@ -24,15 +23,15 @@ namespace WebApplication2.Controllers.API
         public IHttpActionResult insert([FromBody]Category category)
         {
             Response response = new Response();
-            if (this.categoryDao.checkExist(category) != null)
+            if (Service.categoryDAO.checkExist(category) != null)
             {
                 response = new Response("409", "Loại sản phẩm này đã tồn tại", null);
                 return Content<Response>(HttpStatusCode.Conflict, response);
             }
             else
             {
-                this.categoryDao.insertCategory(category);
-                this.categoryDao.saveCategory();
+                Service.categoryDAO.insertCategory(category);
+                Service.categoryDAO.saveCategory();
                 response = new Response("201", "Loại sản phẩm đã được thêm", category);
                 return Content<Response>(HttpStatusCode.Created, response);
             }
@@ -42,25 +41,25 @@ namespace WebApplication2.Controllers.API
         [HttpPut]
         public IHttpActionResult update([FromBody]Category category)
         {
-            Category category1 = this.categoryDao.checkExist(category);
+            Category category1 = Service.categoryDAO.checkExist(category);
             Response response = new Response();
             if (category1 != null && category1.id != category.id)
             {
                 response = new Response("409", "Loại sản phẩm đã tồn tại", null);
                 return Content<Response>(HttpStatusCode.NotFound, response);
             }
-            else if (this.categoryDao.getCategoryById(category.id) == null)
+            else if (Service.categoryDAO.getCategoryById(category.id) == null)
             {
                 response = new Response("404", "Loại sản phẩm không tồn tại", null);
                 return Content<Response>(HttpStatusCode.NotFound, response);
             }
             else
             {
-                category1 = this.categoryDao.getCategoryById(category.id);
+                category1 = Service.categoryDAO.getCategoryById(category.id);
                 category1.code = category.code;
                 category1.name = category.name;
-                this.categoryDao.updateCategory(category1);
-                this.categoryDao.saveCategory();
+                Service.categoryDAO.updateCategory(category1);
+                Service.categoryDAO.saveCategory();
                 response = new Response("200", "Cập nhật loại sản phẩm thành công", category);
                 return Content<Response>(HttpStatusCode.OK, response);
             }
@@ -70,7 +69,7 @@ namespace WebApplication2.Controllers.API
         [HttpDelete]
         public IHttpActionResult delete(short id)
         {
-            Category cate = this.categoryDao.getCategoryById(id);
+            Category cate = Service.categoryDAO.getCategoryById(id);
             Response response = new Response();
             if (cate == null)
             {
@@ -79,7 +78,7 @@ namespace WebApplication2.Controllers.API
                 return Content<Response>(HttpStatusCode.NotFound, response);
             }
 
-            this.categoryDao.deleteCategory(id);
+            Service.categoryDAO.deleteCategory(id);
             response.code = "200";
             response.status = "Xóa loại sản phẩm thành công";
             return Content<Response>(HttpStatusCode.OK, response);
@@ -89,7 +88,7 @@ namespace WebApplication2.Controllers.API
         [HttpGet]
         public IHttpActionResult getCategory(short id)
         {
-            Category categorytemp = this.categoryDao.getCategoryById(id);
+            Category categorytemp = Service.categoryDAO.getCategoryById(id);
             Response response = new Response();
             if (categorytemp == null)
             {
@@ -110,7 +109,7 @@ namespace WebApplication2.Controllers.API
         [HttpGet]
         public IHttpActionResult getCategories()
         {
-            IEnumerable<Category> categories = this.categoryDao.getCategory();
+            IEnumerable<Category> categories = Service.categoryDAO.getCategory();
             Response response = new Response();
             response.code = "200";
             response.status = "Thành công";

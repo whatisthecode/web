@@ -14,8 +14,8 @@ namespace WebApplication2.Models
         [ForeignKey("Group")]
         public Int16 groupId { get; set; }
 
-        public virtual ApplicationRole ApplicationRole { get; set; }
+        public ApplicationRole ApplicationRole { get; set; }
 
-        public virtual Group Group { get; set; }
+        public Group Group { get; set; }
     }
 }

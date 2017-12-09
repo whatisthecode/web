@@ -5,7 +5,7 @@ using System.Web;
 
 namespace WebApplication2.DAO
 {
-    interface RoleDAO
+    public interface RoleDAO
     {
         void DeleteRole(String roleId);
     }

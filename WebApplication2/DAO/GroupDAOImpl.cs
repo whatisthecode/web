@@ -8,6 +8,10 @@ namespace WebApplication2.DAO
 {
     public class GroupDAOImpl : BaseImpl<Group, Int16>, GroupDAO, IDisposable
     {
+        public GroupDAOImpl() : base()
+        {
+
+        }
         public void deleteGroup(Int16 groupId)
         {
             base.delete(groupId);

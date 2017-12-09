@@ -25,7 +25,7 @@ namespace WebApplication2.Models
 
         public Category parent { get; set; }
 
-        public virtual ICollection<Category> subCategories { get; set; }
+        public ICollection<Category> subCategories { get; set; }
 
         public CategoryType CategoryType { get; set; }
 

@@ -11,7 +11,8 @@ namespace WebApplication2.DAO
     {
         public DBContext() : base("DBContext")
         {
-            this.Configuration.LazyLoadingEnabled = true;
+            //this.Configuration.LazyLoadingEnabled = true;
+            //this.Configuration.ProxyCreationEnabled = false;
         }
 
         public static DBContext Create()
@@ -41,8 +42,7 @@ namespace WebApplication2.DAO
         {
             Database.SetInitializer<DBContext>(null);
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<UserInfo>().HasKey(k => k.id)
-                        .Property(c => c.id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+
             modelBuilder.Entity<ApplicationUser>().HasRequired(t => t.userInfo);
 
             // And Here:

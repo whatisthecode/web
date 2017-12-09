@@ -9,7 +9,10 @@ namespace WebApplication2.DAO
 {
     public class CategoryTypeDAOImpl : BaseImpl<CategoryType, Int16>, CategoryTypeDAO, IDisposable
     {
+        public CategoryTypeDAOImpl() : base()
+        {
 
+        }
         public bool check(string column)
         {
             throw new NotImplementedException();

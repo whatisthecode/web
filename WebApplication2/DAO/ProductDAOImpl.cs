@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using LaptopWebsite.Models.Mapping;
 using WebApplication2.Models;
+using System.Data.Entity;
 
 namespace WebApplication2.DAO
 {
@@ -33,7 +34,14 @@ namespace WebApplication2.DAO
         public IEnumerable<Product> getProducts()
         {
 
-            return base.get().Where(p => p.status >= 0).ToList();
+            IList<Product> products = base.get().Where(p => p.status >= 0).ToList();
+            Int16 productsLength = (Int16)products.Count;
+            for(Int16 productIndex = 0; productIndex < productsLength; productIndex++)
+            {
+                products[productIndex].UserInfo = Service.userInfoDAO.getUserInfo(products[productIndex].id);
+                base.getContext().Entry<Product>(products[productIndex]).Collection(p => p.attributes).Load();
+            }
+            return products;
         }
         public Product checkexist(string code)
         {

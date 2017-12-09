@@ -7,7 +7,7 @@ using WebApplication2.Models;
 
 namespace WebApplication2.DAO
 {
-    interface ProductAttributeDAO
+    public interface ProductAttributeDAO
     {
         ProductAttribute getProductAttributeById(Int16 id);
         IEnumerable<ProductAttribute> getProductAttributeAll();

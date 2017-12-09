@@ -34,23 +34,10 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
     public class AccountController : ApiController
     {
         private const string LocalLoginProvider = "Local";
-        private UserManager<ApplicationUser> _userManager;
-        private RoleManager<ApplicationRole> _roleManager;
-        private GroupRoleManagerDAO groupRoleManagerDAO;
-        private GroupDAO groupDAO;
-        private UserInfoDAO userInfoDao;
-        private TokenDAO tokenDAO;
-        private UserGroupDAO userGroupDAO;
 
         public AccountController()
         {
-            this.userInfoDao = new UserInfoDAOImpl();
-            this.groupRoleManagerDAO = new GroupRoleManagerDAOImpl();
-            this.tokenDAO = new TokenDAOImpl();
-            this.groupDAO = new GroupDAOImpl();
-            this.userGroupDAO = new UserGroupDAOImpl();
-            this._userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(new DBContext()));
-            this._roleManager = new ApplicationRoleManager(new RoleStore<ApplicationRole>(new DBContext()));
+
         }
 
         public AccountController(ApplicationUserManager userManager, ApplicationRoleManager roleManager,
@@ -65,11 +52,11 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
         {
             get
             {
-                return (ApplicationUserManager)_userManager ?? Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
+                return (ApplicationUserManager)Service._userManager ?? Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
             }
             private set
             {
-                _userManager = value;
+                Service._userManager = value;
             }
         }
 
@@ -77,11 +64,11 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
         {
             get
             {
-                return (ApplicationRoleManager)_roleManager ?? Request.GetOwinContext().GetUserManager<ApplicationRoleManager>();
+                return (ApplicationRoleManager)Service._roleManager ?? Request.GetOwinContext().GetUserManager<ApplicationRoleManager>();
             }
             private set
             {
-                _roleManager = value;
+                Service._roleManager = value;
             }
         }
 
@@ -93,7 +80,7 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
         {
             Response response = new Response();
             ExternalLoginData externalLogin = ExternalLoginData.FromIdentity(User.Identity as ClaimsIdentity);
-            var accessToken = this.tokenDAO.getByUsername(User.Identity.GetUserName());
+            var accessToken = Service.tokenDAO.getByUsername(User.Identity.GetUserName());
             if (accessToken != null)
             {
                 Token token = accessToken;
@@ -126,8 +113,8 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
                 }
                 else
                 {
-                    this.tokenDAO.delete(token.id);     //remove token from database
-                    this.tokenDAO.save();
+                    Service.tokenDAO.delete(token.id);     //remove token from database
+                    Service.tokenDAO.save();
                     response.status = "Phiên đăng nhập của bạn đã hết hạn, vui lòng đăng nhập lại";
                     response.code = "401";
                     response.results = "";
@@ -149,9 +136,9 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
         public IHttpActionResult Logout()
         {
             ExternalLoginData externalLogin = ExternalLoginData.FromIdentity(User.Identity as ClaimsIdentity);
-            Token token = this.tokenDAO.getByUsername(User.Identity.GetUserName());
-            this.tokenDAO.delete(token.id);
-            this.tokenDAO.save();
+            Token token = Service.tokenDAO.getByUsername(User.Identity.GetUserName());
+            Service.tokenDAO.delete(token.id);
+            Service.tokenDAO.save();
             Authentication.SignOut(CookieAuthenticationDefaults.AuthenticationType);
             return Ok();
         }
@@ -440,7 +427,7 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
 
             Response response = new Response();
 
-            UserInfo checkUser = userInfoDao.checkExist("identityNumber", model.identityNumber);
+            UserInfo checkUser = Service.userInfoDAO.checkExist("identityNumber", model.identityNumber);
             if (checkUser != null)
             {
                 response.code = "409";
@@ -466,12 +453,12 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
             {
                 foreach (var group in model.groups)
                 {
-                    Group gr = this.groupDAO.getGroupByName(group);
+                    Group gr = Service.groupDAO.getGroupByName(group);
                     ApplicationUserGroup userGroup = new ApplicationUserGroup();
                     userGroup.groupId = gr.id;
                     userGroup.userId = identityUser.Id;
-                    this.userGroupDAO.AddUserToGroup(userGroup);
-                    this.userGroupDAO.saveUserGroup();
+                    Service.userGroupDAO.AddUserToGroup(userGroup);
+                    Service.userGroupDAO.saveUserGroup();
                 }
                 string code = await this.UserManager.GenerateEmailConfirmationTokenAsync(identityUser.Id);
                 var callbackUrl = new Uri(Url.Link("ConfirmEmail", new { userId = identityUser.Id, code = code }));
@@ -519,10 +506,10 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing && _userManager != null)
+            if (disposing && Service._userManager != null)
             {
-                _userManager.Dispose();
-                _userManager = null;
+                Service._userManager.Dispose();
+                Service._userManager = null;
             }
 
             base.Dispose(disposing);
@@ -736,7 +723,7 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
             var user = UserManager.FindById(id);
             var userInfoId = user.userInfo.id;
             UserInfo userInfo = new UserInfo();
-            userInfo = userInfoDao.getUserInfo(userInfoId);
+            userInfo = Service.userInfoDAO.getUserInfo(userInfoId);
             if(currentUserInfoLogin.identityNumber != null)
             {
                 userInfo.identityNumber = currentUserInfoLogin.identityNumber;
@@ -758,8 +745,8 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
             }
             if(flag > 0)
             {
-                userInfoDao.updateUserInfo(userInfo);
-                userInfoDao.saveUserinfo();
+                Service.userInfoDAO.updateUserInfo(userInfo);
+                Service.userInfoDAO.saveUserinfo();
             }
             response.code = "200";
             response.status = "Success";
@@ -783,7 +770,7 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
                 bool result = UserManager.CheckPassword(identityUser, loginModel.password); //validate user password
                 if(result == true)
                 {
-                    Token validateToken = tokenDAO.getByUsername(loginModel.email); //user have logined yet?
+                    Token validateToken = Service.tokenDAO.getByUsername(loginModel.email); //user have logined yet?
                     if (validateToken == null)      //User dont have token
                     {
                         var request = HttpContext.Current.Request;
@@ -810,8 +797,8 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
                                 token.expires = DateTime.Parse(responseData[".expires"]);
                                 token.tokenType = responseData["token_type"];
                                 token.issued = DateTime.Parse(responseData[".issued"]);
-                                this.tokenDAO.insert(token);
-                                this.tokenDAO.save();
+                                Service.tokenDAO.insert(token);
+                                Service.tokenDAO.save();
                                 /***Create Sesssion***/
                                 var user = UserManager.FindByEmail(loginModel.email);
                                 //HttpContext context = HttpContext.Current;
@@ -830,7 +817,7 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
                         int compare = DateTime.Compare(currentDate, expiresDate);
                         if (compare <= 0)      //Token havent expired
                         {
-                            Token token = this.tokenDAO.getById(validateToken.id);
+                            Token token = Service.tokenDAO.getById(validateToken.id);
                             response.status = "Đăng nhập thành công";
                             response.code = "200";
                             response.results = token;
@@ -838,8 +825,8 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
                         }
                         else        //Token expired
                         {
-                            this.tokenDAO.delete(validateToken.id);     //remove token from database
-                            this.tokenDAO.save();
+                            Service.tokenDAO.delete(validateToken.id);     //remove token from database
+                            Service.tokenDAO.save();
                             response.status = "Phiên đăng nhập của bạn đã hết hạn, vui lòng đăng nhập lại";
                             response.code = "401";
                             response.results = "";

@@ -16,19 +16,10 @@ namespace WebApplication2.Controllers.API
     [Authorize]
     public class ProductController : ApiController
     {
-        private ProductDAO productDao;
-        private ProductAttributeDAO productAttributeDAO;
-        private UserInfoDAO userInfoDAO;
-        private CategoryDAO categoryDAO;
-        private CategoryProductDAO categoryProductDAO;
 
         public ProductController()
         {
-            this.productDao = new ProductDAOImpl();
-            this.productAttributeDAO = new ProductAttributeDAOImpl();
-            this.userInfoDAO = new UserInfoDAOImpl();
-            this.categoryDAO = new CategoryDAOImpl();
-            this.categoryProductDAO = new CategoryProductDAOImpl();
+
         }
 
         [Route("api/product")]
@@ -39,8 +30,8 @@ namespace WebApplication2.Controllers.API
             Response response = Utils.checkInput(createProductModel, CreateProductModel.required);
             if (response.code != "422")
             {
-                Product productcheck = this.productDao.checkexist(createProductModel.code);
-                UserInfo user = this.userInfoDAO.getUserInfo(createProductModel.createdBy);
+                Product productcheck = Service.productDAO.checkexist(createProductModel.code);
+                UserInfo user = Service.userInfoDAO.getUserInfo(createProductModel.createdBy);
                 if (user == null)
                 {
                     response.code = "404";
@@ -63,29 +54,29 @@ namespace WebApplication2.Controllers.API
                     product.longDescription = createProductModel.longDescription;
                     product.name = createProductModel.name;
                     product.createdBy = createProductModel.createdBy;
-                    this.productDao.insertProduct(product);
-                    this.productDao.saveProduct();
+                    Service.productDAO.insertProduct(product);
+                    Service.productDAO.saveProduct();
 
                     //insert data to category product
-                    Product newProduct = productDao.checkexist(product.code);
+                    Product newProduct = Service.productDAO.checkexist(product.code);
                     for (int i = 0; i < createProductModel.categories.Length; i++)
                     {
                         Category category = new Category();
                         category.id = createProductModel.categories[i];
-                        if (this.categoryDAO.checkExist(category) != null)
+                        if (Service.categoryDAO.checkExist(category) != null)
                         {
                             CategoryProduct catepro = new CategoryProduct();
                             catepro.categoryId = createProductModel.categories[i];
                             catepro.productId = newProduct.id;
-                            this.categoryProductDAO.insertCategoryProduct(catepro);
-                            this.categoryProductDAO.save();
+                            Service.categoryProductDAO.insertCategoryProduct(catepro);
+                            Service.categoryProductDAO.save();
                         }
                     }
                     foreach (var attribute in createProductModel.attributes)
                     {
                         ProductAttribute productAttribute = new ProductAttribute(product.id, attribute.Key, attribute.Value.ToString());
-                        this.productAttributeDAO.insertProductAttribute(productAttribute);
-                        this.productAttributeDAO.saveProductAttribute();
+                        Service.productAttributeDAO.insertProductAttribute(productAttribute);
+                        Service.productAttributeDAO.saveProductAttribute();
                     }
 
                     response.code = "201";
@@ -103,7 +94,7 @@ namespace WebApplication2.Controllers.API
         public IHttpActionResult getProductWithConditions(short id)
         {
             Response response = new Response();
-            Product productflag = this.productDao.getProduct(id);
+            Product productflag = Service.productDAO.getProduct(id);
             if (productflag == null)
             {
                 response.code = "404";
@@ -124,7 +115,7 @@ namespace WebApplication2.Controllers.API
         public IHttpActionResult getProductslist()
         {
             Response response = new Response();
-            IEnumerable<Product> productlist = this.productDao.getProducts().ToList();
+            IEnumerable<Product> productlist = Service.productDAO.getProducts().ToList();
             response.code = "200";
             response.status = "Danh sách sản phẩm hiện tại: ";
             response.results = productlist;
@@ -137,7 +128,7 @@ namespace WebApplication2.Controllers.API
         public IHttpActionResult updateProduct([FromBody]CreateProductModel updateProductModel, Int16 id)
         {
             Response response = new Response();
-            Product productcheck = this.productDao.getProduct(id);
+            Product productcheck = Service.productDAO.getProduct(id);
 
             if (productcheck == null)
             {
@@ -158,14 +149,14 @@ namespace WebApplication2.Controllers.API
 
                 response.code = "200";
                 response.status = "Cập nhật sản phẩm thành công";
-                Int16[] listCategoryId = productDao.getProductCategoriesId(id);
+                Int16[] listCategoryId = Service.productDAO.getProductCategoriesId(id);
 
                 for (int i = 0; i < listCategoryId.Length; i++)
                 {
                     
-                    Int16 idCatPro = categoryProductDAO.getProductCategoriesID(listCategoryId[i], id);
-                    categoryProductDAO.deleteCategoryProduct(idCatPro);
-                    categoryProductDAO.save();
+                    Int16 idCatPro = Service.categoryProductDAO.getProductCategoriesID(listCategoryId[i], id);
+                    Service.categoryProductDAO.deleteCategoryProduct(idCatPro);
+                    Service.categoryProductDAO.save();
                 }
 
                 Int16 updateProductModelLength = (Int16)updateProductModel.categories.Length;
@@ -174,24 +165,24 @@ namespace WebApplication2.Controllers.API
                     
                         Category category = new Category();
                         category.id = updateProductModel.categories[i];
-                        if (this.categoryDAO.checkExist(category) != null)
+                        if (Service.categoryDAO.checkExist(category) != null)
                         {
                             CategoryProduct catepro = new CategoryProduct();
                             catepro.categoryId = updateProductModel.categories[i];
                             catepro.productId = id;
-                            this.categoryProductDAO.insertCategoryProduct(catepro);
-                            this.categoryProductDAO.save();
+                            Service.categoryProductDAO.insertCategoryProduct(catepro);
+                            Service.categoryProductDAO.save();
                         }
                     
 
                 }
-                categoryProductDAO.save();
+                Service.categoryProductDAO.save();
 
                 productcheck.name = updateProductModel.name;
                 productcheck.shortDescription = updateProductModel.shortDescription;
                 productcheck.longDescription = updateProductModel.longDescription;
-                this.productDao.updateProduct(productcheck);
-                this.productDao.saveProduct();
+                Service.productDAO.updateProduct(productcheck);
+                Service.productDAO.saveProduct();
                 return Content<Response>(HttpStatusCode.OK, response);
             }
 
@@ -202,7 +193,7 @@ namespace WebApplication2.Controllers.API
         public IHttpActionResult deleteProduct([FromUri]short iddel)
         {
             Response response = new Response();
-            Product productcheck = this.productDao.getProduct(iddel);
+            Product productcheck = Service.productDAO.getProduct(iddel);
             if (productcheck == null)
             {
                 response.code = "404";
@@ -211,12 +202,12 @@ namespace WebApplication2.Controllers.API
             }
             else
             {
-                Product productDel = this.productDao.getProduct(iddel);
+                Product productDel = Service.productDAO.getProduct(iddel);
                 productDel.status = -1;
                 response.code = "200";
                 response.status = "Xóa sản phẩm thành công";
-                this.productDao.updateProduct(productDel);
-                this.productDao.saveProduct();
+                Service.productDAO.updateProduct(productDel);
+                Service.productDAO.saveProduct();
                 return Content<Response>(HttpStatusCode.NotFound, response);
 
             }

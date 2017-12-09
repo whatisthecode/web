@@ -12,11 +12,10 @@ namespace WebApplication2.Controllers.API
 {
     public class InvoiceController : ApiController
     {
-        private InvoiceDAO invoiceDao;
 
         public InvoiceController()
         {
-            this.invoiceDao = new InvoiceDAOImpl();
+
         }
 
         [Route("api/invoice")]
@@ -24,15 +23,15 @@ namespace WebApplication2.Controllers.API
         public IHttpActionResult insert([FromBody]Invoice invoice)
         {
             Response response = new Response();
-            if (this.invoiceDao.checkExist(invoice) != null)
+            if (Service.invoiceDAO.checkExist(invoice) != null)
             {
                 response = new Response("409", "Hóa đơn này đã tồn tại", null);
                 return Content<Response>(HttpStatusCode.Conflict, response);
             }
             else
             {
-                this.invoiceDao.insertInvoice(invoice);
-                this.invoiceDao.saveInvoice();
+                Service.invoiceDAO.insertInvoice(invoice);
+                Service.invoiceDAO.saveInvoice();
                 response = new Response("201", "Hóa đơn đã được thêm", invoice);
                 return Content<Response>(HttpStatusCode.Created, response);
             }
@@ -42,27 +41,27 @@ namespace WebApplication2.Controllers.API
         [HttpPut]
         public IHttpActionResult update([FromBody]Invoice invoice)
         {
-            Invoice invoice1 = this.invoiceDao.checkExist(invoice);
+            Invoice invoice1 = Service.invoiceDAO.checkExist(invoice);
             Response response = new Response();
             if (invoice1 != null && invoice1.id != invoice.id)
             {
                 response = new Response("409", "Hóa đơn đã tồn tại", null);
                 return Content<Response>(HttpStatusCode.NotFound, response);
             }
-            else if (this.invoiceDao.getInvoiceById(invoice.id) == null)
+            else if (Service.invoiceDAO.getInvoiceById(invoice.id) == null)
             {
                 response = new Response("404", "Hóa đơn không tồn tại", null);
                 return Content<Response>(HttpStatusCode.NotFound, response);
             }
             else
             {
-                invoice1 = this.invoiceDao.getInvoiceById(invoice.id);
+                invoice1 = Service.invoiceDAO.getInvoiceById(invoice.id);
                 invoice1.code = invoice.code;
                 invoice1.buyerId = invoice.buyerId;
                 invoice1.salerId = invoice.salerId;
                 invoice1.total = invoice.total;
-                this.invoiceDao.updateInvoice(invoice1);
-                this.invoiceDao.saveInvoice();
+                Service.invoiceDAO.updateInvoice(invoice1);
+                Service.invoiceDAO.saveInvoice();
                 response = new Response("200", "Cập nhật hóa đơn thành công", invoice);
                 return Content<Response>(HttpStatusCode.OK, response);
             }
@@ -72,7 +71,7 @@ namespace WebApplication2.Controllers.API
         [HttpDelete]
         public IHttpActionResult delete(short id)
         {
-            Invoice invo = this.invoiceDao.getInvoiceById(id);
+            Invoice invo = Service.invoiceDAO.getInvoiceById(id);
             Response response = new Response();
             if (invo == null)
             {
@@ -81,7 +80,7 @@ namespace WebApplication2.Controllers.API
                 return Content<Response>(HttpStatusCode.NotFound, response);
             }
 
-            this.invoiceDao.deleteInvoice(id);
+            Service.invoiceDAO.deleteInvoice(id);
             response.code = "200";
             response.status = "Xóa hóa đơn thành công";
             return Content<Response>(HttpStatusCode.OK, response);
@@ -91,7 +90,7 @@ namespace WebApplication2.Controllers.API
         [HttpGet]
         public IHttpActionResult getInvoice(short id)
         {
-            Invoice invoicetemp = this.invoiceDao.getInvoiceById(id);
+            Invoice invoicetemp = Service.invoiceDAO.getInvoiceById(id);
             Response response = new Response();
             if (invoicetemp == null)
             {
@@ -110,7 +109,7 @@ namespace WebApplication2.Controllers.API
         [HttpGet]
         public IHttpActionResult getInvoices()
         {
-            IEnumerable<Invoice> invoices = this.invoiceDao.getInvoice();
+            IEnumerable<Invoice> invoices = Service.invoiceDAO.getInvoice();
             Response response = new Response();
             response.code = "200";
             response.status = "Thành công";

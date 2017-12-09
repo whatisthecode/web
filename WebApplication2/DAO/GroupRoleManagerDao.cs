@@ -7,12 +7,14 @@ using WebApplication2.Models;
 
 namespace WebApplication2.DAO
 {
-    interface GroupRoleManagerDAO
+    public interface GroupRoleManagerDAO
     {
 
         void ClearGroupRoles(Int16 groupId);
 
         void AddRoleToGroup(Int16 groupId, string roleName);
+
+        ICollection<ApplicationRoleGroup> getGroupRoles(Int16 groupId);
 
     }
 }

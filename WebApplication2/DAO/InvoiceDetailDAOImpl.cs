@@ -9,6 +9,10 @@ namespace WebApplication2.DAO
 {
     public class InvoiceDetailDAOImpl : BaseImpl<InvoiceDetail, Int16>, InvoiceDetailDAO, IDisposable
     {
+        public InvoiceDetailDAOImpl() : base()
+        {
+
+        }
         public bool check(string column)
         {
             throw new NotImplementedException();

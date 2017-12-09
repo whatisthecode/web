@@ -19,20 +19,10 @@ namespace WebApplication2.Controllers.API
     [RoutePrefix("api")]
     public class RoleController : ApiController
     {
-        private UserManager<ApplicationUser> _userManager;
-        private RoleManager<ApplicationRole> _roleManager;
-
-        private GroupRoleManagerDAO groupRoleManagerDao;
-        private GroupDAO groupDAO;
-        private UserGroupDAO userGroupDAO;
 
         public RoleController()
         {
-            this.groupRoleManagerDao = new GroupRoleManagerDAOImpl();
-            this._roleManager = new ApplicationRoleManager(new RoleStore<ApplicationRole>(new DBContext()));
-            this._userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(new DBContext()));
-            this.groupDAO = new GroupDAOImpl();
-            this.userGroupDAO = new UserGroupDAOImpl();
+
         }
 
         public RoleController(ApplicationUserManager userManager, ApplicationRoleManager roleManager,
@@ -47,11 +37,11 @@ namespace WebApplication2.Controllers.API
         {
             get
             {
-                return (ApplicationRoleManager)_roleManager ?? Request.GetOwinContext().GetUserManager<ApplicationRoleManager>();
+                return (ApplicationRoleManager)Service._roleManager ?? Request.GetOwinContext().GetUserManager<ApplicationRoleManager>();
             }
             private set
             {
-                this._roleManager = value;
+                Service._roleManager = value;
             }
         }
 
@@ -59,11 +49,11 @@ namespace WebApplication2.Controllers.API
         {
             get
             {
-                return (ApplicationUserManager)_userManager ?? Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
+                return (ApplicationUserManager)Service._userManager ?? Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
             }
             private set
             {
-                _userManager = value;
+               Service._userManager = value;
             }
         }
         public ISecureDataFormat<AuthenticationTicket> AccessTokenFormat { get; private set; }
@@ -72,7 +62,7 @@ namespace WebApplication2.Controllers.API
         [Route("role/create")]
         public IHttpActionResult create()
         {
-            var result = this._roleManager.CreateAsync(new ApplicationRole("Admin", "Global Access"));
+            var result = Service._roleManager.CreateAsync(new ApplicationRole("Admin", "Global Access"));
             Response response = new Response();
             if (!result.Result.Succeeded)
             {
@@ -80,11 +70,11 @@ namespace WebApplication2.Controllers.API
                 response.status = "Cant create role";
                 return Content<Response>(HttpStatusCode.InternalServerError, response);
             }
-            this._roleManager.CreateAsync(new ApplicationRole("CanEditUser", "Add, modify, and delete Users"));
-            this._roleManager.CreateAsync(new ApplicationRole("CanEditGroup", "Add, modify, and delete Groups"));
-            this._roleManager.CreateAsync(new ApplicationRole("CanEditRole", "Add, modify, and delete roles"));
-            this._roleManager.CreateAsync(new ApplicationRole("User", "Restricted to business domain activity"));
-            this._roleManager.CreateAsync(new ApplicationRole("Merchant", ""));
+            Service._roleManager.CreateAsync(new ApplicationRole("CanEditUser", "Add, modify, and delete Users"));
+            Service._roleManager.CreateAsync(new ApplicationRole("CanEditGroup", "Add, modify, and delete Groups"));
+            Service._roleManager.CreateAsync(new ApplicationRole("CanEditRole", "Add, modify, and delete roles"));
+            Service._roleManager.CreateAsync(new ApplicationRole("User", "Restricted to business domain activity"));
+            Service._roleManager.CreateAsync(new ApplicationRole("Merchant", ""));
 
             response.code = "201";
             response.status = "Create Success";
@@ -100,8 +90,8 @@ namespace WebApplication2.Controllers.API
             {
                 Group group = new Group();
                 group.name = groupName;
-                this.groupDAO.insertGroup(group);
-                this.groupDAO.saveGroup();
+                Service.groupDAO.insertGroup(group);
+                Service.groupDAO.saveGroup();
             }
             Response response = new Response("201", "Created", "");
             return Content<Response>(HttpStatusCode.Created, response);
@@ -121,31 +111,31 @@ namespace WebApplication2.Controllers.API
                 new string[] { "User" };
 
             // Add the Super-Admin Roles to the Super-Admin Group:
-            Group superAdmins = this.groupDAO.getGroupByName("SuperAdmins");
+            Group superAdmins = Service.groupDAO.getGroupByName("SuperAdmins");
             foreach (string name in _superAdminRoleNames)
             {
-                groupRoleManagerDao.AddRoleToGroup(superAdmins.id, name);
+                Service.groupRoleManagerDAO.AddRoleToGroup(superAdmins.id, name);
             }
 
             // Add the Group-Admin Roles to the Group-Admin Group:
-            Group groupAdmins = this.groupDAO.getGroupByName("GroupAdmins");
+            Group groupAdmins = Service.groupDAO.getGroupByName("GroupAdmins");
             foreach (string name in _groupAdminRoleNames)
             {
-                groupRoleManagerDao.AddRoleToGroup(groupAdmins.id, name);
+                Service.groupRoleManagerDAO.AddRoleToGroup(groupAdmins.id, name);
             }
 
             // Add the User-Admin Roles to the User-Admin Group:
-            Group userAdmins = this.groupDAO.getGroupByName("UserAdmins");
+            Group userAdmins = Service.groupDAO.getGroupByName("UserAdmins");
             foreach (string name in _userAdminRoleNames)
             {
-                groupRoleManagerDao.AddRoleToGroup(userAdmins.id, name);
+                Service.groupRoleManagerDAO.AddRoleToGroup(userAdmins.id, name);
             }
 
             // Add the User Roles to the Users Group:
-            Group users = this.groupDAO.getGroupByName("Users");
+            Group users = Service.groupDAO.getGroupByName("Users");
             foreach (string name in _userRoleNames)
             {
-                groupRoleManagerDao.AddRoleToGroup(users.id, name);
+                Service.groupRoleManagerDAO.AddRoleToGroup(users.id, name);
             }
 
             Response response = new Response("201", "Created", "");
@@ -159,12 +149,12 @@ namespace WebApplication2.Controllers.API
             ApplicationUser user = await UserManager.FindByNameAsync(roleViewModel.username);
             foreach (var group in roleViewModel.groups)
             {
-                Group gr = this.groupDAO.getGroupByName(group);
+                Group gr = Service.groupDAO.getGroupByName(group);
                 ApplicationUserGroup userGroup = new ApplicationUserGroup();
                 userGroup.groupId = gr.id;
                 userGroup.userId = user.Id;
-                this.userGroupDAO.AddUserToGroup(userGroup);
-                this.userGroupDAO.saveUserGroup();
+                Service.userGroupDAO.AddUserToGroup(userGroup);
+                Service.userGroupDAO.saveUserGroup();
             }
             Response response = new Response("200", "created", "");
             return Content<Response>(HttpStatusCode.Created, response);
@@ -174,7 +164,7 @@ namespace WebApplication2.Controllers.API
         [Route("delete-user-group/{userId}")]
         public IHttpActionResult DeleteUserGroup([FromUri]string userId)
         {
-            this.userGroupDAO.ClearUserGroups(userId);
+            Service.userGroupDAO.ClearUserGroups(userId);
             Response response = new Response("200", "Clear user groups success", "");
             return Content<Response>(HttpStatusCode.OK, response);
         }
