@@ -1,7 +1,7 @@
 ﻿if ("undefined" !== typeof app) {
     app.factory('Product', function (API, Helper, Oauth2) {
         var apiName = {
-            "getProductByCategory": "api/category/$1/products/index=$2size=$3filter=$4"
+            "getProductByCategory": "api/category/$1/products/?pageIndex=$2&pageSize=$3&order=$4"
         };
         return {
             getProduct: function (categoryId, pageSize, pageIndex, orderBy, success, fail) {

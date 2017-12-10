@@ -93,6 +93,7 @@ namespace WebApplication2.Controllers.API
 
         [Route("api/product/{id}")]
         [HttpGet]
+        [AllowAnonymous]
         public IHttpActionResult getProductWithConditions(short id)
         {
             Response response = new Response();
@@ -121,7 +122,15 @@ namespace WebApplication2.Controllers.API
             Response response = new Response();
 
             PagedResult<Product> pagedResult = Service.productDAO.PageView(pageRequest.pageIndex, pageRequest.pageSize, pageRequest.order, false);
-
+            IList<Product> products = pagedResult.results;
+            for (var i = 0; i < pagedResult.pageSize; i++)
+            {
+                Product product = products[i];
+                List<ProductAttribute> productAtts = Service.productAttributeDAO.getProAttrsByProId(product.id);
+                //UserInfo userInfo = Service.userInfoDAO.getUserInfo(product.createdBy);
+                products[i].attributes = productAtts;
+                //products[i].UserInfo = userInfo;
+            }
             response.code = "200";
             response.status = "Danh sách sản phẩm hiện tại: ";
             response.results = pagedResult;

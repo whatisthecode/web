@@ -108,6 +108,12 @@
                 } else {
                     return false;
                 }
+            },
+            addCommasToMoney: function (value) {
+                if (this.notEmpty(value) === true)
+                    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                else
+                    return;
             }
         };
     });

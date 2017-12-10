@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using WebApplication2.Models;
+using WebApplication2.Services;
 
 namespace WebApplication2.DAO
 {
@@ -70,8 +71,48 @@ namespace WebApplication2.DAO
             {
                 CategoryProduct categoryProduct = pv.results[i];
                 Product product = productDAO.getProduct(categoryProduct.productId);
+                List<ProductAttribute> proAttrs = Service.productAttributeDAO.getProAttrsByProId(product.id);
+                product.attributes = proAttrs;
                 listProducts.Add(product);
             }
+
+            for (var i = 0; i < listProducts.Count() - 1; i++)
+            {
+                List<ProductAttribute> proAttrs = listProducts[i].attributes.ToList();
+                for(var j = 1; j < listProducts.Count(); j++)
+                {
+                    List<ProductAttribute> proAttrs2 = listProducts[j].attributes.ToList();
+                    switch (orderBy)
+                    {
+                        case "price":
+                            if (ascending)
+                            {
+                                if(proAttrs[0].key == "price" && proAttrs2[0].key == "price")
+                                {
+                                    if (int.Parse(proAttrs[0].value) > int.Parse(proAttrs2[0].value))
+                                    {
+                                        listProducts = Utils.swap(listProducts, i, j);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (proAttrs[0].key == "price" && proAttrs2[0].key == "price")
+                                {
+                                    if (int.Parse(proAttrs[0].value) < int.Parse(proAttrs2[0].value))
+                                    {
+                                        listProducts = Utils.swap(listProducts, i, j);
+                                    }
+                                }
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                
+            }
+            
             pvProduct.results = listProducts;
             return pvProduct;
         }

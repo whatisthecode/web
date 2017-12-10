@@ -48,5 +48,13 @@ namespace WebApplication2.DAO
             proat.updatedAt = DateTime.Now;
             base.update(proat);
         }
+
+        public List<ProductAttribute> getProAttrsByProId(short proId)
+        {
+            var query = from p in base.getContext().productAttributes
+                        where p.productId == proId
+                        select p;
+            return query.ToList();
+        }
     }
 }

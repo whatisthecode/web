@@ -5,9 +5,9 @@
         <div class="col-md-12">
             <ul class="breadcrumb">
                 <li>
-                    <a href="#">Home</a>
+                    <a href="/">Trang chủ</a>
                 </li>
-                <li>Ladies</li>
+                <li>{{currentPage}}</li>
             </ul>
         </div>
 
@@ -189,18 +189,17 @@
                                 <div class="col-md-6 col-sm-6">
                                     <div class="products-number">
                                         <strong>Hiển thị</strong>
-                                            <a href="#" id="10" class="btn-pageSize btn btn-default btn-sm btn-primary" ng-click="rowChanged(pageIndex, 10, filter)">10</a>
-                                            <a href="#" id="20" class="btn-pageSize btn btn-default btn-sm" ng-click="rowChanged(pageIndex, 20, filter)">20</a>  
-                                            <a href="#" id="50" class="btn-pageSize btn btn-default btn-sm" ng-click="rowChanged(pageIndex, 50, filter)">50</a>
+                                            <a href="#" id="10" class="btn-pageSize btn btn-default btn-sm btn-primary" ng-click="rowChanged(pageIndex, 10, filter, asceding)">10</a>
+                                            <a href="#" id="20" class="btn-pageSize btn btn-default btn-sm" ng-click="rowChanged(pageIndex, 20, filter, asceding)">20</a>  
+                                            <a href="#" id="50" class="btn-pageSize btn btn-default btn-sm" ng-click="rowChanged(pageIndex, 50, filter, asceding)">50</a>
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-sm-6">
                                     <div class="products-sort-by">
                                         <strong>Sort by</strong>
-                                        <select name="sort-by" class="form-control">
-                                            <option>Price</option>
-                                            <option>Name</option>
-                                            <option>Sales first</option>
+                                        <select name="sort-by" class="form-control" ng-model="filter" ng-change="rowChanged(pageIndex, pageSize, filter, asceding)">
+                                            <option value="priceUp">Giá tăng dần</option>
+                                            <option value="priceDown">Giá giảm dần</option>
                                         </select>
                                     </div>
                                 </div>
@@ -235,7 +234,7 @@
                             <h3><a href="detail.html">{{product.name}}</a></h3>
                             <p class="price">{{product.attributes[0].value}}</p>
                             <p class="buttons">
-                                <a href="detail.html" class="btn btn-default">View detail</a>
+                                <a class="btn btn-default" ng-click="viewDetail(product.id)">View detail</a>
                                 <a href="basket.html" class="btn btn-primary"><i class="fa fa-shopping-cart"></i>Add to cart</a>
                             </p>
                         </div>
