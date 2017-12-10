@@ -20,8 +20,8 @@ namespace WebApplication2
                 defaults: new { type = "Admin", controller = "AdminHome", action = "Index" }
             );
             routes.MapRoute(
-                name: "Admin-Login",
-                url: "dashboard/login",
+                name: "Login",
+                url: "login",
                 defaults: new { type = "Admin", controller = "AdminLogin", action = "Index" }
             );
             routes.MapRoute(
