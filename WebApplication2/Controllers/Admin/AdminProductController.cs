@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using WebApplication2.CustomAttribute;
 using WebApplication2.Models;
 using WebApplication2.Models.Mapping;
+using WebApplication2.Models.RequestModel;
 
 namespace WebApplication2.Controllers.Admin
 {
@@ -39,6 +40,24 @@ namespace WebApplication2.Controllers.Admin
                 return View(products);
             }
 
+            return View();
+        }
+        [MVCAuthorize(Roles = "VIEW_PRODUCT")]
+        public ActionResult Detail(Int16 id)
+        {
+            String accessToken = "Bearer " + Session["currentUser"].ToString();
+            String uri = "/api/product/" + id;
+            HttpClient httpClient = new HttpClient();
+            httpClient.BaseAddress = baseUrl;
+
+            var response = httpClient.GetAsync(uri).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                Response content = response.Content.ReadAsAsync<Response>().Result;
+                ProductDetail product = ((JObject)content.results).ToObject<ProductDetail>();
+                ViewBag.categories = Service.categoryDAO.getCategory();               
+                return View(product);
+            }
             return View();
         }
     }

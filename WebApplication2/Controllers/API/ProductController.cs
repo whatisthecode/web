@@ -93,11 +93,12 @@ namespace WebApplication2.Controllers.API
 
         [Route("api/product/{id}")]
         [HttpGet]
+        [AllowAnonymous]
         public IHttpActionResult getProductWithConditions(short id)
         {
             Response response = new Response();
-            Product productflag = Service.productDAO.getProduct(id);
-            if (productflag == null)
+            Product product = Service.productDAO.getProduct(id);
+            if (product == null)
             {
                 response.code = "404";
                 response.status = "Sản phẩm cần tìm không có trong danh sách";
@@ -105,9 +106,21 @@ namespace WebApplication2.Controllers.API
             }
             else
             {
+                ProductDetail productDetail = new ProductDetail();
                 response.code = "200";
                 response.status = "Sản phẩm cần tìm là: ";
-                response.results = productflag;
+                productDetail.id = product.id;
+                productDetail.code = product.code;
+                productDetail.name = product.name;
+                productDetail.status = product.status;
+                productDetail.shortDescription = product.shortDescription;
+                productDetail.longDescription = product.longDescription;
+                productDetail.userInfo = Service.userInfoDAO.getUserInfo(product.createdBy);
+                productDetail.attributes = Service.productAttributeDAO.getProAttrsByProId(product.id);
+                productDetail.choseCategories = Service.categoryProductDAO.getListCategoryProductByProdId(product.id).ToList();
+                productDetail.thumbnails = Service.imageDAO.getThumbnail(product.id).ToList();
+                productDetail.details = Service.imageDAO.getDetailImage(product.id).ToList();
+                response.results = productDetail;
                 return Content<Response>(HttpStatusCode.OK, response);
             }
 
@@ -121,7 +134,17 @@ namespace WebApplication2.Controllers.API
             Response response = new Response();
 
             PagedResult<Product> pagedResult = Service.productDAO.PageView(pageRequest.pageIndex, pageRequest.pageSize, pageRequest.order, false);
-
+            IList<Product> products = pagedResult.items;
+            Int16 productsLength = (Int16)products.Count;
+            for (Int16 i = 0; i < productsLength; i++)
+            {
+                Product product = products[i];
+                List<ProductAttribute> productAtts = Service.productAttributeDAO.getProAttrsByProId(product.id);
+                //UserInfo userInfo = Service.userInfoDAO.getUserInfo(product.createdBy);
+                products[i].attributes = productAtts;
+                products[i].UserInfo = Service.userInfoDAO.getUserInfo(products[i].createdBy);
+                //products[i].UserInfo = userInfo;
+            }
             response.code = "200";
             response.status = "Danh sách sản phẩm hiện tại: ";
             response.results = pagedResult;

@@ -16,6 +16,8 @@ namespace WebApplication2.Models
         [Column("product_id")]
         public Int16 productId { get; set; }
 
+        public String type { get; set; }
+
         public Product Product { get; set; }
 
         public Image()

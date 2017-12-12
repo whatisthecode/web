@@ -36,5 +36,13 @@ namespace WebApplication2.Services
                 return check;
             }
         }
+
+        public static List<T> swap<T>(List<T> list, int indexA, int indexB)
+        {
+            var temp = list[indexA];
+            list[indexA] = list[indexB];
+            list[indexB] = temp;
+            return list;
+        }
     }
 }

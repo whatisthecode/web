@@ -144,7 +144,7 @@ namespace WebApplication2.Controllers.API
         {
             Response response = new Response();
 
-            PagedResult<Product> pageResults = Service.categoryProductDAO.pageView(categoryId, pageRequest.pageIndex, pageRequest.pageSize, pageRequest.order, true);
+            PagedResult<Product> pageResults = Service.categoryProductDAO.pageView(categoryId, pageRequest.pageIndex, pageRequest.pageSize, pageRequest.order, pageRequest.ascending);
 
             response.code = "200";
             response.status = "Thành công";

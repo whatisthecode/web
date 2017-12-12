@@ -31,8 +31,18 @@ namespace WebApplication2
             );
             routes.MapRoute(
                 name: "Product",
-                url: "products",
+                url: "dashboard/products",
                 defaults: new { type = "Admin", controller = "AdminProduct", action = "Index" }
+            );
+            routes.MapRoute(
+                name: "Product-Detail",
+                url: "dashboard/product/{id}",
+                defaults: new { type = "Admin", controller = "AdminProduct", action = "Detail" }
+            );
+            routes.MapRoute(
+                name: "Remove-Product",
+                url: "dashboard/product/remove/{id}",
+                defaults: new { type = "Admin", controller = "AdminProduct", action = "Remove" }
             );
             routes.MapRoute(
                 name: "Not-Found",

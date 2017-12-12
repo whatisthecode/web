@@ -217,6 +217,7 @@
     <Compile Include="Controllers\API\AccountController.cs" />
     <Compile Include="Controllers\API\CategoryController.cs" />
     <Compile Include="Controllers\API\CategoryProductController.cs" />
+    <Compile Include="Controllers\API\ImageController.cs" />
     <Compile Include="Controllers\API\InvoiceController.cs" />
     <Compile Include="Controllers\API\ProductAttributeController.cs" />
     <Compile Include="Controllers\API\ProductController.cs" />
@@ -240,6 +241,8 @@
     <Compile Include="DAO\GroupDAOImpl.cs" />
     <Compile Include="DAO\GroupRoleManagerDAO.cs" />
     <Compile Include="DAO\GroupRoleManagerDAOImpl.cs" />
+    <Compile Include="DAO\ImageDAO.cs" />
+    <Compile Include="DAO\ImageDAOImpl.cs" />
     <Compile Include="DAO\InvoiceDAO.cs" />
     <Compile Include="DAO\InvoiceDAOImpl.cs" />
     <Compile Include="DAO\InvoiceDetailDAO.cs" />
@@ -285,6 +288,7 @@
     <Compile Include="Models\RequestModel\Customer.cs" />
     <Compile Include="Models\RequestModel\FromUri.cs" />
     <Compile Include="Models\RequestModel\Merchant.cs" />
+    <Compile Include="Models\RequestModel\ProductDetail.cs" />
     <Compile Include="Models\Token.cs" />
     <Compile Include="Models\UserInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -477,6 +481,7 @@
     <Content Include="Views\Admin\Error\NotFound.cshtml" />
     <Content Include="Views\Admin\Error\Forbidden.cshtml" />
     <Content Include="Views\Admin\AdminProduct\Index.cshtml" />
+    <Content Include="Views\Admin\AdminProduct\Detail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

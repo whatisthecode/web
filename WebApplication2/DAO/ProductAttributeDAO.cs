@@ -16,6 +16,6 @@ namespace WebApplication2.DAO
         void deleteProductAttribute(Int16 id);
         void saveProductAttribute();
         void dispose();
-
+        List<ProductAttribute> getProAttrsByProId(short proId);
     }
 }

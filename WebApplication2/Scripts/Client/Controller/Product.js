@@ -3,14 +3,28 @@
         $scope.products = [];
         $scope.pageSize = 10;
         $scope.pageIndex = 1;
-        $scope.filter = "id";
+        $scope.filter = "name";
+        $scope.asceding = false;
         $scope.rowCount = null;
-        
-        getProduct = function (categoryId, pageIndex, pageSize, filter) {
+        $scope.currentPage = "";
+
+        var categoryId = null;
+        getProduct = function (pageIndex, pageSize, filter) {
+            switch ($routeParams.category) {
+                case "ban-phim":
+                    categoryId = 1;
+                    $scope.currentPage = "Bàn Phím";
+                    break;
+                case "chuot":
+                    categoryId = 2;
+                    $scope.currentPage = "Chuột";
+                    break;
+                default:
+                    break;
+            }
             Product.getProduct(categoryId, pageIndex, pageSize, filter, function (response) {
                 if (response)
                 {
-                    console.log(response);
                     $scope.products = response.results;
                     $scope.pageSize = response.pageSize;
                     $scope.pageIndex = response.currentPage;
@@ -23,25 +37,27 @@
             });
         };
 
-        var categoryId = 1;
-        getProduct(categoryId, $scope.pageIndex, $scope.pageSize, $scope.filter);
+        getProduct($scope.pageIndex, $scope.pageSize, $scope.filter);
 
         $scope.pageChanged = function (pageSize, pageIndex, filter)
         {
-            console.log(categoryId);
-            console.log(pageSize);
-            console.log(pageIndex);
-            console.log(filter);
-            getProduct(categoryId, pageIndex, pageSize, filter);
+            getProduct(pageIndex, pageSize, filter);
         }
 
-        $scope.rowChanged = function (pageIndex, pageSize, filter) 
+        $scope.rowChanged = function (pageIndex, pageSize, filter, asceding) 
         {
-            getProduct(categoryId, pageIndex, pageSize, filter);
+            if (filter === "priceUp")
+                asceding = true;
+            else
+                asceding = false;
+            getProduct(pageIndex, pageSize, filter, asceding);
             $(".btn-pageSize").removeClass("btn-primary");
             $("#" + pageSize).addClass("btn-primary");
         }
 
-        console.log($routeParams.category);
+        $scope.viewDetail = function (productId)
+        {
+            window.location.href = $routeParams.category + "/" + productId;
+        }
     });
 }
