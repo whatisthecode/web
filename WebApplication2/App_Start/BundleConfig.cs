@@ -26,6 +26,7 @@ namespace WebApplication2
             bundles.Add(new ScriptBundle("~/bundles/admin_js").Include(
                         "~/Assets/JS/jquery-1.10.2.min.js",
                         "~/Assets/JS/bootstrap.min.js",
+                        "~/Assets/JS/bootstrap-wysihtml5-0.0.2.min.js",
                         "~/Assets/JS/respond.js",
                         "~/Assets/JS/jquery-comfirm.min.js",
                         "~/Assets/JS/modernizr-2.6.2.js"));
@@ -79,8 +80,12 @@ namespace WebApplication2
             bundles.Add(new StyleBundle("~/Content/admin-login").Include(
                       "~/Assets/CSS/Admin/login-style.css"));
 
+            bundles.Add(new StyleBundle("~/Content/error").Include(
+                      "~/Assets/CSS/error.css"));
+
             bundles.Add(new StyleBundle("~/Content/admin_template").Include(
                      "~/Assets/CSS/bootstrap.min.css",
+                     "~/Assets/CSS/bootstrap-wysihtml5-0.0.2.css",
                      "~/Assets/CSS/animate.min.css",
                      "~/Assets/CSS/Admin/paper-dashboard.css",
                      "~/Assets/CSS/Admin/demo.css",

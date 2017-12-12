@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using WebApplication2.CustomAttribute;
 using WebApplication2.DAO;
 using WebApplication2.Models;
 using WebApplication2.Models.Mapping;
@@ -20,7 +21,15 @@ namespace WebApplication2.Controllers.API
         {
         }
 
-
+        [Route("api/test")]
+        [HttpGet]
+        [APIAuthorize(Roles = "VIEW_USER")]
+        public IHttpActionResult aaa()
+        {
+            Response response = new Response("200", "Clear user groups success", "");
+            
+            return Content<Response>(HttpStatusCode.OK, response);
+        }
         [Route("api/initialize")]
         [HttpPost]
         public async Task<IHttpActionResult> initializeAsync()

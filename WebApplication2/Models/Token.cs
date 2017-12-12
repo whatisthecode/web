@@ -30,6 +30,9 @@ namespace WebApplication2.Models
         [Column(".expires", TypeName = "datetime2")]
         public DateTime expires { get; set; }
 
+        [Column("is_login")]
+        public Boolean isLogin { get; set; }
+
         public Token()
         {
 

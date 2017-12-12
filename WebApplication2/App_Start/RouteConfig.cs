@@ -25,6 +25,26 @@ namespace WebApplication2
                 defaults: new { type = "Admin", controller = "AdminLogin", action = "Index" }
             );
             routes.MapRoute(
+                name: "Logout",
+                url: "logout",
+                defaults: new { type = "Admin", controller = "AdminLogin", action = "Logout" }
+            );
+            routes.MapRoute(
+                name: "Product",
+                url: "products",
+                defaults: new { type = "Admin", controller = "AdminProduct", action = "Index" }
+            );
+            routes.MapRoute(
+                name: "Not-Found",
+                url: "notfound",
+                defaults: new { type = "Admin", controller = "Error", action = "notfound" }
+            );
+            routes.MapRoute(
+                name: "Forbidden",
+                url: "forbidden",
+                defaults: new { type = "Admin", controller = "Error", action = "forbidden" }
+            );
+            routes.MapRoute(
                 name: "Default",
                 url: "{*whatever}",
                 defaults: new { type = "Client", controller = "Home", action = "Index" }

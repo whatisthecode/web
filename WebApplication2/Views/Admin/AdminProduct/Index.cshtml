@@ -1,0 +1,39 @@
+﻿
+@{
+    ViewBag.Title = "Trang quản lý sản phẩm";
+}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="header">
+                    <h4 class="title">Danh sách sản phẩm</h4>
+                </div>
+                <div class="content table-responsive table-full-width">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Mã sản phẩm</th>
+                                <th>Tên</th>
+                                <th>Người đăng</th>
+                            </tr>        
+                        </thead>
+                        @{ 
+                            Int16 flag = 1;
+                        }
+                        @foreach (var product in Model)
+                        {
+                            <tr>
+                                <td>@flag++</td>
+                                <td>@product.code</td>
+                                <td>@product.name</td>
+                                <td>@product.createdBy</td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

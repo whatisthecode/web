@@ -66,13 +66,13 @@ namespace WebApplication2.DAO
             pvProduct.pageSize = pv.pageSize;
             pvProduct.currentPage = pv.currentPage;
             pvProduct.pageCount = pv.pageCount;
-            for(var i = 0; i < pv.results.Count(); i++)
+            for(var i = 0; i < pv.items.Count(); i++)
             {
-                CategoryProduct categoryProduct = pv.results[i];
+                CategoryProduct categoryProduct = pv.items[i];
                 Product product = productDAO.getProduct(categoryProduct.productId);
                 listProducts.Add(product);
             }
-            pvProduct.results = listProducts;
+            pvProduct.items = listProducts;
             return pvProduct;
         }
     }

@@ -10,6 +10,7 @@ using Microsoft.Owin.Security;
 using System.Security.Claims;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web.Http;
 
 namespace WebApplication2
 {
@@ -49,9 +50,10 @@ namespace WebApplication2
             {
                 manager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser>(dataProtectionProvider.Create("ASP.NET Identity"))
                 {
-                    TokenLifespan = TimeSpan.FromHours(6)
+                    TokenLifespan = TimeSpan.FromDays(1)
                 };
             }
+            
             return manager;
         }
     }
