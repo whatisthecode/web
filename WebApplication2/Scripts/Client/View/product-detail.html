@@ -1,19 +1,16 @@
 ﻿
-<div id="content" data-ng-controller="ProductController">
+<div id="content" data-ng-controller="ProductDetailController">
     <div class="container">
 
         <div class="col-md-12">
             <ul class="breadcrumb">
                 <li>
-                    <a href="#">Home</a>
+                    <a href="/">Trang Chủ</a>
                 </li>
                 <li>
-                    <a href="#">Ladies</a>
+                    <a href="/view.currentCategory">{{view.currentCategory}}</a>
                 </li>
-                <li>
-                    <a href="#">Tops</a>
-                </li>
-                <li>White Blouse Armani</li>
+                <li>{{view.productDetail.name}}</li>
             </ul>
 
         </div>
@@ -210,7 +207,7 @@
                             <a href="#details" class="scroll-to">Bấm để xem chi tiết sản phẩm</a>
                         </p>
                         <p class="text-center buttons">
-                            <a href="basket.html" class="btn btn-primary"><i class="fa fa-shopping-cart"></i> Thêm vào giỏ</a>
+                            <button class="btn btn-primary" ng-click="addProductToCart(view.productDetail)"><i class="fa fa-shopping-cart"></i> Thêm vào giỏ</button>
                             <a href="basket.html" class="btn btn-default"><i class="fa fa-money"></i> Mua ngay</a>
                         </p>
 
@@ -269,135 +266,6 @@
                     <h4>Thông tin chi tiết</h4>
                 </p>
                 <p>{{view.productDetail.longDescription}}</p>
-            </div>
-
-            <div class="row same-height-row">
-                <div class="col-md-3 col-sm-6">
-                    <div class="box same-height">
-                        <h3>Có thể bạn thích</h3>
-                    </div>
-                </div>
-
-                <div class="col-md-3 col-sm-6">
-                    <div class="product same-height">
-                        <div class="flip-container">
-                            <div class="flipper">
-                                <div class="front">
-                                    <a href="detail.html">
-                                        <img src="./Assets/IMG/product2.jpg" alt="" class="img-responsive">
-                                    </a>
-                                </div>
-                                <div class="back">
-                                    <a href="detail.html">
-                                        <img src="./Assets/IMG/product2_2.jpg" alt="" class="img-responsive">
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <a href="detail.html" class="invisible">
-                            <img src="./Assets/IMG/product2.jpg" alt="" class="img-responsive">
-                        </a>
-                        <div class="text">
-                            <h3>Fur coat</h3>
-                            <p class="price">$143</p>
-                        </div>
-                    </div>
-                    <!-- /.product -->
-                </div>
-
-            </div>
-
-            <div class="row same-height-row">
-                <div class="col-md-3 col-sm-6">
-                    <div class="box same-height">
-                        <h3>Products viewed recently</h3>
-                    </div>
-                </div>
-
-
-                <div class="col-md-3 col-sm-6">
-                    <div class="product same-height">
-                        <div class="flip-container">
-                            <div class="flipper">
-                                <div class="front">
-                                    <a href="detail.html">
-                                        <img src="./Assets/IMG/product2.jpg" alt="" class="img-responsive">
-                                    </a>
-                                </div>
-                                <div class="back">
-                                    <a href="detail.html">
-                                        <img src="./Assets/IMG/product2_2.jpg" alt="" class="img-responsive">
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <a href="detail.html" class="invisible">
-                            <img src="./Assets/IMG/product2.jpg" alt="" class="img-responsive">
-                        </a>
-                        <div class="text">
-                            <h3>Fur coat</h3>
-                            <p class="price">$143</p>
-                        </div>
-                    </div>
-                    <!-- /.product -->
-                </div>
-
-                <div class="col-md-3 col-sm-6">
-                    <div class="product same-height">
-                        <div class="flip-container">
-                            <div class="flipper">
-                                <div class="front">
-                                    <a href="detail.html">
-                                        <img src="./Assets/IMG/product1.jpg" alt="" class="img-responsive">
-                                    </a>
-                                </div>
-                                <div class="back">
-                                    <a href="detail.html">
-                                        <img src="./Assets/IMG/product1_2.jpg" alt="" class="img-responsive">
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <a href="detail.html" class="invisible">
-                            <img src="./Assets/IMG/product1.jpg" alt="" class="img-responsive">
-                        </a>
-                        <div class="text">
-                            <h3>Fur coat</h3>
-                            <p class="price">$143</p>
-                        </div>
-                    </div>
-                    <!-- /.product -->
-                </div>
-
-
-                <div class="col-md-3 col-sm-6">
-                    <div class="product same-height">
-                        <div class="flip-container">
-                            <div class="flipper">
-                                <div class="front">
-                                    <a href="detail.html">
-                                        <img src="./Assets/IMG/product3.jpg" alt="" class="img-responsive">
-                                    </a>
-                                </div>
-                                <div class="back">
-                                    <a href="detail.html">
-                                        <img src="./Assets/IMG/product3_2.jpg" alt="" class="img-responsive">
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <a href="detail.html" class="invisible">
-                            <img src="./Assets/IMG/product3.jpg" alt="" class="img-responsive">
-                        </a>
-                        <div class="text">
-                            <h3>Fur coat</h3>
-                            <p class="price">$143</p>
-
-                        </div>
-                    </div>
-                    <!-- /.product -->
-                </div>
-
             </div>
 
         </div>

@@ -1,0 +1,41 @@
+﻿<div id="content" data-ng-controller="InvoiceController">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-offset-4 col-md-4">
+                <div class="box order-summary">
+                    <div class="box-header">
+                        <span style="font-size:25px; font-weight:400;">Hóa Đơn </span>
+                        <img class="pull-right" src="Assets/img/logo.jpg" alt="White Blouse Armani" height="50" width="50" />
+                    </div>
+                    <p class="text-muted"><b>Họ tên:</b> Ngô Đông Hồng</p>
+                    <p class="text-muted"><b>Địa chỉ:</b> 67 ACB TPHCM Q.8</p>
+                    <p class="text-muted"><b>Sđt:</b> 0914294327</p>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th colspan="2">Sản phẩm</th>
+                                    <th>SL</th>
+                                    <th class="text-right">Thành tiền</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="product in view.products">
+                                    <td colspan="2">{{product.name}}</td>
+                                    <th>{{product.amount}}</th>
+                                    <th class="text-right">{{product.price}}</th>
+                                </tr>
+                                <tr class="total">
+                                    <td colspan="3">Tổng cộng</td>
+                                    <th class="text-right">{{view.total}}</th>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

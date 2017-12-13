@@ -122,7 +122,7 @@ namespace WebApplication2.DAO
                         select c.categoryId;
             return query.ToArray();
         }
-     
+
         /* public void checkProductCode(Product product)
          {*
              var query = from p in base.getContext().products select p;
@@ -130,5 +130,21 @@ namespace WebApplication2.DAO
              Product pro = base.checkColumnExists(query);  
 
          }*/
+
+        public PagedResult<Product> AdminPageView(Int16 userId, Int16 indexnum, Int16 pagesize, String Orderby)
+        {
+            var query = from c in base.getContext().products select c;
+            query = query.Where(u => u.createdBy == userId);
+            switch (Orderby)
+            {
+                case "name":
+                    query = query.OrderBy(n => n.name);
+                    break;
+
+            }
+            PagedResult<Product> pv = base.PageView(query, indexnum, pagesize);
+            return pv;
+
+        }
     }
 }

@@ -25,7 +25,7 @@
             Product.getProduct(categoryId, pageIndex, pageSize, filter, function (response) {
                 if (response)
                 {
-                    $scope.products = response.results;
+                    $scope.products = response.items;
                     $scope.pageSize = response.pageSize;
                     $scope.pageIndex = response.currentPage;
                     $scope.rowCount = response.rowCount;
@@ -39,13 +39,11 @@
 
         getProduct($scope.pageIndex, $scope.pageSize, $scope.filter);
 
-        $scope.pageChanged = function (pageSize, pageIndex, filter)
-        {
+        $scope.pageChanged = function (pageSize, pageIndex, filter) {
             getProduct(pageIndex, pageSize, filter);
-        }
+        };
 
-        $scope.rowChanged = function (pageIndex, pageSize, filter, asceding) 
-        {
+        $scope.rowChanged = function (pageIndex, pageSize, filter, asceding) {
             if (filter === "priceUp")
                 asceding = true;
             else
@@ -53,11 +51,10 @@
             getProduct(pageIndex, pageSize, filter, asceding);
             $(".btn-pageSize").removeClass("btn-primary");
             $("#" + pageSize).addClass("btn-primary");
-        }
+        };
 
-        $scope.viewDetail = function (productId)
-        {
+        $scope.viewDetail = function (productId) {
             window.location.href = $routeParams.category + "/" + productId;
-        }
+        };
     });
 }
