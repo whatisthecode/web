@@ -5,7 +5,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Formatting;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
+using WebApplication2.CustomAttribute;
 using WebApplication2.DAO;
 using WebApplication2.Models;
 using WebApplication2.Models.Mapping;
@@ -15,10 +20,9 @@ using static WebApplication2.Models.RequestModel.FromUri;
 
 namespace WebApplication2.Controllers.API
 {
-    [Authorize]
     public class ProductController : ApiController
     {
-
+        static Uri baseUrl = new Uri("http://localhost:54962/");
         public ProductController()
         {
 
@@ -26,10 +30,14 @@ namespace WebApplication2.Controllers.API
 
         [Route("api/product")]
         [HttpPost]
-        [Authorize(Roles = "CREATE_PRODUCT")]
-        public IHttpActionResult insertNewProduct([FromBody]CreateProductModel createProductModel)
+        [APIAuthorize(Roles = "CREATE_PRODUCT")]
+        public async Task<IHttpActionResult> insertNewProduct([FromBody]CreateProductModel createProductModel)
         {
             Response response = Utils.checkInput(createProductModel, CreateProductModel.required);
+            String accessToken = HttpContext.Current.Request.Headers.Get("Authorization").Replace("Bearer ","");
+            Token token = Service.tokenDAO.getByAccessToken(accessToken);
+            ApplicationUser appUser = Service._userManager.FindByEmailAsync(token.userName).Result;
+            createProductModel.createdBy = appUser.userInfoId;
             if (response.code != "422")
             {
                 Product productcheck = Service.productDAO.checkexist(createProductModel.code);
@@ -49,6 +57,7 @@ namespace WebApplication2.Controllers.API
                 }
                 else
                 {
+                                      
                     //create Product object to insert data
                     Product product = new Product();
                     product.code = createProductModel.code;
@@ -81,8 +90,41 @@ namespace WebApplication2.Controllers.API
                         Service.productAttributeDAO.saveProductAttribute();
                     }
 
+                    foreach (var thumbnail in createProductModel.thumbnails)
+                    {
+                        HttpClient httpClient = new HttpClient();
+                        httpClient.BaseAddress = baseUrl;
+                        httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                        httpClient.DefaultRequestHeaders.Add("Authorization", accessToken);
+
+                        CreateImageModel createImageModel = new CreateImageModel();
+                        createImageModel.productId = product.id;
+                        createImageModel.url = thumbnail.GetValue("url").ToString();
+                        createImageModel.type = "thumbnail";
+
+                        HttpContent httpContent = new ObjectContent<CreateImageModel>(createImageModel, new JsonMediaTypeFormatter());
+                        await httpClient.PostAsync("api/image/upload/base64", httpContent);
+                    }
+
+                    foreach (var detail in createProductModel.details)
+                    {
+                        HttpClient httpClient = new HttpClient();
+                        httpClient.BaseAddress = baseUrl;
+                        httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                        httpClient.DefaultRequestHeaders.Add("Authorization", accessToken);
+
+                        CreateImageModel createImageModel = new CreateImageModel();
+                        createImageModel.productId = product.id;
+                        createImageModel.url = detail.GetValue("url").ToString();
+                        createImageModel.type = "detail";
+
+                        HttpContent httpContent = new ObjectContent<CreateImageModel>(createImageModel, new JsonMediaTypeFormatter());
+                        await httpClient.PostAsync("api/image/upload/base64", httpContent);
+                    }
+
                     response.code = "201";
-                    response.results = "Thêm sản phẩm thành công";
+                    response.status = "Thêm sản phẩm thành công";
+                    response.results = product;
                     return Content<Response>(HttpStatusCode.Created, response);
                 }
 
@@ -93,7 +135,6 @@ namespace WebApplication2.Controllers.API
 
         [Route("api/product/{id}")]
         [HttpGet]
-        [AllowAnonymous]
         public IHttpActionResult getProductWithConditions(short id)
         {
             Response response = new Response();
@@ -128,7 +169,6 @@ namespace WebApplication2.Controllers.API
 
         [Route("api/products/")]
         [HttpGet]
-        [AllowAnonymous]
         public IHttpActionResult getProductslist([FromUri] PageRequest pageRequest)
         {
             Response response = new Response();

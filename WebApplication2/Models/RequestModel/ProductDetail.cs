@@ -7,6 +7,7 @@ namespace WebApplication2.Models.RequestModel
 {
     public class ProductDetail
     {
+
         public Int16 id { get; set; }
 
         public Int16 status { get; set; }

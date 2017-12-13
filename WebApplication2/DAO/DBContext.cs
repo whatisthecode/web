@@ -43,7 +43,7 @@ namespace WebApplication2.DAO
             Database.SetInitializer<DBContext>(null);
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<ApplicationUser>().HasRequired(t => t.userInfo);
+            modelBuilder.Entity<ApplicationUser>().HasRequired(t => t.UserInfo);
 
             // And Here:
             EntityTypeConfiguration<Group> groupsConfig = modelBuilder.Entity<Group>().ToTable("Groups");

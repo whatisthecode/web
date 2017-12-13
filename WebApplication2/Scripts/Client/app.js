@@ -10,6 +10,9 @@
         }).when("/notfound", {
             controller: "ErrorController",
             templateUrl: "./Scripts/Client/View/error.html"
+        }).when("/login", {
+            controller: "ErrorController",
+            templateUrl: "./Scripts/Client/View/error.html"
         }).when("/account/confirm", {
             controller: "AccountConfirmController",
             templateUrl: "./Scripts/Client/View/confirm-email.html"
@@ -18,7 +21,7 @@
             templateUrl: "./Scripts/Client/View/set-password.html"
         }).when("/register", {
             controller: "RegisterController",
-             templateUrl: "./Scripts/Client/View/register.html"
+            templateUrl: "./Scripts/Client/View/register.html"
         }).when("/:category", {
             controller: "ProductController",
             templateUrl: "./Scripts/Client/View/product.html"

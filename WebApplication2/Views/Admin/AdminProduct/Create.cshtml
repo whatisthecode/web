@@ -1,0 +1,460 @@
+﻿
+@{
+    ViewBag.Title = "Create";
+    ViewBag.currentAction = "product";
+    ViewBag.pageTitle = "Thêm sản phẩm";
+    ViewBag.pageLink = "/dashboard/product/create";
+}
+
+<div class="container-fluid">
+    <form method="post" action="~/dashboard/product/create">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>Mã sản phẩm</label>
+                    <input type="text" class="form-control border-input" placeholder="Mã sản phẩm" name="code" value="@if(Model.code != null){ @Model.code; }">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>Tên sản phẩm</label>
+                    <input type="text" class="form-control border-input" placeholder="Tên sản phẩm" name="name" value="@if(Model.name != null){ @Model.name; }">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>Mô tả ngắn</label>
+                    <textarea rows="5" class="form-control border-input" name="shortDescription" value="@if(Model.shortDescription != null){ @Model.shortDescription; }">@if(Model.shortDescription != null){ @Model.shortDescription; }</textarea>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>Mô tả chi tiết</label>
+                    <textarea rows="5" class="form-control border-input" name="longDescription" value="@if(Model.longDescription != null){ @Model.longDescription; }">@if(Model.longDescription != null){ @Model.longDescription; }</textarea>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Giá</label>
+                    <input type="hidden" class="form-control border-input" value="price" name="attributes[0].key">
+                    <input type="text" class="form-control border-input" placeholder="Giá của sản phẩm" name="attributes[0].value" value="@if(@Model.attributes != null && Model.attributes[0] != null){ @Model.attributes[0].value; }">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Số lượng</label>
+                    <input type="hidden" class="form-control border-input" name="attributes[1].key" value="amount">
+                    <input type="text" class="form-control border-input" placeholder="Số lượng" name="attributes[1].value" value="@if(@Model.attributes != null && Model.attributes[1] != null){ @Model.attributes[1].value; }">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Giá sau khi giảm</label>
+                    <input type="hidden" class="form-control border-input" name="attributes[2].key" value="discount">
+                    <input type="text" class="form-control border-input" placeholder="Giá sản phẩm sau khi giảm" name="attributes[2].value" value="@if(@Model.attributes != null && Model.attributes[2] != null){ @Model.attributes[2].value; }">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Màu sắc</label>
+                    <input type="hidden" class="form-control border-input" value="color" name="attributes[3].key">
+                    <input type="text" class="form-control border-input" placeholder="Màu của sản phẩm" name="attributes[3].value" value="@if(@Model.attributes != null && Model.attributes[3] != null){ @Model.attributes[3].value; }">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>Danh mục sản phẩm</label>
+                    <ul class="select-box">
+                        @{
+                            Int16 ci = 0;
+                        }
+                        @foreach (var category in ViewBag.categories)
+                        {
+                            Int16 flag1 = 0;
+                            if (Model.choseCategories != null)
+                            {
+                                foreach (var choseCat in Model.choseCategories)
+                                {
+                                    if (choseCat.categoryId == category.id)
+                                    {
+                                        flag1++;
+                                        break;
+                                    }
+                                }
+                            }
+                            if (flag1 == 0)
+                            {
+                                <li><input class="category" type="checkbox" value="@category.id" /> @category.name</li>
+                            }
+                            else
+                            {
+                                <li><input class="category" type="checkbox" checked name="choseCategories[@ci].categoryId" value="@category.id" /> @category.name</li>
+                                ci++;
+                            }
+                        }
+                        <input type="hidden" id="currentCatIndex" value="@ci" />
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>Ảnh đại diện</label>
+                    <div class="image-box" data-info="thumbnail">
+                        @{
+                            Int16 ti = 0;
+                        }
+                        @if (Model.thumbnails != null)
+                        {
+                            foreach (var thumbnail in Model.thumbnails)
+                            {
+                                <div class="image-box-item">
+                                    <img src="@thumbnail.url" />
+                                    <input type="hidden" value="@thumbnail.url" name="thumbnails[@(ti++)].url" />
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <img src="~/Assets/IMG/add.png" class="add-thumbnail" data-id="#thumbnail1" />
+                            <img src="~/Assets/IMG/add.png" class="add-thumbnail" data-id="#thumbnail2" />
+                        }
+                        <input type="file" class="hidden" id="thumbnail1" accept="image/*" />
+                        <input type="file" class="hidden" id="thumbnail2" accept="image/*" />
+                        <input type="file" class="hidden" id="edit-thumbnail" accept="iamge/*" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>Ảnh chi tiết</label>
+                    <div class="image-box" data-info="detail">
+                        @{ 
+                            Int16 di = 0;
+                        }
+                        @if (Model.details != null)
+                        {
+                            foreach (var detail in Model.details)
+                            {
+                                <div class="image-box-item">
+                                    <img src="@detail.url" />
+                                    <input type="hidden" value="@detail.url" name="details[@(di++)].url" />
+                                </div>
+                            }
+                        }
+                        <img src="~/Assets/IMG/add.png" class="add-detail" accept="image/*" data-id="#detail" />
+                        <input type="file" class="hidden" id="detail" multiple accept="image/*" />
+                        <input type="file" class="hidden" id="edit-detail" accept="image/*" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <button type="submit" class="btn btn-fill btn-flat btn-md btn-info">Lưu</button>
+            </div>
+        </div>
+    </form>
+</div>
+@*<!-- The Modal/Lightbox -->
+    <div id="thumbnail" class="modal lightbox">
+        <span class="close cursor" onclick="closeModal('thumbnail')">&times;</span>
+        <div class="modal-content">
+            <div class="modal-body">
+                @foreach (var thumbnail in Model.thumbnails)
+                {
+                    <div class="mySlides">
+                        <span class="helper"></span>
+                        <img src="@thumbnail.url">
+                    </div>
+                }
+
+                <!-- Next/previous controls -->
+                <a class="prev" onclick="plusSlides('thumbnail', -1)">&#10094;</a>
+                <a class="next" onclick="plusSlides('thumbnail', 1)">&#10095;</a>
+            </div>
+            <!-- Thumbnail image controls -->
+            <div class="modal-footer" style="height:110px">
+                @{
+                    Int16 ti1 = 1;
+                }
+                @foreach (var thumbnail in Model.thumbnails)
+                {
+                    <div class="column">
+                        <span class="helper"></span>
+                        <img class="demo" src="@thumbnail.url" onclick="currentSlide('thumbnail', @(ti1++))" alt="Nature">
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- The Modal/Lightbox -->
+    <div id="detail" class="modal lightbox">
+        <span class="close cursor" onclick="closeModal('detail')">&times;</span>
+        <div class="modal-content">
+            <div class="modal-body">
+                @foreach (var detail in Model.details)
+                {
+                    <div class="mySlides">
+                        <span class="helper"></span>
+                        <img src="@detail.url">
+                    </div>
+                }
+
+                <!-- Next/previous controls -->
+                <a class="prev" onclick="plusSlides('detail', -1)">&#10094;</a>
+                <a class="next" onclick="plusSlides('detail', 1)">&#10095;</a>
+            </div>
+            <!-- Thumbnail image controls -->
+            <div class="modal-footer" style="height:110px">
+                @{
+                    Int16 di1 = 1;
+                }
+                @foreach (var detail in Model.details)
+                {
+                    <div class="column">
+                        <span class="helper"></span>
+                        <img class="demo" src="@detail.url" onclick="currentSlide('detail', @(di1++))" alt="Nature">
+                    </div>
+                }
+            </div>
+        </div>
+    </div>*@
+
+@section script{
+    <script>
+        refreshImageBoxItemAction();
+        refreshThumbnailAction();
+        function refreshThumbnailAction() {
+            $(".add-thumbnail").off("click");
+            $("#thumbnail1").off("change");
+            $("#thumbnail2").off("change");
+            $(".add-thumbnail").on("click", function (e) {
+                var self = $(e.target);
+                var id = $(self).data("id");
+                $(id).click();
+            });
+            $("#thumbnail1").on("change", function () {
+                var self = this;
+                if (self.files.length > 0) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        var imageTag = `<div class="image-box-item"><img src="${e.target.result}" /><input type="hidden" value="${e.target.result}" name="thumbnails[0].url" /></div>`;
+                        $(imageTag).insertBefore($('img[data-id="#thumbnail1"]'));
+                        $('img[data-id="#thumbnail1"]').remove();
+                        refreshImageBoxItemAction();
+                    }
+                    reader.readAsDataURL(self.files[0]);
+                }
+            });
+            $("#thumbnail2").on("change", function () {
+                var self = this;
+                if (self.files.length > 0) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        var imageTag = `<div class="image-box-item"><img src="${e.target.result}" /><input type="hidden" value="${e.target.result}" name="thumbnails[1].url" /></div>`;
+                        $(imageTag).insertBefore($('img[data-id="#thumbnail2"]'));
+                        $('img[data-id="#thumbnail2"]').remove();
+                        refreshImageBoxItemAction();
+                    }
+                    reader.readAsDataURL(self.files[0]);
+                }
+            });
+        }
+        function refreshImageBoxItemAction() {
+            $(".image-box-item").off("mouseover");
+            $(".image-box-item").off("mouseleave");
+            $(".image-box-item").on("mouseover", function (e) {
+                var self = $(e.target).parents(".image-box-item");
+                if ($(self).has(".menu").length === 0) {
+                    var menu = ` <span class="menu">
+                        <a id="view-image"><span class="helper"></span><i class="ti-eye"></i></a>
+                        <a id="edit-image"><span class="helper"></span><i class="ti-pencil"></i></a>
+                        <a id="remove-image"><span class="helper"></span><i class="ti-close"></i></a>
+                    </span>`;
+                    $(self).append(menu);
+                    setTimeout(function () {
+                        $("a#view-image").on("click", function (e) {
+                            console.log("view");
+                        });
+                        $("a#edit-image").on("click", function (e) {
+                            var self = $(e.target).parents(".image-box-item");
+                            var imageBox = $(self).parents(".image-box");
+                            var type = $(imageBox).data("info");
+                            if (type === "thumbnail") {
+                                $("input#edit-thumbnail").click();
+                                $("input#edit-thumbnail").off("change");
+                                $("input#edit-thumbnail").on("change", function () {
+                                    if (this.files.length > 0) {
+                                        var reader = new FileReader();
+                                        reader.onload = function (e) {
+                                            $(self).find("img").prop("src", e.target.result);
+                                            $(self).find("input").prop("value", e.target.result);
+                                        }
+                                        reader.readAsDataURL(this.files[0]);
+                                        $(this).val(null);
+                                        $(this).files = [];
+                                    }
+                                });
+                            }
+                            else if (type === "detail") {
+                                $("input#edit-detail").click();
+                                $("input#edit-detail").off("change");
+                                $("input#edit-detail").on("change", function () {
+                                    if (this.files.length > 0) {
+                                        var reader = new FileReader();
+                                        reader.onload = function (e) {
+                                            $(self).find("img").prop("src", e.target.result);
+                                            $(self).find("input").prop("value", e.target.result);
+                                        }
+                                        reader.readAsDataURL(this.files[0]);
+                                        $(this).val(null);
+                                        $(this).files = [];
+                                    }
+                                });
+                            }
+                        });
+                        $("a#remove-image").on("click", function (e) {
+                            var self = $(e.target).parents(".image-box-item");
+                            var imageBox = $(self).parents(".image-box");
+                            var index = $(imageBox).find(".image-box-item").index($(self)) + 1;
+                            var type = $(imageBox).data("info");
+                            var items = $(imageBox).find(".image-box-item");
+                            var itemsLength = items.length;
+                            for (var i = index; i < itemsLength; i++) {
+                                var name = $(items[i]).find("input").prop("name");
+                                name = name.substring(0, name.indexOf("["));
+                                name += "[" + (i - 1) + "].url";
+                                $(items[i]).find("input").prop("name", name);
+                            }
+                            if (type === "thumbnail") {
+                                if (index === 1) {
+                                    var thumbnail = `<img src="/Assets/IMG/add.png" class="add-thumbnail" data-id="#thumbnail1" />`;
+                                    isHavingThumbnail1 = $(imageBox).find("img[data-id='#thumbnail1']").length > 0 ? true : false;
+                                    if (itemsLength === 1) {
+                                        if (isHavingThumbnail1) {
+                                            thumbnail = `<img src="/Assets/IMG/add.png" class="add-thumbnail" data-id="#thumbnail2" />`;
+                                            $(imageBox).append(thumbnail);
+                                        }
+                                        else {
+                                            $(thumbnail).insertBefore("img[data-id='#thumbnail2']");
+                                        }
+                                    }
+                                    else if (itemsLength === 2)
+                                        $(thumbnail).insertBefore($(self));
+                                }
+                                else if(index === 2 ) {
+                                    var thumbnail = `<img src="/Assets/IMG/add.png" class="add-thumbnail" data-id="#thumbnail2" />`
+                                    $(imageBox).append(thumbnail);
+                                }
+                                refreshThumbnailAction();
+                            }
+                            $(self).remove();
+                        });
+                    }, 0);
+                }
+            });
+            $(".image-box-item").on("mouseleave", function (e) {
+                var self = $(e.target);
+                if (!$(self).is(".image-box-item"))
+                    self = $(self).parents(".image-box-item");
+                if ($(self).has(".menu").length > 0) {
+                    $(self).find(".menu").remove();
+                }
+            });
+        }
+        $("#detail").on("change", function () {
+            var self = this;
+            if (self.files.length > 0) {
+                var filesLength = self.files.length;
+                for (var i = 0; i < filesLength; i++) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        var imageBox = $(self).parents(".image-box");
+                        var index = $(imageBox).find(".image-box-item").length;
+                        var imageTag = `<div class="image-box-item"><img src="${e.target.result}" /><input type="hidden" value="${e.target.result}" name="details[${index}].url" /></div>`;
+                        $(imageTag).insertBefore($('img[data-id="#detail"]'));
+                        setTimeout(function () {
+                            refreshImageBoxItemAction();
+                        }, 1);
+                    }
+                    reader.readAsDataURL(self.files[i]);
+                }
+            }
+        });
+        $(".add-detail").on("click", function (e) {
+            $("input#detail").click();
+        });
+        $(".category").on("click", function (e) {
+            var self = $(e.target);
+            var index = $("#currentCatIndex").val();
+            if ($(self).prop("checked")) {
+                $(self).prop("name", "choseCategories[" + index + "].categoryId");
+                $("#currentCatIndex").val((index + 1));
+            }
+            else {
+                $(self).prop("name", "");
+                $("#currentCatIndex").val((index - 1));
+            }
+        });
+        // Open the Modal
+        function openModal(id) {
+            document.getElementById(id).style.display = "block";
+        }
+
+        // Close the Modal
+        function closeModal(id) {
+            document.getElementById(id).style.display = "none";
+        }
+
+        var slideIndex = 1;
+        showSlides('thumbnail', slideIndex);
+        showSlides('detail', slideIndex);
+
+        // Next/previous controls
+        function plusSlides(id, n) {
+            showSlides(id, slideIndex += n);
+        }
+
+        // Thumbnail image controls
+        function currentSlide(id, n) {
+            showSlides(id, slideIndex = n);
+        }
+
+        function showSlides(id, n) {
+            var i;
+            var slides = $("#" + id + " .mySlides");
+            var dots = $("#" + id + " .demo");
+            if (n > slides.length) { slideIndex = 1 }
+            if (n < 1) { slideIndex = slides.length }
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+            for (i = 0; i < dots.length; i++) {
+                dots[i].className = dots[i].className.replace(" active", "");
+            }
+            slides[slideIndex - 1].style.display = "block";
+            dots[slideIndex - 1].className += " active";
+        }
+    </script>
+
+}
+

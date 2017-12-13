@@ -80,24 +80,25 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
         public IHttpActionResult GetUserInfo()
         {
             Response response = new Response();
-            var accessToken = Service.tokenDAO.getByUsername(User.Identity.GetUserName());
+            String accessToken = HttpContext.Current.Request.Headers.Get("Authorization").Replace("Bearer ","");
             if (accessToken != null)
             {
-                Token token = accessToken;
+                Token token = Service.tokenDAO.getByAccessToken(accessToken);
                 DateTime currentDate = DateTime.Now;
                 DateTime expiresDate = token.expires;
                 int result = DateTime.Compare(currentDate, expiresDate);
                 if (result <= 0)
                 {
                     UserInfo userInfo = new UserInfo();
-                    var user = UserManager.FindById(User.Identity.GetUserId());
+                    var user = Service._userManager.FindByEmail(token.userName);
+                    user.UserInfo = Service.userInfoDAO.getUserInfo(user.userInfoId);
                     CurrentUserInfoLogin currentUserInfoLogin = new CurrentUserInfoLogin();
-                    currentUserInfoLogin.dob = user.userInfo.dob;
-                    currentUserInfoLogin.lastName = user.userInfo.lastName;
-                    currentUserInfoLogin.firstName = user.userInfo.firstName;
-                    currentUserInfoLogin.status = user.userInfo.status;
-                    currentUserInfoLogin.id = user.userInfo.id;
-                    currentUserInfoLogin.identityNumber = user.userInfo.identityNumber;
+                    currentUserInfoLogin.dob = user.UserInfo.dob;
+                    currentUserInfoLogin.lastName = user.UserInfo.lastName;
+                    currentUserInfoLogin.firstName = user.UserInfo.firstName;
+                    currentUserInfoLogin.status = user.UserInfo.status;
+                    currentUserInfoLogin.id = user.UserInfo.id;
+                    currentUserInfoLogin.identityNumber = user.UserInfo.identityNumber;
                     currentUserInfoLogin.groups = user.groups.ToList();
 
                     UserInfoViewModel userInfoModel = new UserInfoViewModel();
@@ -236,7 +237,7 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
             createUserInfo.dob = model.dob;
 
             var identityUser = new ApplicationUser() { UserName = model.Email, Email = model.Email };
-            identityUser.userInfo = createUserInfo;
+            identityUser.UserInfo = createUserInfo;
             IdentityResult result = await UserManager.CreateAsync(identityUser, model.Password);
 
             if (!result.Succeeded)
@@ -393,7 +394,7 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
 
             var flag = 0;
             var user = UserManager.FindById(id);
-            var userInfoId = user.userInfo.id;
+            var userInfoId = user.UserInfo.id;
             UserInfo userInfo = new UserInfo();
             userInfo = Service.userInfoDAO.getUserInfo(userInfoId);
             if (currentUserInfoLogin.identityNumber != null)

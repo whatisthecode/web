@@ -3,6 +3,7 @@
     ViewBag.Title = "Detail";
     ViewBag.pageTitle = "Chi tiết sản phẩm " + Model.code;
     ViewBag.pageLink = "/dashboard/product/" + Model.id;
+    ViewBag.currentAction = "product";
 }
 <div class="container-fluid">
     <div class="row">
@@ -120,38 +121,6 @@
             </div>
         </div>
     </div>
-    <!-- The Modal/Lightbox -->
-    <div id="thumbnail" class="modal lightbox">
-        <span class="close cursor" onclick="closeModal('thumbnail')">&times;</span>
-        <div class="modal-content">
-            <div class="modal-body">
-                @foreach (var thumbnail in Model.thumbnails)
-                {
-                    <div class="mySlides">
-                        <span class="helper"></span>
-                        <img src="@thumbnail.url">
-                    </div>
-                }
-
-                <!-- Next/previous controls -->
-                <a class="prev" onclick="plusSlides('thumbnail', -1)">&#10094;</a>
-                <a class="next" onclick="plusSlides('thumbnail', 1)">&#10095;</a>
-            </div>
-            <!-- Thumbnail image controls -->
-            <div class="modal-footer" style="height:110px">
-                @{
-                    Int16 ti1 = 1;
-                }
-                @foreach (var thumbnail in Model.thumbnails)
-                {
-                    <div class="column">
-                        <span class="helper"></span>
-                        <img class="demo" src="@thumbnail.url" onclick="currentSlide('thumbnail', @(ti1++))" alt="Nature">
-                    </div>
-                }
-            </div>
-        </div>
-    </div>
     <div class="row">
         <div class="col-md-12">
             <div class="form-group">
@@ -168,44 +137,79 @@
             </div>
         </div>
     </div>
-    <!-- The Modal/Lightbox -->
-    <div id="detail" class="modal lightbox">
-        <span class="close cursor" onclick="closeModal('detail')">&times;</span>
-        <div class="modal-content">
-            <div class="modal-body">
-                @foreach (var detail in Model.details)
-                {
-                    <div class="mySlides">
-                        <span class="helper"></span>
-                        <img src="@detail.url">
-                    </div>
-                }
-
-                <!-- Next/previous controls -->
-                <a class="prev" onclick="plusSlides('detail', -1)">&#10094;</a>
-                <a class="next" onclick="plusSlides('detail', 1)">&#10095;</a>
-            </div>
-            <!-- Thumbnail image controls -->
-            <div class="modal-footer" style="height:110px">
-                @{
-                    Int16 di1 = 1;
-                }
-                @foreach (var detail in Model.details)
-                {
-                    <div class="column">
-                        <span class="helper"></span>
-                        <img class="demo" src="@detail.url" onclick="currentSlide('detail', @(di1++))" alt="Nature">
-                    </div>
-                }
-            </div>
-        </div>
-    </div>
+    
     <div class="row">
         <div class="col-md-12">
             <button type="submit" class="btn btn-fill btn-flat btn-md btn-info">Lưu</button>
         </div>
     </div>
 </div>
+    <!-- The Modal/Lightbox -->
+<div id="thumbnail" class="modal lightbox">
+    <span class="close cursor" onclick="closeModal('thumbnail')">&times;</span>
+    <div class="modal-content">
+        <div class="modal-body">
+            @foreach (var thumbnail in Model.thumbnails)
+            {
+                <div class="mySlides">
+                    <span class="helper"></span>
+                    <img src="@thumbnail.url">
+                </div>
+            }
+
+            <!-- Next/previous controls -->
+            <a class="prev" onclick="plusSlides('thumbnail', -1)">&#10094;</a>
+            <a class="next" onclick="plusSlides('thumbnail', 1)">&#10095;</a>
+        </div>
+        <!-- Thumbnail image controls -->
+        <div class="modal-footer" style="height:110px">
+            @{
+                Int16 ti1 = 1;
+            }
+            @foreach (var thumbnail in Model.thumbnails)
+            {
+                <div class="column">
+                    <span class="helper"></span>
+                    <img class="demo" src="@thumbnail.url" onclick="currentSlide('thumbnail', @(ti1++))" alt="Nature">
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- The Modal/Lightbox -->
+<div id="detail" class="modal lightbox">
+    <span class="close cursor" onclick="closeModal('detail')">&times;</span>
+    <div class="modal-content">
+        <div class="modal-body">
+            @foreach (var detail in Model.details)
+            {
+                <div class="mySlides">
+                    <span class="helper"></span>
+                    <img src="@detail.url">
+                </div>
+            }
+
+            <!-- Next/previous controls -->
+            <a class="prev" onclick="plusSlides('detail', -1)">&#10094;</a>
+            <a class="next" onclick="plusSlides('detail', 1)">&#10095;</a>
+        </div>
+        <!-- Thumbnail image controls -->
+        <div class="modal-footer" style="height:110px">
+            @{
+                Int16 di1 = 1;
+            }
+            @foreach (var detail in Model.details)
+            {
+                <div class="column">
+                    <span class="helper"></span>
+                    <img class="demo" src="@detail.url" onclick="currentSlide('detail', @(di1++))" alt="Nature">
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
 @section script{
     <script>
         // Open the Modal

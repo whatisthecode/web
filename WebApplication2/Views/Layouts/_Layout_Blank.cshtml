@@ -1,3 +1,6 @@
 ﻿@RenderBody()
 @Scripts.Render("~/bundles/blank_js")
 @RenderSection("script", false)
+<script>
+        localStorage.setItem("token", "@Session["currentUser"]");
+</script>

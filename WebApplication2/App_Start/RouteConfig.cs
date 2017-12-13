@@ -30,6 +30,11 @@ namespace WebApplication2
                 defaults: new { type = "Admin", controller = "AdminLogin", action = "Logout" }
             );
             routes.MapRoute(
+                name: "Create-Product",
+                url: "dashboard/product/create",
+                defaults: new { type = "Admin", controller = "AdminProduct", action = "Create" }
+            );
+            routes.MapRoute(
                 name: "Product",
                 url: "dashboard/products",
                 defaults: new { type = "Admin", controller = "AdminProduct", action = "Index" }

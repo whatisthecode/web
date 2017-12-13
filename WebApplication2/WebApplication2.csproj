@@ -284,6 +284,7 @@
     <Compile Include="Models\ProductAttribute.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\Rating.cs" />
+    <Compile Include="Models\RequestModel\CreateImageModel.cs" />
     <Compile Include="Models\RequestModel\CreateProductModel.cs" />
     <Compile Include="Models\RequestModel\Customer.cs" />
     <Compile Include="Models\RequestModel\FromUri.cs" />
@@ -317,6 +318,7 @@
     <Content Include="Assets\FONT\flexslider-icon.svg" />
     <Content Include="Assets\FONT\fontawesome-webfont.svg" />
     <Content Include="Assets\FONT\themify.svg" />
+    <Content Include="Assets\IMG\add.png" />
     <Content Include="Assets\IMG\AjaxLoader.gif" />
     <Content Include="Assets\IMG\aletaobao.ico" />
     <Content Include="Assets\IMG\background.jpg" />
@@ -482,6 +484,7 @@
     <Content Include="Views\Admin\Error\Forbidden.cshtml" />
     <Content Include="Views\Admin\AdminProduct\Index.cshtml" />
     <Content Include="Views\Admin\AdminProduct\Detail.cshtml" />
+    <Content Include="Views\Admin\AdminProduct\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

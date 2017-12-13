@@ -4,6 +4,8 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApplication2.Models
 {
@@ -16,10 +18,11 @@ namespace WebApplication2.Models
             this.groups = new HashSet<ApplicationUserGroup>();
         }
 
-        [JsonIgnore]
-        public UserInfo userInfo { get; set; }
+        [ForeignKey("UserInfo")]
+        public Int16 userInfoId { get; set; }
 
-        [JsonIgnore]
+        public UserInfo UserInfo { get; set; }
+
         public ICollection<ApplicationUserGroup> groups { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager, string authenticationType)

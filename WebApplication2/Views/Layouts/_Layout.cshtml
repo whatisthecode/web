@@ -20,16 +20,25 @@
     @Styles.Render("~/Content/client_template")
 </head>
 <body data-ng-app="TMDT-client">
-    @Html.Partial("~/Views/Client/Shared/Top.cshtml")
-    @Html.Partial("~/Views/Client/Shared/Header.cshtml")
+    @if (Request.Url.AbsoluteUri.IndexOf("login") < 0 && Request.Url.AbsoluteUri.IndexOf("notfound") < 0 && Request.Url.AbsoluteUri.IndexOf("forbidden") < 0)
+    {
+        @Html.Partial("~/Views/Client/Shared/Top.cshtml")
+        @Html.Partial("~/Views/Client/Shared/Header.cshtml")
+    }
     <div id="all">
         @RenderBody()
     </div>
-    @Html.Partial("~/Views/Client/Shared/Footer.cshtml")
+    @if (Request.Url.AbsoluteUri.IndexOf("login") < 0 && Request.Url.AbsoluteUri.IndexOf("notfound") < 0 && Request.Url.AbsoluteUri.IndexOf("forbidden") < 0)
+    {
+        @Html.Partial("~/Views/Client/Shared/Footer.cshtml")
+    }
     @Scripts.Render("~/bundles/angularjs")
     @Scripts.Render("~/bundles/client_js")
     @Scripts.Render("~/bundles/client_controller")
     @Scripts.Render("~/bundles/client_service")
     @RenderSection("scripts", required: false)
+    <script>
+        localStorage.setItem("token", "@Session["currentUser"]");
+    </script>
 </body>
 </html>

@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using WebApplication2.CustomAttribute;
 using WebApplication2.Models;
 using WebApplication2.Models.Mapping;
+using static WebApplication2.Models.AccountViewModels;
 
 namespace WebApplication2.Controllers.Admin
 {
@@ -48,18 +49,32 @@ namespace WebApplication2.Controllers.Admin
             {
                 var contents = ((JObject)reponse.Content.ReadAsAsync<Response>().Result.results).ToObject<Token>();
                 Session["currentUser"] = contents.accessToken;
-                if(!String.IsNullOrEmpty(returnUrl))
+
+                HttpClient httpClient1 = new HttpClient();
+                httpClient1.BaseAddress = baseUrl;
+                httpClient1.DefaultRequestHeaders.Add("Authorization", "Bearer " + Session["currentUser"]);
+
+                var response2 = httpClient1.GetAsync("api/account/userinfo").Result;
+                if (response2.IsSuccessStatusCode)
                 {
-                    return Redirect(returnUrl);
+                    var content2 = ((JObject)response2.Content.ReadAsAsync<Response>().Result.results).ToObject<UserInfoViewModel>();
+                    CurrentUserInfoLogin userInfo = ((JObject)content2.userInfo).ToObject<CurrentUserInfoLogin>();
+                    Session["username"] = userInfo.firstName + " " + userInfo.lastName;
+
+                    if (!String.IsNullOrEmpty(returnUrl))
+                    {
+                        return Redirect(returnUrl);
+                    }
+                    return RedirectToAction("Index", "AdminHome");
                 }
-                return RedirectToAction("Index", "AdminHome");
+                else
+                {
+                    ViewBag.error = "Sai tên đăng nhập hoặc mật khẩu";
+                    return View();
+                }
+
             }
-            else
-            {
-                ViewBag.error = "Sai tên đăng nhập hoặc mật khẩu";
-                return View();
-            }
-            
+            return View();
         }
 
         public ActionResult Logout()
@@ -72,6 +87,7 @@ namespace WebApplication2.Controllers.Admin
             if (reponse.IsSuccessStatusCode)
             {
                 Session["currentUser"] = null;
+                Session["username"] = null;
             }
             return RedirectToAction("Index", "AdminLogin");
         }

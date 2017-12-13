@@ -7,44 +7,79 @@
 
     <div class="sidebar-wrapper">
         <div class="logo">
-            <a href="./admin" style="color:#212121" class="simple-text">
+            <a href="~/dashboard" style="color:#212121" class="simple-text">
                 ALEtaobao
             </a>
         </div>
 
         <ul class="nav">
-            <li>
-                <a href="user.html">
+            @if (ViewBag.currentAction != null && ViewBag.currentAction.ToString() == "user")
+            {
+                @Html.Raw("<li class='active'>");
+            }
+            else
+            {
+                @Html.Raw("<li>");
+            }
+                <a href="~/dashboard/users?pageSize=10&pageIndex=1">
                     <i class="ti-user"></i>
                     <p>Người dùng</p>
                 </a>
             </li>
-            <li class="active">
-                <a href="dashboard.html">
+            @if (ViewBag.currentAction != null && ViewBag.currentAction.ToString() == "product")
+            {
+                @Html.Raw("<li class='active'>");
+            }
+            else
+            {
+                @Html.Raw("<li>");
+            }
+                <a href="~/dashboard/products?pageSize=10&pageIndex=1">
                     <i class="ti-package"></i>
                     <p>Sản phẩm</p>
                 </a>
             </li>
-            <li>
-                <a href="table.html">
+            @if (ViewBag.currentAction != null && ViewBag.currentAction.ToString() == "invoice")
+            {
+                @Html.Raw("<li class='active'>");
+            }
+            else
+            {
+                @Html.Raw("<li>");
+            }
+                <a href="~/dashboard/invoices?pageSize=10&pageIndex=1">
                     <i class="ti-receipt"></i>
                     <p>Hóa đơn</p>
                 </a>
             </li>
-            <li>
-                <a href="typography.html">
+            @if (ViewBag.currentAction != null && ViewBag.currentAction.ToString() == "statistic")
+            {
+                @Html.Raw("<li class='active'>");
+            }
+            else
+            {
+                @Html.Raw("<li>");
+            }
+                <a href="~/dashboard/statistic">
                     <i class="ti-stats-up"></i>
                     <p>Thống kê</p>
                 </a>
             </li>
-            <li>
-                <a href="typography.html">
-                    <i class="ti-id-badge"></i>
-                    <p>Thông tin tài khoản</p>
-                </a>
+            @if (ViewBag.currentAction != null && ViewBag.currentAction.ToString() == "info")
+            {
+                @Html.Raw("<li class='active'>");
+            }
+            else
+            {
+                @Html.Raw("<li>");
+            }
+            <a href="~/dashboard/info">
+                <i class="ti-id-badge"></i>
+                <p>Thông tin tài khoản</p>
+            </a>
             </li>
             <li class="active-pro">
-                <a href="typography.html">
+                <a href="~/logout">
                     <i class="ti-shift-right"></i>
                     <p>Đăng xuất</p>
                 </a>

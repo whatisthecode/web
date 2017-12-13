@@ -10,7 +10,6 @@ namespace WebApplication2.Controllers.Admin
     [MVCAuthorize]
     public class AdminHomeController : Controller
     {
-
         // GET: Admin
         public ActionResult Index()
         {
