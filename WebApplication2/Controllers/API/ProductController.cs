@@ -1,4 +1,5 @@
 ﻿using LaptopWebsite.Models.Mapping;
+using Microsoft.AspNet.Identity.EntityFramework;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using WebApplication2.CustomAttribute;
 using WebApplication2.DAO;
 using WebApplication2.Models;
 using WebApplication2.Models.Mapping;
@@ -15,7 +17,7 @@ using static WebApplication2.Models.RequestModel.FromUri;
 
 namespace WebApplication2.Controllers.API
 {
-    [Authorize]
+    [APIAuthorize]
     public class ProductController : ApiController
     {
 
@@ -26,7 +28,7 @@ namespace WebApplication2.Controllers.API
 
         [Route("api/product")]
         [HttpPost]
-        [Authorize(Roles = "CREATE_PRODUCT")]
+        [APIAuthorize (Roles = "CREATE_PRODUCT")]
         public IHttpActionResult insertNewProduct([FromBody]CreateProductModel createProductModel)
         {
             Response response = Utils.checkInput(createProductModel, CreateProductModel.required);
@@ -243,5 +245,55 @@ namespace WebApplication2.Controllers.API
 
         }
 
+
+        [Route("api/admin/products/")]
+        [HttpGet]
+        public async System.Threading.Tasks.Task<IHttpActionResult> getAdminProductslistAsync([FromUri] PageRequest pageRequest, [FromBody] Token token)
+        {
+            Response response = new Response();
+            if(token.accessToken == null)
+            {
+                response.code = "400";
+                response.status = "Bổ sung token";
+                return Content<Response>(HttpStatusCode.OK, response);
+            }
+            var accessToken = token.accessToken;
+            Token valiToken = Service.tokenDAO.getByAccessToken(accessToken);
+            ApplicationUser user = await Service._userManager.FindByEmailAsync(valiToken.userName);
+            PagedResult<Product> pv = Service.productDAO.AdminPageView(user.userInfo.id, pageRequest.pageIndex, pageRequest.pageSize, pageRequest.order);
+            response.code = "200";
+            response.status = "Success";
+            response.results = pv;
+            return Content<Response>(HttpStatusCode.OK, response);
+        }
+
+        [Route("api/admin/product/{id}")]
+        [HttpGet]
+        [AllowAnonymous]
+        public async System.Threading.Tasks.Task<IHttpActionResult> getAdminProductslistAsync([FromUri] Int16 id, [FromBody] Token token)
+        {
+            Response response = new Response();
+            var accessToken = token.accessToken;
+            if (accessToken == null)
+            {
+                response.code = "400";
+                response.status = "Bổ sung token";
+                return Content<Response>(HttpStatusCode.OK, response);
+            }
+            Token valiToken = Service.tokenDAO.getByAccessToken(accessToken);
+            ApplicationUser user = await Service._userManager.FindByEmailAsync(valiToken.userName);
+            Product product = Service.productDAO.getProduct(id);
+            if(product.createdBy != user.userInfo.id)
+            {
+                response.code = "400";
+                response.status = "Sản phẩm không thuộc quyền sở hửu của bạn";
+                response.results = "";
+            }
+            response.code = "200";
+            response.status = "Lấy sản phẩm thành công";
+            response.results = product;
+            return Content<Response>(HttpStatusCode.OK, response);
+
+        }
     }
 }

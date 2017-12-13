@@ -5,10 +5,12 @@ _________________________________________________________ -->
         <div class="col-md-offset-6 col-md-6" data-animate="fadeInDown">
             <ul class="menu">
                 <li>
-                    <a href="#" data-toggle="modal" data-target="#login-modal">Đăng nhập</a>
+                    <a ng-show="!isLogin" href="#" data-toggle="modal" data-target="#login-modal">Đăng nhập</a>
+                    <a ng-hide="!isLogin">Hi! {{$scope.email}}</a>
                 </li>
                 <li>
-                    <a href="/register">Đăng ký</a>
+                    <a ng-show="!isLogin" href="/register">Đăng ký</a>
+                    <a ng-hide="!isLogin" ng-click="logOut()">Đăng Xuất</a>
                 </li>
                 <li>
                     <a href="/contact">Liên hệ</a>
@@ -32,7 +34,7 @@ _________________________________________________________ -->
                         <div class="form-group">
                             <input type="password" class="form-control" id="password-modal" data-ng-model="password" placeholder="Nhập mật khẩu">
                         </div>
-
+                        <p id="errors"></p>
                         <p class="text-center">
                             <button class="btn btn-primary" data-ng-click="login()"><i class="fa fa-sign-in"></i> Đăng nhập</button>
                         </p>
