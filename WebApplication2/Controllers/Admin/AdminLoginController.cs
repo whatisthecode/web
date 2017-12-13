@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
-using System.Web;
 using System.Web.Mvc;
+using WebApplication2.CustomAttribute;
 using WebApplication2.Models;
+using WebApplication2.Models.Mapping;
 
 namespace WebApplication2.Controllers.Admin
 {
@@ -17,15 +17,19 @@ namespace WebApplication2.Controllers.Admin
         {
         }
         // GET: Default
-        public ActionResult Index()
+        [MVCAuthorize]
+        public ActionResult Index(String returnUrl)
         {
+            ViewBag.returnUrl = returnUrl;
             return View();
         }
+
         [HttpPost]
-        public ActionResult Index(String email, String password)
+        public ActionResult Index(String email, String password, String returnUrl)
         {
             ViewBag.email = email;
             ViewBag.password = password;
+            ViewBag.returnUrl = returnUrl;
             if (email == null || password == null)
             {
                 return View();
@@ -37,13 +41,39 @@ namespace WebApplication2.Controllers.Admin
             LoginModel loginModel = new LoginModel();
             loginModel.email = email;
             loginModel.password = password;
-
             HttpContent httpContent = new ObjectContent<LoginModel>(loginModel, new JsonMediaTypeFormatter());
 
             var reponse = httpClient.PostAsync("api/account/login", httpContent).Result;
-
-            return RedirectToAction("Index", "AdminHome");
+            if (reponse.IsSuccessStatusCode)
+            {
+                var contents = ((JObject)reponse.Content.ReadAsAsync<Response>().Result.results).ToObject<Token>();
+                Session["currentUser"] = contents.accessToken;
+                if(!String.IsNullOrEmpty(returnUrl))
+                {
+                    return Redirect(returnUrl);
+                }
+                return RedirectToAction("Index", "AdminHome");
+            }
+            else
+            {
+                ViewBag.error = "Sai tên đăng nhập hoặc mật khẩu";
+                return View();
+            }
             
+        }
+
+        public ActionResult Logout()
+        {
+            String accessToken = Session["currentUser"].ToString();
+            HttpClient httpClient = new HttpClient();
+            httpClient.BaseAddress = baseUrl;
+            httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + accessToken);
+            var reponse = httpClient.PostAsync("api/account/logout", null).Result;
+            if (reponse.IsSuccessStatusCode)
+            {
+                Session["currentUser"] = null;
+            }
+            return RedirectToAction("Index", "AdminLogin");
         }
     }
 }

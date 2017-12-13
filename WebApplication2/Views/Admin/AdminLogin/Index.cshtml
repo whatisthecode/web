@@ -23,8 +23,9 @@
     <!--start-main-->
     <h1>Xin chào !<span>Vui lòng đăng nhập</span></h1>
     <div class="login-box">
-        <form method="post" action="/dashboard/login">
-            <input name="email" type="text" class="text" value="@if (ViewBag.username != null) { @ViewBag.username } else { @("Tên đăng nhập") }" onfocus="if(this.value === 'Tên đăng nhập') this.value = '';" onblur="if (this.value == '') {this.value = 'Tên đăng nhập';}">
+        <form method="post" action="/login">
+            <input name="returnUrl" type="hidden" value="@ViewBag.returnUrl"/>
+            <input name="email" type="text" class="text" value="@if (ViewBag.email != null) { @ViewBag.email } else { @("Tên đăng nhập") }" onfocus="if(this.value === 'Tên đăng nhập') this.value = '';" onblur="if (this.value == '') {this.value = 'Tên đăng nhập';}">
             <input name="password" type="password" value="@if (ViewBag.password != null) { @ViewBag.password } else { @("Mật khẩu") }" onfocus="if(this.value === 'Mật khẩu') this.value = '';" onblur="if (this.value == '') {this.value = 'Mật khẩu';}">
             <span class="arrow-left-up"></span>
             <span class="arrow-left-down"></span>

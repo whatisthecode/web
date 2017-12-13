@@ -91,7 +91,7 @@ namespace WebApplication2.DAO
             result.pageCount = (int)Math.Ceiling(pageCount);
             var skip = (page - 1) * pageSize;
 
-            result.results = Queryable.Skip(query, skip).Take(pageSize).ToList();
+            result.items = Queryable.Skip(query, skip).Take(pageSize).ToList();
 
             return result;
         }

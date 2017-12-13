@@ -1,5 +1,5 @@
 ﻿@{
-    if(Request.Url.AbsoluteUri.IndexOf("login") > 0)
+    if(Request.Url.AbsoluteUri.IndexOf("login") > 0 || Request.Url.AbsoluteUri.IndexOf("notfound") > 0 || Request.Url.AbsoluteUri.IndexOf("forbidden") > 0)
     {
         Layout = "~/Views/Layouts/_Layout_Blank.cshtml";
     }
