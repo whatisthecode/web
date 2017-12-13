@@ -1,17 +1,16 @@
 ﻿if ("undefined" !== typeof app) {
     app.factory('Login', function (API, Helper, Oauth2) {
         var apiName = {
-            "login": "token"
+            "login": "api/account/login"
         };
         return {
-            login: function (username, password, success, fail) {
+            login: function (email, password, success, fail) {
                 var data = {
-                    username: username,
-                    password: password,
-                    grant_type: "password"
+                    email: email,
+                    password: password
                 };
                 var headers = {
-                    'Content-Type': "application/x-www-form-urlencoded"
+                    'Content-Type': "application/json"
                 };
                 API.request(false, "post", apiName.login, headers, data).then(function (result) {
                     success(result.data);

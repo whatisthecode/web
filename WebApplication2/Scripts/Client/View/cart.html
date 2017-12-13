@@ -1,12 +1,12 @@
-﻿<div id="content">
+﻿<div id="content" ng-controller="CartController">
     <div class="container">
 
         <div class="col-md-12">
             <ul class="breadcrumb">
                 <li>
-                    <a href="/">Home</a>
+                    <a href="/">Trang chủ</a>
                 </li>
-                <li>Shopping cart</li>
+                <li>Giỏ hàng</li>
             </ul>
         </div>
 
@@ -16,79 +16,60 @@
 
                 <form method="post" action="checkout1.html">
 
-                    <h1>Shopping cart</h1>
-                    <p class="text-muted">You currently have 3 item(s) in your cart.</p>
-                    <div class="table-responsive">
+                    <h1>Giỏ hàng</h1>
+                    <p class="text-muted">Hiện tại bạn có {{selectedProductsLength}} sản phẩm trong giỏ hàng.</p>
+                    <div class="table-responsive" style="display:none">
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th colspan="2">Product</th>
-                                    <th>Quantity</th>
-                                    <th>Unit price</th>
-                                    <th>Discount</th>
-                                    <th colspan="2">Total</th>
+                                    <th colspan="2">Sản phẩm</th>
+                                    <th>Số lượng</th>
+                                    <th>Đơn giá</th>
+                                    <th>Giá giảm</th>
+                                    <th colspan="2">Tổng</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
+                                <tr ng-repeat="product in products">
                                     <td>
                                         <a href="#">
                                             <img src="Assets/img/detailsquare.jpg" alt="White Blouse Armani">
                                         </a>
                                     </td>
                                     <td>
-                                        <a href="#">White Blouse Armani</a>
+                                        <p style="margin-bottom : 5px"><a>{{product.name}}</a></p>
+                                        <p style="margin-bottom : 5px">Còn lại: {{product.attributes[1].value}}</p>
                                     </td>
                                     <td>
-                                        <input type="number" value="2" class="form-control">
+                                        <input style="width : 60px;" name="amount" type="number" min="0" max="{{product.attributes[1].value}}" ng-model="product.amount" ng-change="amountChange(product)" ng-click="amountChange(product)" class="form-control amount">
                                     </td>
-                                    <td>$123.00</td>
-                                    <td>$0.00</td>
-                                    <td>$246.00</td>
+                                    <td>{{product.attributes[0].value}}</td>
+                                    <td>{{product.attributes[2].value}}</td>
+                                    <td>{{product.productTotal}}</td>
                                     <td>
-                                        <a href="#"><i class="fa fa-trash-o"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <a href="#">
-                                            <img src="Assets/img/basketsquare.jpg" alt="Black Blouse Armani">
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <a href="#">Black Blouse Armani</a>
-                                    </td>
-                                    <td>
-                                        <input type="number" value="1" class="form-control">
-                                    </td>
-                                    <td>$200.00</td>
-                                    <td>$0.00</td>
-                                    <td>$200.00</td>
-                                    <td>
-                                        <a href="#"><i class="fa fa-trash-o"></i></a>
+                                        <span class="btn btn-simple btn-sm btn-primary" ng-click="removeSelectedProduct(product.id)"><i class="fa fa-trash-o"></i></span>
                                     </td>
                                 </tr>
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th colspan="5">Total</th>
-                                    <th colspan="2">$446.00</th>
+                                    <th colspan="5">Tổng tiền</th>
+                                    <th colspan="2"><span>{{totalInvoice}} Đồng</span></th>
                                 </tr>
                             </tfoot>
                         </table>
 
                     </div>
                     <!-- /.table-responsive -->
-
+                    <span id="errors"></span>
                     <div class="box-footer">
                         <div class="pull-left">
-                            <a href="category.html" class="btn btn-default"><i class="fa fa-chevron-left"></i> Continue shopping</a>
+                            <a href="/" class="btn btn-default"><i class="fa fa-chevron-left"></i> Tiếp tục mua hàng</a>
                         </div>
                         <div class="pull-right">
-                            <button class="btn btn-default"><i class="fa fa-refresh"></i> Update basket</button>
-                            <button type="submit" class="btn btn-primary">
-                                Proceed to checkout <i class="fa fa-chevron-right"></i>
-                            </button>
+                            <a ng-click="checkout()" class="btn btn-primary">
+                                Thanh toán <i class="fa fa-chevron-right"></i>
+                            </a>
                         </div>
                     </div>
 

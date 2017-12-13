@@ -1,0 +1,252 @@
+﻿
+@{
+    ViewBag.Title = "Detail";
+    ViewBag.pageTitle = "Chi tiết sản phẩm " + Model.code;
+    ViewBag.pageLink = "/dashboard/product/" + Model.id;
+}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>Mã sản phẩm</label>
+                <input type="text" class="form-control border-input" placeholder="Tên sản phẩm" value="@Model.code" disabled>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>Tên sản phẩm</label>
+                <input type="text" class="form-control border-input" placeholder="Tên sản phẩm" value="@Model.name">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>Mô tả ngắn</label>
+                <textarea rows="5" class="form-control border-input" value="@Model.shortDescription">@Model.shortDescription</textarea>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>Mô tả chi tiết</label>
+                <textarea rows="5" class="form-control border-input" value="@Model.longDescription">@Model.longDescription</textarea>
+            </div>
+        </div>
+    </div>
+    @{
+        Int16 flag = 0;
+    }
+    @foreach (var attribute in Model.attributes)
+    {
+        if (flag % 2 == 0)
+        {
+            @Html.Raw("<div class='row'>");
+        }
+        <div class="col-md-6">
+            <div class="form-group">
+                @if (attribute.key == "price")
+                {
+                    @Html.Raw("<label>Giá</label>");
+                }
+                else if (attribute.key == "amount")
+                {
+                    @Html.Raw("<label>Số lượng</label>");
+                }
+                else if (attribute.key == "discount")
+                {
+                    @Html.Raw("<label>Giá sau khi giảm</label>");
+                }
+                else if (attribute.key == "color")
+                {
+                    @Html.Raw("<label>Màu sắc</label>");
+                }
+                <input type="text" class="form-control border-input" placeholder="Tên sản phẩm" value="@attribute.value">
+            </div>
+        </div>
+        if ((flag + 1) % 2 == 0)
+        {
+            @Html.Raw("</div>");
+        }
+        flag++;
+    }
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>Danh mục sản phẩm</label>
+                <ul class="select-box">
+                    @foreach (var category in ViewBag.categories)
+                    {
+                        Int16 flag1 = 0;
+                        foreach (var choseCat in Model.choseCategories)
+                        {
+                            if (choseCat.categoryId == category.id)
+                            {
+                                flag1++;
+                                break;
+                            }
+                        }
+                        if (flag1 == 0)
+                        {
+                            <li><input type="checkbox" name="categories" value="@category.id" /> @category.name</li>
+                        }
+                        else
+                        {
+                            <li><input type="checkbox" checked name="categories" value="@category.id" /> @category.name</li>
+                        }
+
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>Ảnh đại diện</label>
+                <div class="image-box">
+                    @{
+                        Int16 ti = 1;
+                    }
+                    @foreach (var thumbnail in Model.thumbnails)
+                    {
+
+                        <img onclick="openModal('thumbnail');currentSlide('thumbnail', @(ti++))" class="img-responsive" src="@thumbnail.url" />
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- The Modal/Lightbox -->
+    <div id="thumbnail" class="modal lightbox">
+        <span class="close cursor" onclick="closeModal('thumbnail')">&times;</span>
+        <div class="modal-content">
+            <div class="modal-body">
+                @foreach (var thumbnail in Model.thumbnails)
+                {
+                    <div class="mySlides">
+                        <span class="helper"></span>
+                        <img src="@thumbnail.url">
+                    </div>
+                }
+
+                <!-- Next/previous controls -->
+                <a class="prev" onclick="plusSlides('thumbnail', -1)">&#10094;</a>
+                <a class="next" onclick="plusSlides('thumbnail', 1)">&#10095;</a>
+            </div>
+            <!-- Thumbnail image controls -->
+            <div class="modal-footer" style="height:110px">
+                @{
+                    Int16 ti1 = 1;
+                }
+                @foreach (var thumbnail in Model.thumbnails)
+                {
+                    <div class="column">
+                        <span class="helper"></span>
+                        <img class="demo" src="@thumbnail.url" onclick="currentSlide('thumbnail', @(ti1++))" alt="Nature">
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>Ảnh chi tiết</label>
+                <div class="image-box">
+                    @{
+                        Int16 di = 1;
+                    }
+                    @foreach (var detail in Model.details)
+                    {
+                        <img onclick="openModal('detail');currentSlide('detail', @(di++))" class="img-responsive" src="@detail.url" />
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- The Modal/Lightbox -->
+    <div id="detail" class="modal lightbox">
+        <span class="close cursor" onclick="closeModal('detail')">&times;</span>
+        <div class="modal-content">
+            <div class="modal-body">
+                @foreach (var detail in Model.details)
+                {
+                    <div class="mySlides">
+                        <span class="helper"></span>
+                        <img src="@detail.url">
+                    </div>
+                }
+
+                <!-- Next/previous controls -->
+                <a class="prev" onclick="plusSlides('detail', -1)">&#10094;</a>
+                <a class="next" onclick="plusSlides('detail', 1)">&#10095;</a>
+            </div>
+            <!-- Thumbnail image controls -->
+            <div class="modal-footer" style="height:110px">
+                @{
+                    Int16 di1 = 1;
+                }
+                @foreach (var detail in Model.details)
+                {
+                    <div class="column">
+                        <span class="helper"></span>
+                        <img class="demo" src="@detail.url" onclick="currentSlide('detail', @(di1++))" alt="Nature">
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <button type="submit" class="btn btn-fill btn-flat btn-md btn-info">Lưu</button>
+        </div>
+    </div>
+</div>
+@section script{
+    <script>
+        // Open the Modal
+        function openModal(id) {
+            document.getElementById(id).style.display = "block";
+        }
+
+        // Close the Modal
+        function closeModal(id) {
+            document.getElementById(id).style.display = "none";
+        }
+
+        var slideIndex = 1;
+        showSlides('thumbnail', slideIndex);
+        showSlides('detail', slideIndex);
+
+        // Next/previous controls
+        function plusSlides(id, n) {
+            showSlides(id, slideIndex += n);
+        }
+
+        // Thumbnail image controls
+        function currentSlide(id, n) {
+            showSlides(id, slideIndex = n);
+        }
+
+        function showSlides(id, n) {
+            var i;
+            var slides = $("#" + id + " .mySlides");
+            var dots = $("#" + id + " .demo");
+            if (n > slides.length) { slideIndex = 1 }
+            if (n < 1) { slideIndex = slides.length }
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+            for (i = 0; i < dots.length; i++) {
+                dots[i].className = dots[i].className.replace(" active", "");
+            }
+            slides[slideIndex - 1].style.display = "block";
+            dots[slideIndex - 1].className += " active";
+        }
+    </script>
+
+}

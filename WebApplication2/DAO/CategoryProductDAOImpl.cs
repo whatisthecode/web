@@ -54,7 +54,10 @@ namespace WebApplication2.DAO
             catepro.updatedAt = DateTime.Now;
             base.update(catepro);
         }
-
+        public IEnumerable<CategoryProduct> getListCategoryProductByProdId(Int16 prodId)
+        {
+            return base.get().Where(cp => cp.productId == prodId).ToList();
+        }
         PagedResult<Product> CategoryProductDAO.pageView(short categoryId, short pageindex, short pagesize, string orderBy, bool ascending)
         {
             var query = from c in base.getContext().categoryProducts select c;
@@ -67,15 +70,14 @@ namespace WebApplication2.DAO
             pvProduct.pageSize = pv.pageSize;
             pvProduct.currentPage = pv.currentPage;
             pvProduct.pageCount = pv.pageCount;
-            for(var i = 0; i < pv.results.Count(); i++)
+            for(var i = 0; i < pv.items.Count(); i++)
             {
-                CategoryProduct categoryProduct = pv.results[i];
+                CategoryProduct categoryProduct = pv.items[i];
                 Product product = productDAO.getProduct(categoryProduct.productId);
                 List<ProductAttribute> proAttrs = Service.productAttributeDAO.getProAttrsByProId(product.id);
                 product.attributes = proAttrs;
                 listProducts.Add(product);
             }
-
             for (var i = 0; i < listProducts.Count() - 1; i++)
             {
                 List<ProductAttribute> proAttrs = listProducts[i].attributes.ToList();
@@ -113,7 +115,7 @@ namespace WebApplication2.DAO
                 
             }
             
-            pvProduct.results = listProducts;
+            pvProduct.items = listProducts;
             return pvProduct;
         }
     }

@@ -1,4 +1,5 @@
 ﻿using LaptopWebsite.Models.Mapping;
+using Microsoft.AspNet.Identity.EntityFramework;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using WebApplication2.CustomAttribute;
 using WebApplication2.DAO;
 using WebApplication2.Models;
 using WebApplication2.Models.Mapping;
@@ -15,7 +17,7 @@ using static WebApplication2.Models.RequestModel.FromUri;
 
 namespace WebApplication2.Controllers.API
 {
-    [Authorize]
+    [APIAuthorize]
     public class ProductController : ApiController
     {
 
@@ -26,8 +28,6 @@ namespace WebApplication2.Controllers.API
 
         [Route("api/product")]
         [HttpPost]
-        [Authorize(Roles = "CREATE_PRODUCT")]
-        [AllowAnonymous]
         public IHttpActionResult insertNewProduct([FromBody]CreateProductModel createProductModel)
         {
             Response response = Utils.checkInput(createProductModel, CreateProductModel.required);
@@ -98,8 +98,8 @@ namespace WebApplication2.Controllers.API
         public IHttpActionResult getProductWithConditions(short id)
         {
             Response response = new Response();
-            Product productflag = Service.productDAO.getProduct(id);
-            if (productflag == null)
+            Product product = Service.productDAO.getProduct(id);
+            if (product == null)
             {
                 response.code = "404";
                 response.status = "Sản phẩm cần tìm không có trong danh sách";
@@ -107,9 +107,21 @@ namespace WebApplication2.Controllers.API
             }
             else
             {
+                ProductDetail productDetail = new ProductDetail();
                 response.code = "200";
                 response.status = "Sản phẩm cần tìm là: ";
-                response.results = productflag;
+                productDetail.id = product.id;
+                productDetail.code = product.code;
+                productDetail.name = product.name;
+                productDetail.status = product.status;
+                productDetail.shortDescription = product.shortDescription;
+                productDetail.longDescription = product.longDescription;
+                productDetail.userInfo = Service.userInfoDAO.getUserInfo(product.createdBy);
+                productDetail.attributes = Service.productAttributeDAO.getProAttrsByProId(product.id);
+                productDetail.choseCategories = Service.categoryProductDAO.getListCategoryProductByProdId(product.id).ToList();
+                productDetail.thumbnails = Service.imageDAO.getThumbnail(product.id).ToList();
+                productDetail.details = Service.imageDAO.getDetailImage(product.id).ToList();
+                response.results = productDetail;
                 return Content<Response>(HttpStatusCode.OK, response);
             }
 
@@ -123,13 +135,15 @@ namespace WebApplication2.Controllers.API
             Response response = new Response();
 
             PagedResult<Product> pagedResult = Service.productDAO.PageView(pageRequest.pageIndex, pageRequest.pageSize, pageRequest.order, false);
-            IList<Product> products = pagedResult.results;
-            for (var i = 0; i < pagedResult.pageSize; i++)
+            IList<Product> products = pagedResult.items;
+            Int16 productsLength = (Int16)products.Count;
+            for (Int16 i = 0; i < productsLength; i++)
             {
                 Product product = products[i];
                 List<ProductAttribute> productAtts = Service.productAttributeDAO.getProAttrsByProId(product.id);
                 //UserInfo userInfo = Service.userInfoDAO.getUserInfo(product.createdBy);
                 products[i].attributes = productAtts;
+                products[i].UserInfo = Service.userInfoDAO.getUserInfo(products[i].createdBy);
                 //products[i].UserInfo = userInfo;
             }
             response.code = "200";
@@ -230,5 +244,55 @@ namespace WebApplication2.Controllers.API
 
         }
 
+
+        [Route("api/admin/products/")]
+        [HttpGet]
+        public async System.Threading.Tasks.Task<IHttpActionResult> getAdminProductslistAsync([FromUri] PageRequest pageRequest, [FromBody] Token token)
+        {
+            Response response = new Response();
+            if(token.accessToken == null)
+            {
+                response.code = "400";
+                response.status = "Bổ sung token";
+                return Content<Response>(HttpStatusCode.OK, response);
+            }
+            var accessToken = token.accessToken;
+            Token valiToken = Service.tokenDAO.getByAccessToken(accessToken);
+            ApplicationUser user = await Service._userManager.FindByEmailAsync(valiToken.userName);
+            PagedResult<Product> pv = Service.productDAO.AdminPageView(user.userInfo.id, pageRequest.pageIndex, pageRequest.pageSize, pageRequest.order);
+            response.code = "200";
+            response.status = "Success";
+            response.results = pv;
+            return Content<Response>(HttpStatusCode.OK, response);
+        }
+
+        [Route("api/admin/product/{id}")]
+        [HttpGet]
+        [AllowAnonymous]
+        public async System.Threading.Tasks.Task<IHttpActionResult> getAdminProductslistAsync([FromUri] Int16 id, [FromBody] Token token)
+        {
+            Response response = new Response();
+            var accessToken = token.accessToken;
+            if (accessToken == null)
+            {
+                response.code = "400";
+                response.status = "Bổ sung token";
+                return Content<Response>(HttpStatusCode.OK, response);
+            }
+            Token valiToken = Service.tokenDAO.getByAccessToken(accessToken);
+            ApplicationUser user = await Service._userManager.FindByEmailAsync(valiToken.userName);
+            Product product = Service.productDAO.getProduct(id);
+            if(product.createdBy != user.userInfo.id)
+            {
+                response.code = "400";
+                response.status = "Sản phẩm không thuộc quyền sở hửu của bạn";
+                response.results = "";
+            }
+            response.code = "200";
+            response.status = "Lấy sản phẩm thành công";
+            response.results = product;
+            return Content<Response>(HttpStatusCode.OK, response);
+
+        }
     }
 }

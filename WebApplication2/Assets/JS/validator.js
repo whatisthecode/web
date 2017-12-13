@@ -3,23 +3,20 @@
 var warningText = [];
 
 checkTextExist = function (text) {
-    for (var t in warningText)
-    {
+    for (var t in warningText) {
         if (warningText[t] === text)
             return true;
     }
     return false;
-}
+};
 
 removeTextExist = function (text) {
-    for (var i = 0; i < warningText.length; i++)
-    {
-        if (warningText[i] === text)
-        {
+    for (var i = 0; i < warningText.length; i++) {
+        if (warningText[i] === text) {
             warningText.splice(i, 1);
         }
     }
-}
+};
 
 validator.prototype.showWarning = function (selector, childSelector, text) {
     if (selector !== null && selector !== "" && typeof selector !== "undefined") {

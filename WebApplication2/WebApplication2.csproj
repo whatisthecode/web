@@ -197,6 +197,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\CustomAttribute.cs" />
     <Compile Include="App_Start\CustomViewEngine.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
@@ -231,6 +232,8 @@
     <Compile Include="DAO\GroupDAOImpl.cs" />
     <Compile Include="DAO\GroupRoleManagerDAO.cs" />
     <Compile Include="DAO\GroupRoleManagerDAOImpl.cs" />
+    <Compile Include="DAO\ImageDAO.cs" />
+    <Compile Include="DAO\ImageDAOImpl.cs" />
     <Compile Include="DAO\InvoiceDAO.cs" />
     <Compile Include="DAO\InvoiceDAOImpl.cs" />
     <Compile Include="DAO\InvoiceDetailDAO.cs" />
@@ -276,6 +279,7 @@
     <Compile Include="Models\RequestModel\Customer.cs" />
     <Compile Include="Models\RequestModel\FromUri.cs" />
     <Compile Include="Models\RequestModel\Merchant.cs" />
+    <Compile Include="Models\RequestModel\ProductDetail.cs" />
     <Compile Include="Models\Token.cs" />
     <Compile Include="Models\UserInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -423,6 +427,7 @@
     <Content Include="Scripts\Client\Shared\Error.js" />
     <Content Include="Scripts\Client\Shared\Top.js" />
     <Content Include="Scripts\Client\View\cart.html" />
+    <Content Include="Scripts\Client\View\check-out.html" />
     <Content Include="Scripts\Client\View\confirm-email.html" />
     <Content Include="Scripts\Client\View\error.html" />
     <Content Include="Scripts\Client\View\index.html" />

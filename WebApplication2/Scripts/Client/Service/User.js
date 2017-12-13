@@ -8,8 +8,8 @@
                 var reqData = {
                     "email": data.email,
                     "newPassword": data.newPassword,
-                    "confirmPassword" : data.confirmPassword
-                }
+                    "confirmPassword": data.confirmPassword
+                };
                 var headers = {
                     'Content-Type': "application/json"
                 };

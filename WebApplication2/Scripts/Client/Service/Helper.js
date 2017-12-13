@@ -114,6 +114,24 @@
                     return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                 else
                     return;
+            },
+            removeCommas: function (value)
+            {
+                if (this.notEmpty(value) === true)
+                    return value.replace(/,/g, '');
+                else
+                    return;
+            },
+            checkItemExistInArray: function (array, item)
+            {
+                if (array.length > 0) {
+                    for (var i = 0; i < array.length; i++) {
+                        if (array[i] === item)
+                            return true;
+                    }
+                    return false;
+                } else
+                    return false;
             }
         };
     });

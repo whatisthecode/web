@@ -26,6 +26,7 @@ namespace WebApplication2
             bundles.Add(new ScriptBundle("~/bundles/admin_js").Include(
                         "~/Assets/JS/jquery-1.10.2.min.js",
                         "~/Assets/JS/bootstrap.min.js",
+                        "~/Assets/JS/bootstrap-wysihtml5-0.0.2.min.js",
                         "~/Assets/JS/respond.js",
                         "~/Assets/JS/jquery-comfirm.min.js",
                         "~/Assets/JS/modernizr-2.6.2.js"));
@@ -58,7 +59,8 @@ namespace WebApplication2
                         "~/Scripts/Client/Service/Login.js",
                         "~/Scripts/Client/Service/User.js",
                         "~/Scripts/Client/Service/Product.js",
-                        "~/Scripts/Client/Service/ProductDetail.js"));
+                        "~/Scripts/Client/Service/ProductDetail.js",
+                        "~/Scripts/Client/Service/Card.js"));
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
             // ready for production, use the build tool at https://modernizr.com to pick only the tests you need.
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
@@ -80,8 +82,12 @@ namespace WebApplication2
             bundles.Add(new StyleBundle("~/Content/admin-login").Include(
                       "~/Assets/CSS/Admin/login-style.css"));
 
+            bundles.Add(new StyleBundle("~/Content/error").Include(
+                      "~/Assets/CSS/error.css"));
+
             bundles.Add(new StyleBundle("~/Content/admin_template").Include(
                      "~/Assets/CSS/bootstrap.min.css",
+                     "~/Assets/CSS/bootstrap-wysihtml5-0.0.2.css",
                      "~/Assets/CSS/animate.min.css",
                      "~/Assets/CSS/Admin/paper-dashboard.css",
                      "~/Assets/CSS/Admin/demo.css",

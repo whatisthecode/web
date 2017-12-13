@@ -7,7 +7,7 @@ namespace LaptopWebsite.Models.Mapping
 {
     public class PagedResult<T>
     {
-        public IList<T> results { get; set; }
+        public IList<T> items { get; set; }
         public int currentPage { get; set; }
         public int pageCount {get;set;}
         public int pageSize { get; set; }

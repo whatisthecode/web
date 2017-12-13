@@ -26,10 +26,11 @@ using Microsoft.Owin.Testing;
 using System.Web.Script.Serialization;
 using Newtonsoft.Json.Linq;
 using System.Text;
+using WebApplication2.CustomAttribute;
 
 namespace WebAPI_NG_TokenbasedAuth.Controllers
 {
-    [Authorize]
+    [APIAuthorize]
     [RoutePrefix("api/Account")]
     public class AccountController : ApiController
     {
@@ -47,7 +48,7 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
             AccessTokenFormat = accessTokenFormat;
             RoleManager = roleManager;
         }
-        
+
         public ApplicationUserManager UserManager
         {
             get
@@ -79,7 +80,6 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
         public IHttpActionResult GetUserInfo()
         {
             Response response = new Response();
-            ExternalLoginData externalLogin = ExternalLoginData.FromIdentity(User.Identity as ClaimsIdentity);
             var accessToken = Service.tokenDAO.getByUsername(User.Identity.GetUserName());
             if (accessToken != null)
             {
@@ -87,7 +87,7 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
                 DateTime currentDate = DateTime.Now;
                 DateTime expiresDate = token.expires;
                 int result = DateTime.Compare(currentDate, expiresDate);
-                if(result <= 0)
+                if (result <= 0)
                 {
                     UserInfo userInfo = new UserInfo();
                     var user = UserManager.FindById(User.Identity.GetUserId());
@@ -103,8 +103,6 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
                     UserInfoViewModel userInfoModel = new UserInfoViewModel();
                     userInfoModel._id = user.Id;
                     userInfoModel.Email = User.Identity.GetUserName();
-                    userInfoModel.HasRegistered = externalLogin == null;
-                    userInfoModel.LoginProvider = externalLogin != null ? externalLogin.LoginProvider : null;
                     userInfoModel.userInfo = currentUserInfoLogin;
                     response.code = "200";
                     response.status = "Success";
@@ -135,52 +133,11 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
         [Route("Logout")]
         public IHttpActionResult Logout()
         {
-            ExternalLoginData externalLogin = ExternalLoginData.FromIdentity(User.Identity as ClaimsIdentity);
-            Token token = Service.tokenDAO.getByUsername(User.Identity.GetUserName());
+            String accessToken = HttpContext.Current.Request.Headers.Get("Authorization").ToString().Replace("Bearer ","");
+            Token token = Service.tokenDAO.getByAccessToken(accessToken);
             Service.tokenDAO.delete(token.id);
             Service.tokenDAO.save();
-            Authentication.SignOut(CookieAuthenticationDefaults.AuthenticationType);
             return Ok();
-        }
-
-        // GET api/Account/ManageInfo?returnUrl=%2F&generateState=true
-        [Route("ManageInfo")]
-        public async Task<ManageInfoViewModel> GetManageInfo(string returnUrl, bool generateState = false)
-        {
-            IdentityUser user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
-
-            if (user == null)
-            {
-                return null;
-            }
-
-            List<UserLoginInfoViewModel> logins = new List<UserLoginInfoViewModel>();
-
-            foreach (IdentityUserLogin linkedAccount in user.Logins)
-            {
-                logins.Add(new UserLoginInfoViewModel
-                {
-                    LoginProvider = linkedAccount.LoginProvider,
-                    ProviderKey = linkedAccount.ProviderKey
-                });
-            }
-
-            if (user.PasswordHash != null)
-            {
-                logins.Add(new UserLoginInfoViewModel
-                {
-                    LoginProvider = LocalLoginProvider,
-                    ProviderKey = user.UserName,
-                });
-            }
-
-            return new ManageInfoViewModel
-            {
-                LocalLoginProvider = LocalLoginProvider,
-                Email = user.UserName,
-                Logins = logins,
-                ExternalLoginProviders = GetExternalLogins(returnUrl, generateState)
-            };
         }
 
         // POST api/Account/ChangePassword
@@ -198,7 +155,7 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
 
             IdentityResult result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword,
                 model.NewPassword);
-            
+
             if (!result.Succeeded)
             {
                 response.code = "500";
@@ -227,7 +184,7 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
             }
 
             IdentityUser user = await UserManager.FindByEmailAsync(model.email);
-            if(user.Id != null)
+            if (user.Id != null)
             {
                 IdentityResult result = await UserManager.AddPasswordAsync(user.Id, model.newPassword);
                 if (!result.Succeeded)
@@ -244,174 +201,11 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
                 response.status = "Email không tồn tại";
                 return Content<Response>(HttpStatusCode.NotFound, response);
             }
-            
+
 
             response.code = "200";
             response.status = "Đặt lại mật khẩu thành công";
             return Content<Response>(HttpStatusCode.OK, response);
-        }
-
-        // POST api/Account/AddExternalLogin
-        [Route("AddExternalLogin")]
-        public async Task<IHttpActionResult> AddExternalLogin(AddExternalLoginBindingModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
-
-            AuthenticationTicket ticket = AccessTokenFormat.Unprotect(model.ExternalAccessToken);
-
-            if (ticket == null || ticket.Identity == null || (ticket.Properties != null
-                && ticket.Properties.ExpiresUtc.HasValue
-                && ticket.Properties.ExpiresUtc.Value < DateTimeOffset.UtcNow))
-            {
-                return BadRequest("External login failure.");
-            }
-
-            ExternalLoginData externalData = ExternalLoginData.FromIdentity(ticket.Identity);
-
-            if (externalData == null)
-            {
-                return BadRequest("The external login is already associated with an account.");
-            }
-
-            IdentityResult result = await UserManager.AddLoginAsync(User.Identity.GetUserId(),
-                new UserLoginInfo(externalData.LoginProvider, externalData.ProviderKey));
-
-            if (!result.Succeeded)
-            {
-                return GetErrorResult(result);
-            }
-
-            return Ok();
-        }
-
-        // POST api/Account/RemoveLogin
-        [Route("RemoveLogin")]
-        public async Task<IHttpActionResult> RemoveLogin(RemoveLoginBindingModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            IdentityResult result;
-
-            if (model.LoginProvider == LocalLoginProvider)
-            {
-                result = await UserManager.RemovePasswordAsync(User.Identity.GetUserId());
-            }
-            else
-            {
-                result = await UserManager.RemoveLoginAsync(User.Identity.GetUserId(),
-                    new UserLoginInfo(model.LoginProvider, model.ProviderKey));
-            }
-
-            if (!result.Succeeded)
-            {
-                return GetErrorResult(result);
-            }
-
-            return Ok();
-        }
-
-        // GET api/Account/ExternalLogin
-        [OverrideAuthentication]
-        [HostAuthentication(DefaultAuthenticationTypes.ExternalCookie)]
-        [AllowAnonymous]
-        [Route("ExternalLogin", Name = "ExternalLogin")]
-        public async Task<IHttpActionResult> GetExternalLogin(string provider, string error = null)
-        {
-            if (error != null)
-            {
-                return Redirect(Url.Content("~/") + "#error=" + Uri.EscapeDataString(error));
-            }
-
-            if (!User.Identity.IsAuthenticated)
-            {
-                return new ChallengeResult(provider, this);
-            }
-
-            ExternalLoginData externalLogin = ExternalLoginData.FromIdentity(User.Identity as ClaimsIdentity);
-            if (externalLogin == null)
-            {
-                return InternalServerError();
-            }
-            
-            if (externalLogin.LoginProvider != provider)
-            {
-                Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
-                return new ChallengeResult(provider, this);
-            }
-
-            ApplicationUser user = await UserManager.FindAsync(new UserLoginInfo(externalLogin.LoginProvider,
-                externalLogin.ProviderKey));
-            bool hasRegistered = user != null;
-
-            if (hasRegistered)
-            {
-                Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
-                
-                 ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(UserManager,
-                    OAuthDefaults.AuthenticationType);
-                ClaimsIdentity cookieIdentity = await user.GenerateUserIdentityAsync(UserManager,
-                    CookieAuthenticationDefaults.AuthenticationType);
-
-                AuthenticationProperties properties = ApplicationOAuthProvider.CreateProperties(user.UserName);
-                Authentication.SignIn(properties, oAuthIdentity, cookieIdentity);
-            }
-            else
-            {
-                IEnumerable<Claim> claims = externalLogin.GetClaims();
-                ClaimsIdentity identity = new ClaimsIdentity(claims, OAuthDefaults.AuthenticationType);
-                Authentication.SignIn(identity);
-            }
-
-            return Ok();
-        }
-
-        // GET api/Account/ExternalLogins?returnUrl=%2F&generateState=true
-        [AllowAnonymous]
-        [Route("ExternalLogins")]
-        public IEnumerable<ExternalLoginViewModel> GetExternalLogins(string returnUrl, bool generateState = false)
-        {
-            IEnumerable<AuthenticationDescription> descriptions = Authentication.GetExternalAuthenticationTypes();
-            List<ExternalLoginViewModel> logins = new List<ExternalLoginViewModel>();
-
-            string state;
-
-            if (generateState)
-            {
-                const int strengthInBits = 256;
-                state = RandomOAuthStateGenerator.Generate(strengthInBits);
-            }
-            else
-            {
-                state = null;
-            }
-
-            foreach (AuthenticationDescription description in descriptions)
-            {
-                ExternalLoginViewModel login = new ExternalLoginViewModel
-                {
-                    Name = description.Caption,
-                    Url = Url.Route("ExternalLogin", new
-                    {
-                        provider = description.AuthenticationType,
-                        response_type = "token",
-                        client_id = Startup.PublicClientId,
-                        redirect_uri = new Uri(Request.RequestUri, returnUrl).AbsoluteUri,
-                        state = state
-                    }),
-                    State = state
-                };
-                logins.Add(login);
-            }
-
-            return logins;
         }
 
         // POST api/Account/Register
@@ -440,14 +234,18 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
             createUserInfo.lastName = model.lastName;
             createUserInfo.identityNumber = model.identityNumber;
             createUserInfo.dob = model.dob;
-            
-            var identityUser = new ApplicationUser() { UserName = model.Email, Email = model.Email};
+
+            var identityUser = new ApplicationUser() { UserName = model.Email, Email = model.Email };
             identityUser.userInfo = createUserInfo;
             IdentityResult result = await UserManager.CreateAsync(identityUser, model.Password);
 
             if (!result.Succeeded)
             {
-                return GetErrorResult(result);
+                var message = "Đăng ký thất bại. Xin vui lòng đăng ky lại!";
+                response.code = "400";
+                response.status = "Đăng ký thất bại";
+                response.results = message;
+                return Content<Response>(HttpStatusCode.BadRequest, response);
             }
             else
             {
@@ -462,7 +260,7 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
                 }
                 string code = await this.UserManager.GenerateEmailConfirmationTokenAsync(identityUser.Id);
                 var callbackUrl = new Uri(Url.Link("ConfirmEmail", new { userId = identityUser.Id, code = code }));
-                await this.UserManager.SendEmailAsync(identityUser.Id,"Xác thực tài khoản của bạn","Vui lòng nhấn vào link sau: <a href=\""+ callbackUrl + "\">link</a>");
+                await this.UserManager.SendEmailAsync(identityUser.Id, "Xác thực tài khoản của bạn", "Vui lòng nhấn vào link sau: <a href=\"" + callbackUrl + "\">link</a>");
                 var message = "Chúng tôi đã gửi email xác thực tài khoản vào mail " + identityUser.Email + " . Vui lòng kiểm tra email để xác thực.";
                 response.code = "201";
                 response.status = "Đăng ký thành công";
@@ -471,133 +269,7 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
             }
         }
 
-        // POST api/Account/RegisterExternal
-        [OverrideAuthentication]
-        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
-        [Route("RegisterExternal")]
-        public async Task<IHttpActionResult> RegisterExternal(RegisterExternalBindingModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var info = await Authentication.GetExternalLoginInfoAsync();
-            if (info == null)
-            {
-                return InternalServerError();
-            }
-
-            var user = new ApplicationUser() { UserName = model.Email, Email = model.Email };
-
-            IdentityResult result = await UserManager.CreateAsync(user);
-            if (!result.Succeeded)
-            {
-                return GetErrorResult(result);
-            }
-
-            result = await UserManager.AddLoginAsync(user.Id, info.Login);
-            if (!result.Succeeded)
-            {
-                return GetErrorResult(result); 
-            }
-            return Ok();
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && Service._userManager != null)
-            {
-                Service._userManager.Dispose();
-                Service._userManager = null;
-            }
-
-            base.Dispose(disposing);
-        }
-
         #region Helpers
-
-        private IAuthenticationManager Authentication
-        {
-            get { return Request.GetOwinContext().Authentication; }
-        }
-
-        private IHttpActionResult GetErrorResult(IdentityResult result)
-        {
-            if (result == null)
-            {
-                return InternalServerError();
-            }
-
-            if (!result.Succeeded)
-            {
-                if (result.Errors != null)
-                {
-                    foreach (string error in result.Errors)
-                    {
-                        ModelState.AddModelError("", error);
-                    }
-                }
-
-                if (ModelState.IsValid)
-                {
-                    // No ModelState errors are available to send, so just return an empty BadRequest.
-                    return BadRequest();
-                }
-
-                return BadRequest(ModelState);
-            }
-
-            return null;
-        }
-
-        private class ExternalLoginData
-        {
-            public string LoginProvider { get; set; }
-            public string ProviderKey { get; set; }
-            public string UserName { get; set; }
-
-            public IList<Claim> GetClaims()
-            {
-                IList<Claim> claims = new List<Claim>();
-                claims.Add(new Claim(ClaimTypes.NameIdentifier, ProviderKey, null, LoginProvider));
-
-                if (UserName != null)
-                {
-                    claims.Add(new Claim(ClaimTypes.Name, UserName, null, LoginProvider));
-                }
-
-                return claims;
-            }
-
-            public static ExternalLoginData FromIdentity(ClaimsIdentity identity)
-            {
-                if (identity == null)
-                {
-                    return null;
-                }
-
-                Claim providerKeyClaim = identity.FindFirst(ClaimTypes.NameIdentifier);
-
-                if (providerKeyClaim == null || String.IsNullOrEmpty(providerKeyClaim.Issuer)
-                    || String.IsNullOrEmpty(providerKeyClaim.Value))
-                {
-                    return null;
-                }
-
-                if (providerKeyClaim.Issuer == ClaimsIdentity.DefaultIssuer)
-                {
-                    return null;
-                }
-
-                return new ExternalLoginData
-                {
-                    LoginProvider = providerKeyClaim.Issuer,
-                    ProviderKey = providerKeyClaim.Value,
-                    UserName = identity.FindFirstValue(ClaimTypes.Name)
-                };
-            }
-        }
 
         private static class RandomOAuthStateGenerator
         {
@@ -654,7 +326,7 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
         {
             Response response = new Response();
             var user = await UserManager.FindByEmailAsync(registerExternalBindingModel.Email);
-            if(user == null)
+            if (user == null)
             {
                 response.code = "404";
                 response.status = "Email không tồn tại";
@@ -662,13 +334,13 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
             }
 
             var userConfirmed = await UserManager.IsEmailConfirmedAsync(user.Id);
-            if(!userConfirmed)
+            if (!userConfirmed)
             {
                 response.code = "403";
                 response.status = "Email chưa được xác thực";
                 Content<Response>(HttpStatusCode.Forbidden, response);
             }
- 
+
             string code = await this.UserManager.GeneratePasswordResetTokenAsync(user.Id);
             var callbackUrl = new Uri(Url.Link("ForgotPassword", new { userId = user.Id, code = code }));
             await this.UserManager.SendEmailAsync(user.Id, "Lấy lại mật khẩu", "Vui lòng nhấn vào link sau: <a href=\"" + callbackUrl + "\">link</a>");
@@ -712,7 +384,7 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
         public IHttpActionResult updateAccountInfo([FromUri]string id, [FromBody]CurrentUserInfoLogin currentUserInfoLogin)
         {
             Response response = new Response();
-            if(id == null)
+            if (id == null)
             {
                 response.code = "400";
                 response.status = "Missing Required fields";
@@ -724,26 +396,26 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
             var userInfoId = user.userInfo.id;
             UserInfo userInfo = new UserInfo();
             userInfo = Service.userInfoDAO.getUserInfo(userInfoId);
-            if(currentUserInfoLogin.identityNumber != null)
+            if (currentUserInfoLogin.identityNumber != null)
             {
                 userInfo.identityNumber = currentUserInfoLogin.identityNumber;
                 flag++;
             }
-            if(currentUserInfoLogin.firstName != null)
+            if (currentUserInfoLogin.firstName != null)
             {
                 userInfo.firstName = currentUserInfoLogin.firstName;
                 flag++;
             }
-            if(currentUserInfoLogin.lastName != null)
+            if (currentUserInfoLogin.lastName != null)
             {
                 userInfo.lastName = currentUserInfoLogin.lastName;
                 flag++;
             }
-            if(currentUserInfoLogin.dob != null)
+            if (currentUserInfoLogin.dob != null)
             {
                 userInfo.dob = currentUserInfoLogin.dob;
             }
-            if(flag > 0)
+            if (flag > 0)
             {
                 Service.userInfoDAO.updateUserInfo(userInfo);
                 Service.userInfoDAO.saveUserinfo();
@@ -764,10 +436,10 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
                 return this.BadRequest("Invalid user data");
             }
             ApplicationUser identityUser = UserManager.FindByEmail(loginModel.email);
-            if(identityUser != null)    //validate username
+            if (identityUser != null)    //validate username
             {
                 bool result = UserManager.CheckPassword(identityUser, loginModel.password); //validate user password
-                if(result == true)
+                if (result == true)
                 {
                     Token validateToken = Service.tokenDAO.getByUsername(loginModel.email); //user have logined yet?
                     if (validateToken == null)      //User dont have token
@@ -789,6 +461,7 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
                                 var responseString = await tokenServiceResponse.Content.ReadAsStringAsync();
                                 var jsSerializer = new JavaScriptSerializer();
                                 var responseData = jsSerializer.Deserialize<Dictionary<string, string>>(responseString);
+
                                 Token token = new Token();
                                 token.accessToken = responseData["access_token"];
                                 token.userName = responseData["userName"];
@@ -796,12 +469,11 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
                                 token.expires = DateTime.Parse(responseData[".expires"]);
                                 token.tokenType = responseData["token_type"];
                                 token.issued = DateTime.Parse(responseData[".issued"]);
+                                token.isLogin = true;
+
                                 Service.tokenDAO.insert(token);
                                 Service.tokenDAO.save();
-                                /***Create Sesssion***/
-                                var user = UserManager.FindByEmail(loginModel.email);
-                                //HttpContext context = HttpContext.Current;
-                                //context.Session[user.Id] = token.accessToken;
+
                                 response.status = "Đăng nhập thành công";
                                 response.code = "200";
                                 response.results = token;
@@ -814,24 +486,47 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
                         DateTime currentDate = DateTime.Now;
                         DateTime expiresDate = validateToken.expires;
                         int compare = DateTime.Compare(currentDate, expiresDate);
-                        if (compare <= 0)      //Token havent expired
+                        if (!validateToken.isLogin)
                         {
-                            Token token = Service.tokenDAO.getById(validateToken.id);
-                            response.status = "Đăng nhập thành công";
-                            response.code = "200";
-                            response.results = token;
-                            return Content<Response>(HttpStatusCode.OK, response);
+                            if (compare < 0)      //Token hasn't expired
+                            {
+                                Token token = Service.tokenDAO.getById(validateToken.id);
+                                response.status = "Đăng nhập thành công";
+                                response.code = "200";
+                                response.results = token;
+                                return Content<Response>(HttpStatusCode.OK, response);
+                            }
+                            else        //Token expired
+                            {
+                                Service.tokenDAO.delete(validateToken.id);     //remove token from database
+                                Service.tokenDAO.save();
+                                response.status = "Phiên đăng nhập của bạn đã hết hạn, vui lòng đăng nhập lại";
+                                response.code = "401";
+                                response.results = "";
+                                return Content<Response>(HttpStatusCode.OK, response);
+                            }
                         }
-                        else        //Token expired
+                        else
                         {
-                            Service.tokenDAO.delete(validateToken.id);     //remove token from database
-                            Service.tokenDAO.save();
-                            response.status = "Phiên đăng nhập của bạn đã hết hạn, vui lòng đăng nhập lại";
-                            response.code = "401";
-                            response.results = "";
-                            return Content<Response>(HttpStatusCode.OK, response);
+                            if(compare <= 0)
+                            {
+                                Token token = Service.tokenDAO.getById(validateToken.id);
+                                response.status = "Đăng nhập thành công";
+                                response.code = "200";
+                                response.results = token;
+                                return Content<Response>(HttpStatusCode.OK, response);
+                            }
+                            else
+                            {
+                                Service.tokenDAO.delete(validateToken.id);     //remove token from database
+                                Service.tokenDAO.save();
+                                response.status = "Phiên đăng nhập của bạn đã hết hạn, vui lòng đăng nhập lại";
+                                response.code = "401";
+                                response.results = "";
+                                return Content<Response>(HttpStatusCode.OK, response);
+                            }
                         }
-                        
+
                     }
                 }   //wrong password
                 else
