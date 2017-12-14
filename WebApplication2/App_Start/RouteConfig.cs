@@ -55,17 +55,31 @@ namespace WebApplication2
                 url: "dashboard/users",
                 defaults: new { type = "Admin", controller = "AdminUser", action = "Index" }
             );
+            routes.MapRoute(
+                name: "Create-User",
+                url: "dashboard/user/create",
+                defaults: new { type = "Admin", controller = "AdminUser", action = "Create" }
+            );
+            routes.MapRoute(
+                name: "Info",
+                url: "dashboard/info",
+                defaults: new { type = "Admin", controller = "AdminUser", action = "Info" }
+            );
+            routes.MapRoute(
+                name: "User-Detail",
+                url: "dashboard/user/{id}",
+                defaults: new { type = "Admin", controller = "AdminUser", action = "Detail" }
+            );
+            routes.MapRoute(
+                name: "Remove-User",
+                url: "dashboard/user/remove/{id}",
+                defaults: new { type = "Admin", controller = "AdminUser", action = "Remove" }
+            );
 
             routes.MapRoute(
                 name: "Invoice",
                 url: "dashboard/invoices",
                 defaults: new { type = "Admin", controller = "AdminInvoice", action = "Index" }
-            );
-
-            routes.MapRoute(
-                name: "Info",
-                url: "dashboard/info",
-                defaults: new { type = "Admin", controller = "AdminInfo", action = "Index" }
             );
 
             routes.MapRoute(

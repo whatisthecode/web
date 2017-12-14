@@ -486,6 +486,7 @@
     <Content Include="Views\Admin\AdminInvoice\Index.cshtml" />
     <Content Include="Views\Admin\AdminStatistic\Index.cshtml" />
     <Content Include="Views\Admin\AdminUser\Index.cshtml" />
+    <Content Include="Views\Admin\AdminUser\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
