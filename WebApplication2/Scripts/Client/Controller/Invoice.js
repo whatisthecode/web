@@ -3,13 +3,14 @@
         console.log("This check out");
         $scope.view = {
             products: [],
-            total: "0"
+            total: "0",
+            userData: ""
         };
 
         $scope.createInvoice = function () {
             var req = {
                 "products": $scope.view.products,
-                "buyer": "",
+                "buyer": 6,
                 "total": $scope.view.total
             };
             Invoice.createInvoice(req, function (response) {
@@ -24,6 +25,7 @@
         };
 
         viewInit = function () {
+            $scope.userData = JSON.parse(localStorage.getItem("userData"));
             var checkOuts = $cookieStore.get("checkOuts");
             $scope.view.products = checkOuts;
             console.log(checkOuts);

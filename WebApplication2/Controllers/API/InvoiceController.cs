@@ -24,7 +24,7 @@ namespace WebApplication2.Controllers.API
         [APIAuthorize(Roles = "CREATE_INVOICE")]
         [Route("api/invoice")]
         [HttpPost]
-        public IHttpActionResult insert([FromBody]ViewInvoiceModel viewInvoiceModel)
+        public IHttpActionResult insertAsync([FromBody]ViewInvoiceModel viewInvoiceModel)
         {
             Response response = new Response();
             //if (Service.invoiceDAO.checkExist(viewInvoiceModel) != null)
@@ -73,10 +73,15 @@ namespace WebApplication2.Controllers.API
                     Service.invoiceDetailDAO.insertInvoiceDetail(invoiceDetail);
                     Service.invoiceDetailDAO.saveInvoiceDetail();
                 }
-                Invoice updateInvoice = new Invoice(code, viewInvoiceModel.buyer, salers[i], total);
+                Invoice updateInvoice = createInvoice;
+                updateInvoice.total = total;
                 Service.invoiceDAO.updateInvoice(updateInvoice);
                 Service.invoiceDAO.saveInvoice();
+                //var message = "<p>Thông tin đơn hàng của bạn</p> " +
+                //              "<p>Mã hóa đơn: " + createInvoice.id +"</p>" +
+                //              "<p></p>";
             }
+            //await Service._userManager.SendEmailAsync(viewInvoiceModel.buyer, "Thông tin đơn hàng", );
             response = new Response("201", "Hóa đơn đã được thêm", products);
             return Content<Response>(HttpStatusCode.Created, response);
         }
