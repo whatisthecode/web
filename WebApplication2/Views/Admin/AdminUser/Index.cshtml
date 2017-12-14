@@ -5,5 +5,42 @@
     ViewBag.pageLink = "/dashboard/users?pageSize=10&pageIndex=1";
     ViewBag.currentAction = "user";
 }
-<h2>Index</h2>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="content">
+                    <a href="~/dashboard/user/create" class="btn btn-primary btn-wd btn-fill btn-flat">Thêm người dùng</a>
+                </div>
+            </div>
+            <div class="card">
+                <div class="header">
+                    <h4 class="title">Danh sách người dùng</h4>
+                </div>
+                <div class="content table-responsive table-full-width">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Email</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{ 
+                                Int16 flag = 1;
+                            }
+                            @foreach(var user in Model)
+                            {
+                                @:<tr>
+                                @:<td>@(flag++)</td>
+                                @:<td>@user.dob</td>
+                                @:</tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 

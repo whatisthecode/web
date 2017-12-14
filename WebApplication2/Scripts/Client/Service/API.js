@@ -15,8 +15,10 @@
                     //headers['Authorization'] = "Bearer " + Oauth2.token.access_token;
                     if (token)
                         headers['Authorization'] = "Bearer " + token;
-                    else
-                        location.href = "./login";
+                    else {
+                        var returnUrl = encodeURIComponent(location.origin + location.pathname);
+                        location.href = "./login?returnUrl=" + returnUrl;     
+                    }
                 }
                 if (!headers['Content-Type'] && method !== "head" && method !== "options") {
                     headers['Content-Type'] = undefined;
