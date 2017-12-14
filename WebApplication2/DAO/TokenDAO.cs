@@ -11,6 +11,7 @@ namespace WebApplication2.DAO
         bool checkColumnExists(string column);
         bool checkColumnsExist(Array columns);
         void delete(short id);
+        void update(Token token);
         void Dispose();
         IEnumerable<Token> get();
         Token getById(short id);

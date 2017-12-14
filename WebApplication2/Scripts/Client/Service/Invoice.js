@@ -11,7 +11,7 @@
                 var headers = {
                     'Content-Type': "application/json"
                 };
-                API.request(false, "post", apiName.createInvoice, headers, data).then(function (result) {
+                API.request(true, "post", apiName.createInvoice, headers, data).then(function (result) {
                     success(result.data);
                     fail(null);
                 }, function (error) {

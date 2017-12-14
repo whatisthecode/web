@@ -205,9 +205,14 @@
     <Compile Include="App_Start\Service.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\Admin\AdminCategoryController.cs" />
     <Compile Include="Controllers\Admin\AdminHomeController.cs" />
+    <Compile Include="Controllers\Admin\AdminInfoController.cs" />
+    <Compile Include="Controllers\Admin\AdminInvoiceController.cs" />
     <Compile Include="Controllers\Admin\AdminLoginController.cs" />
     <Compile Include="Controllers\Admin\AdminProductController.cs" />
+    <Compile Include="Controllers\Admin\AdminStatisticController.cs" />
+    <Compile Include="Controllers\Admin\AdminUserController.cs" />
     <Compile Include="Controllers\API\AccountController.cs" />
     <Compile Include="Controllers\API\CategoryController.cs" />
     <Compile Include="Controllers\API\CategoryProductController.cs" />
@@ -284,6 +289,7 @@
     <Compile Include="Models\RequestModel\Invoice.cs" />
     <Compile Include="Models\RequestModel\Merchant.cs" />
     <Compile Include="Models\RequestModel\ProductDetail.cs" />
+    <Compile Include="Models\RequestModel\SidebarModel.cs" />
     <Compile Include="Models\Token.cs" />
     <Compile Include="Models\UserInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -481,6 +487,11 @@
     <Folder Include="Scripts\Admin\Factory\" />
     <Folder Include="Scripts\Admin\Provider\" />
     <Folder Include="Scripts\Admin\Shared\" />
+    <Folder Include="Views\Admin\AdminCategory\" />
+    <Folder Include="Views\Admin\AdminInfo\" />
+    <Folder Include="Views\Admin\AdminInvoice\" />
+    <Folder Include="Views\Admin\AdminStatistic\" />
+    <Folder Include="Views\Admin\AdminUser\" />
     <Folder Include="Views\Default\" />
     <Folder Include="Views\Test\" />
   </ItemGroup>

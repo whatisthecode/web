@@ -10,7 +10,7 @@
         $scope.createInvoice = function () {
             var req = {
                 "products": $scope.view.products,
-                "buyer": $scope.view.userData.id,
+                "buyer": $scope.view.userData.userInfo.id,
                 "total": $scope.view.total
             };
             Invoice.createInvoice(req, function (response) {

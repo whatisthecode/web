@@ -4,21 +4,23 @@
             request: function (isAuthenticated, method, apiEndpoint, headers = null, data = null, isAPI = false) {
                 if (!headers)
                     headers = {};
-                //if (isAuthenticated) {
-                //    if (Oauth2.isExpired) {
-                //        Oauth2.clear();
-                //        location.href = "./login";
-                //        return null;
-                //    }
-                //    headers['Authorization'] = "Bearer " + Oauth2.token.access_token;
-                //}
                 var token = localStorage.getItem("token");
-                if (token)
-                    headers['Authorization'] = "Bearer " + token;
-                else
-                    location.href = "./login";
-                if (!headers['Content-Type'] && method !== "head" && method !== "options")
-                    headers['Content-Type'] = undefined;
+                if (isAuthenticated) {
+                    //if (Oauth2.isExpired) {
+                    //    Oauth2.clear();
+                    //    location.href = "./login";
+                    //    return null;
+                    //}
+                    //headers['Authorization'] = "Bearer " + Oauth2.token.access_token;
+                    if (token)
+                        headers['Authorization'] = "Bearer " + token;
+                    else
+                        location.href = "./login";
+                    if (!headers['Content-Type'] && method !== "head" && method !== "options") {
+                        headers['Content-Type'] = undefined;
+                        data = JSON.stringify(data);
+                    }
+                }
                 var realApiEndpoint = Helper.getAPIEndpoint(apiEndpoint, isAPI);
 
                 var transformRequest = angular.identity;

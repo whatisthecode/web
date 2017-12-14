@@ -93,6 +93,9 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
                     var user = await Service._userManager.FindByEmailAsync(token.userName);
                     user.UserInfo = Service.userInfoDAO.getUserInfo(user.userInfoId);
                     CurrentUserInfoLogin currentUserInfoLogin = new CurrentUserInfoLogin();
+
+                    user.groups = Service.userGroupDAO.getUserGroupByUser(user.Id).ToList();
+
                     currentUserInfoLogin.dob = user.UserInfo.dob;
                     currentUserInfoLogin.lastName = user.UserInfo.lastName;
                     currentUserInfoLogin.firstName = user.UserInfo.firstName;
@@ -136,8 +139,20 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
         {
             String accessToken = HttpContext.Current.Request.Headers.Get("Authorization").ToString().Replace("Bearer ","");
             Token token = Service.tokenDAO.getByAccessToken(accessToken);
-            Service.tokenDAO.delete(token.id);
-            Service.tokenDAO.save();
+            DateTime currentDate = DateTime.Now;
+            DateTime expiresDate = token.expires;
+            int compare = DateTime.Compare(currentDate, expiresDate);
+            if(compare < 0)
+            {
+                token.isLogin = false;
+                Service.tokenDAO.update(token);
+                Service.tokenDAO.save();
+            }
+            else
+            {
+                Service.tokenDAO.delete(token.id);
+                Service.tokenDAO.save();
+            }
             return Ok();
         }
 
@@ -492,6 +507,9 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
                             if (compare < 0)      //Token hasn't expired
                             {
                                 Token token = Service.tokenDAO.getById(validateToken.id);
+                                token.isLogin = true;
+                                Service.tokenDAO.update(token);
+                                Service.tokenDAO.save();
                                 response.status = "Đăng nhập thành công";
                                 response.code = "200";
                                 response.results = token;

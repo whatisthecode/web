@@ -40,6 +40,7 @@ namespace WebApplication2.CustomAttribute
                     {
                         filterContext.HttpContext.Session["currentUser"] = null;
                         filterContext.HttpContext.Session["username"] = null;
+                        filterContext.HttpContext.Session["sidebar"] = null;
                         String returnUrl = filterContext.HttpContext.Server.UrlEncode(filterContext.HttpContext.Request.Url.AbsoluteUri);
                         filterContext.Result = new RedirectResult("/login?returnUrl=" + returnUrl);
                     }
@@ -49,6 +50,7 @@ namespace WebApplication2.CustomAttribute
                         {
                             filterContext.HttpContext.Session["currentUser"] = null;
                             filterContext.HttpContext.Session["username"] = null;
+                            filterContext.HttpContext.Session["sidebar"] = null;
                             String returnUrl = filterContext.HttpContext.Server.UrlEncode(filterContext.HttpContext.Request.Url.AbsoluteUri);
                             filterContext.Result = new RedirectResult("/login?returnUrl=" + returnUrl);
                         }
@@ -61,6 +63,7 @@ namespace WebApplication2.CustomAttribute
                             {
                                 filterContext.HttpContext.Session["currentUser"] = null;
                                 filterContext.HttpContext.Session["username"] = null;
+                                filterContext.HttpContext.Session["sidebar"] = null;
                                 String returnUrl = filterContext.HttpContext.Server.UrlEncode(filterContext.HttpContext.Request.Url.AbsoluteUri);
                                 filterContext.Result = new RedirectResult("/login?returnUrl=" + returnUrl);
                             }
