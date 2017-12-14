@@ -9,6 +9,9 @@
         }).when("/", {
             controller: "IndexController",
             templateUrl: "./Scripts/Client/View/index.html"
+        }).when("/check-out", {
+            controller: "InvoiceController",
+            templateUrl: "./Scripts/Client/View/check-out.html"
         }).when("/cart", {
             controller: "CartController",
             templateUrl: "./Scripts/Client/View/cart.html"
@@ -21,9 +24,6 @@
         }).when("/register", {
             controller: "RegisterController",
              templateUrl: "./Scripts/Client/View/register.html"
-        }).when("/product/check-out", {
-            controller: "InvoiceController",
-            templateUrl: "./Scripts/Client/View/check-out.html"
         }).when("/:category", {
             controller: "ProductController",
             templateUrl: "./Scripts/Client/View/product.html"

@@ -22,7 +22,8 @@ namespace WebApplication2.Models.RequestModel
         {
             public Int16 productId { get; set; }
             public int amount { get; set; }
-            public Int16 saler { get; set; }
+            public int price { get; set; }
+            public string name { get; set; }
         }
     }
 }

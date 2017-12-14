@@ -234,8 +234,8 @@
                             <h3><a href="detail.html">{{product.name}}</a></h3>
                             <p class="price">{{product.attributes[0].value}}</p>
                             <p class="buttons">
-                                <a class="btn btn-default" ng-click="viewDetail(product.id)">View detail</a>
-                                <a href="basket.html" class="btn btn-primary"><i class="fa fa-shopping-cart"></i>Add to cart</a>
+                                <a class="btn btn-default" ng-click="viewDetail(product.id)">Xem chi tiết</a>
+                                <a ng-click="addProductToCart(product)" class="btn btn-primary"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ</a>
                             </p>
                         </div>
                         <!-- /.text -->
@@ -247,10 +247,6 @@
             <!-- /.products -->
 
             <div class="pages">
-
-                <p class="loadMore">
-                    <a href="#" class="btn btn-primary btn-lg"><i class="fa fa-chevron-down"></i> Load more</a>
-                </p>
 
                 <div uib-pagination boundary-links="true" total-items="rowCount" ng-model="pageIndex" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"
                      ng-change="pageChanged(pageSize, pageIndex, filter)"></div>

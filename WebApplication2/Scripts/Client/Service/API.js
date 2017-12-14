@@ -4,17 +4,22 @@
             request: function (isAuthenticated, method, apiEndpoint, headers = null, data = null, isAPI = false) {
                 if (!headers)
                     headers = {};
+                var token = localStorage.getItem("token");
                 if (isAuthenticated) {
-                    if (Oauth2.isExpired) {
-                        Oauth2.clear();
+                    //if (Oauth2.isExpired) {
+                    //    Oauth2.clear();
+                    //    location.href = "./login";
+                    //    return null;
+                    //}
+                    //headers['Authorization'] = "Bearer " + Oauth2.token.access_token;
+                    if (token)
+                        headers['Authorization'] = "Bearer " + token;
+                    else
                         location.href = "./login";
-                        return null;
+                    if (!headers['Content-Type'] && method !== "head" && method !== "options") {
+                        headers['Content-Type'] = undefined;
+                        data = JSON.stringify(data);
                     }
-                    headers['Authorization'] = "Bearer " + Oauth2.token.access_token;
-                }
-                if (!headers['Content-Type'] && method !== "head" && method !== "options") {
-                    headers['Content-Type'] = undefined;
-                    data = JSOn.stringify(data);
                 }
                 var realApiEndpoint = Helper.getAPIEndpoint(apiEndpoint, isAPI);
 

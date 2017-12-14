@@ -107,22 +107,40 @@
             else {
                 if ($scope.products.length > 0)
                 {
-                    var checkOuts = [];
-                    for (var i = 0; i < $scope.products.length; i++) {
-                        if ($scope.products[i].amount > 0) {
-                            var checkOut = {
-                                "amount": $scope.products[i].amount,
-                                "productId": $scope.products[i].id,
-                                "price": $scope.products[i].productTotal,
-                                "name": $scope.products[i].name
-                            };
-                            checkOuts.push(checkOut);
+                    if (checkLogin() === true)
+                    {
+                        var checkOuts = [];
+                        for (var i = 0; i < $scope.products.length; i++) {
+                            if ($scope.products[i].amount > 0) {
+                                var checkOut = {
+                                    "amount": $scope.products[i].amount,
+                                    "productId": $scope.products[i].id,
+                                    "price": $scope.products[i].productTotal,
+                                    "name": $scope.products[i].name
+                                };
+                                checkOuts.push(checkOut);
+                            }
                         }
+                        $cookieStore.put("checkOuts", checkOuts);
+                        window.location.href = "/check-out";
                     }
-                    $cookieStore.put("checkOuts", checkOuts);
-                    window.location.href = "/product/check-out";
+                    else
+                    {
+                        validator.prototype.showWarning("#errors", "#checkLogin", "Vui lòng đăng nhập để tiếp tục thanh toán!");
+                        //setTimeout(function () {
+                        //    window.location.href = "/login";
+                        //}, 2000);
+                    }
                 }
             }
+        };
+
+        checkLogin = function () {
+            var token = localStorage.getItem("token");
+            if (Helper.notEmpty(token))
+                return true;
+            else
+                return false;
         };
             
 

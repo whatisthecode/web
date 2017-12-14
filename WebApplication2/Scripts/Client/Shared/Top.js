@@ -7,9 +7,9 @@
         };
         $scope.logout = function () {
             window.open(location.origin + "/logout", "_self");
-        }
+        };
         $scope.info = function () {
             window.open(location.origin + "/dashboard/info", "_self");
-        }
+        };
     });
 }

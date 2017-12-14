@@ -2,14 +2,16 @@
     <div class="container">
         <div class="row">
             <div class="col-md-offset-4 col-md-4">
+                <blockquote>
+                    <p>Đây là thông tin đơn hàng của bạn. Nhấn <b>xác nhận</b> để hoàn tất việc thanh toán.</p>
+                    <p>Nhấn <b>Hủy</b> để trờ lại trang chủ</p>
+                </blockquote>
                 <div class="box order-summary">
                     <div class="box-header">
                         <span style="font-size:25px; font-weight:400;">Hóa Đơn </span>
                         <img class="pull-right" src="Assets/img/logo.jpg" alt="White Blouse Armani" height="50" width="50" />
                     </div>
-                    <p class="text-muted"><b>Họ tên:</b> Ngô Đông Hồng</p>
-                    <p class="text-muted"><b>Địa chỉ:</b> 67 ACB TPHCM Q.8</p>
-                    <p class="text-muted"><b>Sđt:</b> 0914294327</p>
+                    <p class="text-muted"><b>Họ tên:</b> {{view.userData.userInfo.firstName}} {{view.userData.userInfo.lastName}}</p>
                     <div class="table-responsive">
                         <table class="table">
                             <thead>
@@ -32,9 +34,9 @@
                             </tbody>
                         </table>
                     </div>
-
+                    <a href="/" class="btn btn-default text-primary">Hủy</a>
+                    <a ng-click="createInvoice()"class="btn btn-primary pull-right">Xác nhận</a>
                 </div>
-
             </div>
         </div>
     </div>
