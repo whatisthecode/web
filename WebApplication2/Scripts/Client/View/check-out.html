@@ -2,6 +2,10 @@
     <div class="container">
         <div class="row">
             <div class="col-md-offset-4 col-md-4">
+                <blockquote>
+                    <p>Đây là thông tin đơn hàng của bạn. Nhấn <b>xác nhận</b> để hoàn tất việc thanh toán.</p>
+                    <p>Nhấn <b>Hủy</b> để trờ lại trang chủ</p>
+                </blockquote>
                 <div class="box order-summary">
                     <div class="box-header">
                         <span style="font-size:25px; font-weight:400;">Hóa Đơn </span>
@@ -32,9 +36,9 @@
                             </tbody>
                         </table>
                     </div>
-
+                    <a href="/" class="btn btn-default text-primary">Hủy</a>
+                    <a ng-click="createInvoice()"class="btn btn-primary pull-right">Xác nhận</a>
                 </div>
-
             </div>
         </div>
     </div>

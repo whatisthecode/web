@@ -8,22 +8,25 @@
 
         $scope.createInvoice = function () {
             var req = {
-                "products": [],
+                "products": $scope.view.products,
                 "buyer": "",
-                "total": ""
-            }
+                "total": $scope.view.total
+            };
             Invoice.createInvoice(req, function (response) {
                 if (response) {
                     console.log(response);
                 }
             }, function (err) {
-                console.log(err);
-            }));
-        }
+                if (err) {
+                    console.log(err);
+                }
+            });
+        };
 
         viewInit = function () {
             var checkOuts = $cookieStore.get("checkOuts");
             $scope.view.products = checkOuts;
+            console.log(checkOuts);
             var sum = 0;
             for (var i = 0; i < checkOuts.length; i++)
             {
