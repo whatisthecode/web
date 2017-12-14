@@ -49,6 +49,25 @@ namespace WebApplication2
                 url: "dashboard/product/remove/{id}",
                 defaults: new { type = "Admin", controller = "AdminProduct", action = "Remove" }
             );
+
+            routes.MapRoute(
+                name: "User",
+                url: "dashboard/users",
+                defaults: new { type = "Admin", controller = "AdminUser", action = "Index" }
+            );
+
+            routes.MapRoute(
+                name: "Invoice",
+                url: "dashboard/invoices",
+                defaults: new { type = "Admin", controller = "AdminInvoice", action = "Index" }
+            );
+
+            routes.MapRoute(
+                name: "Info",
+                url: "dashboard/info",
+                defaults: new { type = "Admin", controller = "AdminInfo", action = "Index" }
+            );
+
             routes.MapRoute(
                 name: "Not-Found",
                 url: "notfound",
