@@ -27,7 +27,6 @@ namespace WebApplication2.Controllers.API
 
         [Route("api/product")]
         [HttpPost]
-        [APIAuthorize (Roles = "CREATE_PRODUCT")]
         public IHttpActionResult insertNewProduct([FromBody]CreateProductModel createProductModel)
         {
             Response response = Utils.checkInput(createProductModel, CreateProductModel.required);
