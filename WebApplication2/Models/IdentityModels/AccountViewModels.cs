@@ -49,7 +49,7 @@ namespace WebApplication2.Models
         public class CurrentUserInfoLogin
         {
             public Int16? id { get; set; }
-            public Boolean status { get; set; }
+            public Int16 status { get; set; }
             public string firstName { get; set; }
             public string lastName { get; set; }
             public DateTime? dob { get; set; }

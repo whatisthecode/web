@@ -339,3 +339,15 @@ img.hover-shadow {
 .hover-shadow:hover {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)
 }
+.user-inactive,.user-inactive{
+    display:block;
+    width:15px;
+    height:15px;
+    border-radius:100%;
+}
+.user-inactive {
+    background-color: #F44336;
+}
+.user-active {
+    background-color: #4CAF50;
+}
