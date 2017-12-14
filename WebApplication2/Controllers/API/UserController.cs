@@ -31,6 +31,7 @@ namespace WebApplication2.Controllers.API
         public IHttpActionResult getusers()
         {
             String accessToken = HttpContext.Current.Request.Headers.Get("Authorization").Replace("Bearer ", "");
+
             return null;
         }
     }

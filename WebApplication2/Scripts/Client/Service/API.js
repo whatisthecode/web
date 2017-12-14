@@ -4,7 +4,8 @@
             request: function (isAuthenticated, method, apiEndpoint, headers = null, data = null, isAPI = false) {
                 if (!headers)
                     headers = {};
-                var token = localStorage.getItem("token");
+                var token = localStorage.getItem("token").toString();
+                console.log(token);
                 if (isAuthenticated) {
                     //if (Oauth2.isExpired) {
                     //    Oauth2.clear();
@@ -16,26 +17,24 @@
                         headers['Authorization'] = "Bearer " + token;
                     else
                         location.href = "./login";
-                    if (!headers['Content-Type'] && method !== "head" && method !== "options") {
-                        headers['Content-Type'] = undefined;
-                        data = JSON.stringify(data);
-                    }
+                }
+                if (!headers['Content-Type'] && method !== "head" && method !== "options") {
+                    headers['Content-Type'] = undefined;
+                    data = JSON.stringify(data);
                 }
                 var realApiEndpoint = Helper.getAPIEndpoint(apiEndpoint, isAPI);
-
-                var transformRequest = angular.identity;
-                if (headers["Content-Type"]) {
-                    if (headers["Content-Type"] === "application/x-www-form-urlencoded")
-                        transformRequest = $httpParamSerializer;
-                }
 
                 var req = {
                     method: method,
                     url: realApiEndpoint,
-                    transformRequest: transformRequest,
                     headers: headers,
                     data: data || undefined
                 };
+                if (headers["Content-Type"]) {
+                    if (headers["Content-Type"] === "application/x-www-form-urlencoded")
+                        req.transformRequest = $httpParamSerializer;
+                }
+
                 return $http(req);
             }
         };
