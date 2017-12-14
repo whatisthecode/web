@@ -73,5 +73,61 @@ namespace WebApplication2.DAO
         {
             return true;
         }
+
+        public PagedResult<UserInfo> PageView(short indexnum, short pagesize, string Orderby)
+        {
+            var query = from uI in base.getContext().userInfos select uI;
+            switch (Orderby)
+            {
+                case "id":
+                    query = query.OrderBy(uI => uI.id);
+                    break;
+
+            }
+            PagedResult<UserInfo> pv = base.PageView(query, indexnum, pagesize);
+            return pv;
+
+        }
+
+        public PagedResult<UserInfo> PageView(short indexnum, short pagesize, string Orderby, bool ascending)
+        {
+            var query = from uI in base.getContext().userInfos select uI;
+            if (query != null && ascending)
+            {
+                switch (Orderby)
+                {
+                    case "id":
+                        query = query.OrderBy(uI => uI.id);
+                        break;
+
+                }
+            }
+            if (query != null && !ascending)
+            {
+                switch (Orderby)
+                {
+                    case "id":
+                        query = query.OrderByDescending(uI => uI.id);
+                        break;
+                }
+            }
+            PagedResult<UserInfo> pv = base.PageView(query, indexnum, pagesize);
+            return pv;
+        }
+
+        public PagedResult<UserInfo> AdminPageView(short userId, short indexnum, short pagesize, string Orderby)
+        {
+            var query = from uI in base.getContext().userInfos select uI;
+            query = query.Where(u => u.id != userId);
+            switch (Orderby)
+            {
+                case "id":
+                    query = query.OrderBy(uI => uI.id);
+                    break;
+
+            }
+            PagedResult<UserInfo> pv = base.PageView(query, indexnum, pagesize);
+            return pv;
+        }
     }
 }

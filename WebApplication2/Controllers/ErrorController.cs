@@ -8,12 +8,12 @@ namespace WebApplication2.Controllers
 {
     public class ErrorController : Controller
     {
-        public ActionResult notFound()
+        public ActionResult NotFound()
         {
             return View();
         }
 
-        public ActionResult forbidden()
+        public ActionResult Forbidden()
         {
             return View();
         }

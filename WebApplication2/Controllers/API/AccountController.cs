@@ -251,7 +251,7 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
             createUserInfo.identityNumber = model.identityNumber;
             createUserInfo.dob = model.dob;
 
-            var identityUser = new ApplicationUser() { UserName = model.Email, Email = model.Email };
+            var identityUser = new ApplicationUser() { UserName = model.Email, Email = model.Email , PhoneNumber = model.PhoneNumber};
             identityUser.UserInfo = createUserInfo;
             IdentityResult result = await UserManager.CreateAsync(identityUser, model.Password);
 
