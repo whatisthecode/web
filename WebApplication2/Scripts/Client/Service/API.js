@@ -12,8 +12,10 @@
                     }
                     headers['Authorization'] = "Bearer " + Oauth2.token.access_token;
                 }
-                if (!headers['Content-Type'] && method !== "head" && method !== "options")
+                if (!headers['Content-Type'] && method !== "head" && method !== "options") {
                     headers['Content-Type'] = undefined;
+                    data = JSOn.stringify(data);
+                }
                 var realApiEndpoint = Helper.getAPIEndpoint(apiEndpoint, isAPI);
 
                 var transformRequest = angular.identity;
