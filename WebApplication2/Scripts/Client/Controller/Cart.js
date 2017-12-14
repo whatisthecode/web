@@ -66,7 +66,14 @@
         };
 
         productTotal = function (price, amount, discount) {
-            return Helper.addCommasToMoney((parseInt(Helper.removeCommas(price)) - parseInt(Helper.removeCommas(discount))) * parseInt(amount).toString());
+            if (intParse(discount) && Helper.notEmpty(discount))
+            {
+                return Helper.addCommasToMoney(parseInt(Helper.removeCommas(discount)) * parseInt(amount).toString());
+            }
+            else
+            {
+                return Helper.addCommasToMoney(parseInt(Helper.removeCommas(price)) * parseInt(amount).toString());
+            }
         };
 
         sumInvoice = function (products) {
