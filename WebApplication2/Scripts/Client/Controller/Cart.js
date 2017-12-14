@@ -26,8 +26,13 @@
                         response.results["amount"] = 1;
                         response.results["productTotal"] = productTotal(response.results.attributes[0].value, response.results.amount, response.results.attributes[2].value);
                         response.results.attributes[0].value = Helper.addCommasToMoney(response.results.attributes[0].value);
+                        if (Helper.notEmpty(response.results.attributes[2].value))
+                        {
+                            response.results.attributes[2].value = Helper.addCommasToMoney(response.results.attributes[2].value);
+                        }
                         $scope.products.push(response.results);
                         console.log($scope.products);
+                        $scope.totalInvoice = sumInvoice($scope.products);
                     }
                 }, function (err) {
                     if (err) {
@@ -66,13 +71,13 @@
         };
 
         productTotal = function (price, amount, discount) {
-            if (intParse(discount) && Helper.notEmpty(discount))
+            if (Number(Helper.removeCommas(discount)) > 0 && Helper.notEmpty(discount))
             {
-                return Helper.addCommasToMoney(parseInt(Helper.removeCommas(discount)) * parseInt(amount).toString());
+                return Helper.addCommasToMoney(Number(Helper.removeCommas(discount)) * Number(amount).toString());
             }
             else
             {
-                return Helper.addCommasToMoney(parseInt(Helper.removeCommas(price)) * parseInt(amount).toString());
+                return Helper.addCommasToMoney(Number(Helper.removeCommas(price)) * Number(amount).toString());
             }
         };
 
@@ -152,9 +157,5 @@
             
 
         viewOninit();
-        setTimeout(function () {
-            $scope.totalInvoice = sumInvoice($scope.products);
-            console.log($scope.totalInvoice);
-        }, 200);
     });
 }

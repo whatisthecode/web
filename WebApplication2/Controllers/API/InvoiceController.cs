@@ -75,7 +75,7 @@ namespace WebApplication2.Controllers.API
                     var price = proAttrs[0].value;
                     Double subTotal = amount * int.Parse(price);
                     total = total + subTotal;
-                    InvoiceDetail invoiceDetail = new InvoiceDetail(createInvoice.id, lists[j].id, Int16.Parse(amount.ToString()), Int16.Parse(price), subTotal);
+                    InvoiceDetail invoiceDetail = new InvoiceDetail(createInvoice.id, lists[j].id, amount, int.Parse(price), subTotal);
                     Service.invoiceDetailDAO.insertInvoiceDetail(invoiceDetail);
                     Service.invoiceDetailDAO.saveInvoiceDetail();
                 }

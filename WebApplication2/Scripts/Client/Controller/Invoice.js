@@ -19,7 +19,8 @@
                 }
             }, function (err) {
                 if (err) {
-                    console.log(err);
+                    console.log(err.data.status);
+                    validator.prototype.showWarning("#Errors", "#checkLogin", err.data.status);
                 }
             });
         };
