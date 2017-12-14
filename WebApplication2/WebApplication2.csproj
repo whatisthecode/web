@@ -207,6 +207,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\Admin\AdminHomeController.cs" />
     <Compile Include="Controllers\Admin\AdminLoginController.cs" />
+    <Compile Include="Controllers\Admin\AdminProductController.cs" />
     <Compile Include="Controllers\API\AccountController.cs" />
     <Compile Include="Controllers\API\CategoryController.cs" />
     <Compile Include="Controllers\API\CategoryProductController.cs" />
@@ -218,6 +219,7 @@
     <Compile Include="Controllers\API\UserController.cs" />
     <Compile Include="Controllers\Base.cs" />
     <Compile Include="Controllers\Client\HomeController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="DAO\Base.cs" />
     <Compile Include="DAO\BaseImpl.cs" />
     <Compile Include="DAO\CategoryDAO.cs" />
@@ -425,7 +427,6 @@
     <Content Include="Scripts\Client\Service\ProductDetail.js" />
     <Content Include="Scripts\Client\Service\Register.js" />
     <Content Include="Scripts\Client\Service\User.js" />
-    <Content Include="Scripts\Client\Shared\Error.js" />
     <Content Include="Scripts\Client\Shared\Top.js" />
     <Content Include="Scripts\Client\View\cart.html" />
     <Content Include="Scripts\Client\View\check-out.html" />

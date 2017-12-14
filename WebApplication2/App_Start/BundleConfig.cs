@@ -43,7 +43,6 @@ namespace WebApplication2
 
             bundles.Add(new ScriptBundle("~/bundles/client_controller").Include(
                        "~/Scripts/Client/Shared/Top.js",
-                       "~/Scripts/Client/Shared/Error.js",
                        "~/Scripts/Client/Controller/Index.js",
                        "~/Scripts/Client/Controller/Cart.js",
                        "~/Scripts/Client/Controller/Product.js",

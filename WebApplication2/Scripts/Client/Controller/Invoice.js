@@ -18,7 +18,7 @@
                 }
             }, function (err) {
                 console.log(err);
-            }));
+            });
         }
 
         viewInit = function () {
