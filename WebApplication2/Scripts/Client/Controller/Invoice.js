@@ -1,6 +1,5 @@
 ﻿if ("undefined" !== typeof app) {
     app.controller("InvoiceController", function ($scope, CONFIG, ProductDetail, Helper, Invoice, $cookieStore, User) {
-        console.log("This check out");
         $scope.view = {
             products: [],
             total: "0",
@@ -19,7 +18,19 @@
                 }
             }, function (err) {
                 if (err) {
-                    console.log(err);
+                    console.log(err.data.status);
+                    switch (err.data.code)
+                    {
+                        case "409":
+                            {
+                                validator.prototype.showWarning("#errors", "checkLogin", "Bạn không thể mua sản phẩm của chính mình!");
+                            }
+                            break;
+                        default:
+                            console.log(err);
+                            break;
+                    }
+                    
                 }
             });
         };

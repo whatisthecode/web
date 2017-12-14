@@ -15,7 +15,7 @@ namespace WebApplication2.DAO
         }
         public bool check(string column)
         {
-            throw new NotImplementedException();
+            return base.checkColumnExists(column);
         }
 
         public InvoiceDetail checkExist(InvoiceDetail invoicedetail)
@@ -25,27 +25,27 @@ namespace WebApplication2.DAO
 
         public void deleteInvoiceDetail(short InvoiceDetailId)
         {
-            throw new NotImplementedException();
+            base.delete(InvoiceDetailId);
         }
 
         public void dispose()
         {
-            throw new NotImplementedException();
+            base.Dispose();
         }
 
         public IEnumerable<InvoiceDetail> getInvoiceDetail()
         {
-            throw new NotImplementedException();
+            return base.get().ToList();
         }
 
         public InvoiceDetail getInvoiceDetailById(short invoiceDetailId)
         {
-            throw new NotImplementedException();
+            return base.getById(invoiceDetailId);
         }
 
         public void insertInvoiceDetail(InvoiceDetail invoicedetail)
         {
-            throw new NotImplementedException();
+            base.insert(invoicedetail);
         }
 
         public PagedResult<InvoiceDetail> PageView(int pageIndex, int pageSize, string columnName)
@@ -55,12 +55,12 @@ namespace WebApplication2.DAO
 
         public void saveInvoiceDetail()
         {
-            throw new NotImplementedException();
+            base.save();
         }
 
         public void updateInvoiceDetail(InvoiceDetail invoicedetail)
         {
-            throw new NotImplementedException();
+            base.update(invoicedetail);
         }
     }
 }

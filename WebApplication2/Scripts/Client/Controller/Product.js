@@ -25,6 +25,11 @@
             Product.getProduct(categoryId, pageIndex, pageSize, filter, function (response) {
                 if (response)
                 {
+                    
+                    for (var i = 0; i < response.items.length; i++)
+                    {
+                        response.items[i].attributes[0].value = Helper.addCommasToMoney(response.items[i].attributes[0].value);
+                    }
                     $scope.products = response.items;
                     $scope.pageSize = response.pageSize;
                     $scope.pageIndex = response.currentPage;

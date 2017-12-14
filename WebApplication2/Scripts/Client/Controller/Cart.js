@@ -26,8 +26,13 @@
                         response.results["amount"] = 1;
                         response.results["productTotal"] = productTotal(response.results.attributes[0].value, response.results.amount, response.results.attributes[2].value);
                         response.results.attributes[0].value = Helper.addCommasToMoney(response.results.attributes[0].value);
+                        if (Helper.notEmpty(response.results.attributes[2].value))
+                        {
+                            response.results.attributes[2].value = Helper.addCommasToMoney(response.results.attributes[2].value);
+                        }
                         $scope.products.push(response.results);
                         console.log($scope.products);
+                        $scope.totalInvoice = sumInvoice($scope.products);
                     }
                 }, function (err) {
                     if (err) {
@@ -66,7 +71,14 @@
         };
 
         productTotal = function (price, amount, discount) {
-            return Helper.addCommasToMoney((parseInt(Helper.removeCommas(price)) - parseInt(Helper.removeCommas(discount))) * parseInt(amount).toString());
+            if (Number(Helper.removeCommas(discount)) > 0 && Helper.notEmpty(discount))
+            {
+                return Helper.addCommasToMoney(Number(Helper.removeCommas(discount)) * Number(amount).toString());
+            }
+            else
+            {
+                return Helper.addCommasToMoney(Number(Helper.removeCommas(price)) * Number(amount).toString());
+            }
         };
 
         sumInvoice = function (products) {
@@ -126,7 +138,7 @@
                     }
                     else
                     {
-                        validator.prototype.showWarning("#errors", "#checkLogin", "Vui lòng đăng nhập để tiếp tục thanh toán!");
+                        validator.prototype.showWarning("#errors", "checkLogin", "Vui lòng đăng nhập để tiếp tục thanh toán!");
                         //setTimeout(function () {
                         //    window.location.href = "/login";
                         //}, 2000);
@@ -145,9 +157,5 @@
             
 
         viewOninit();
-        setTimeout(function () {
-            $scope.totalInvoice = sumInvoice($scope.products);
-            console.log($scope.totalInvoice);
-        }, 200);
     });
 }

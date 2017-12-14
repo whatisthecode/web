@@ -21,8 +21,8 @@ namespace WebApplication2.Models.RequestModel
         public class InvoiceProducts
         {
             public Int16 productId { get; set; }
-            public int amount { get; set; }
-            public int price { get; set; }
+            public Int16 amount { get; set; }
+            public double price { get; set; }
             public string name { get; set; }
         }
     }
