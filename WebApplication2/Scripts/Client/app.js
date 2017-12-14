@@ -19,6 +19,9 @@
         }).when("/register", {
             controller: "RegisterController",
              templateUrl: "./Scripts/Client/View/register.html"
+        }).when("/product/check-out", {
+            controller: "InvoiceController",
+            templateUrl: "./Scripts/Client/View/check-out.html"
         }).when("/:category", {
             controller: "ProductController",
             templateUrl: "./Scripts/Client/View/product.html"

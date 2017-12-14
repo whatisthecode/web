@@ -3,7 +3,7 @@
         $scope.products = [];
         $scope.selectedProducts = [];
         $scope.totalInvoice = 0;
-        $scope.selectedProductsLength = 0;
+        $scope.selectedProductsLength = "0";
 
         viewOninit = function () {
             $scope.selectedProducts = $cookieStore.get("selectedProducts");
@@ -15,6 +15,7 @@
             }
             else {
                 $(".table-responsive").hide();
+                $scope.selectedProductsLength = "0";
             }
         };
 
@@ -83,12 +84,12 @@
                     $scope.selectedProducts.splice(i, 1);
                     $cookieStore.put("selectedProducts", $scope.selectedProducts);
                 }
-
             }
             for (var j = 0; j < $scope.products.length; j) {
                 if ($scope.products[j].id === productId)
                     $scope.products.splice(j, 1);
             }
+            $scope.totalInvoice = sumInvoice($scope.products);
         };
 
         validateInputAmount = function (productAmount, buyAmount) {
@@ -98,24 +99,29 @@
                 return false;
         };
 
-        $scope.checkout = function () {
+        $scope.checkOut = function () {
             if ($("#errors").children().length > 0) {
                 console.log("Have errors");
                 return;
             }
             else {
-                var checkOuts = [];
-                for (var i = 0; i < $scope.products.length; i++) {
-                    if ($scope.products[i].amount > 0) {
-                        var checkOut = {
-                            "amount": $scope.products[i].amount,
-                            "productId": $scope.products[i].id
-                        };
-                        checkOuts.push(checkOut);
+                if ($scope.products.length > 0)
+                {
+                    var checkOuts = [];
+                    for (var i = 0; i < $scope.products.length; i++) {
+                        if ($scope.products[i].amount > 0) {
+                            var checkOut = {
+                                "amount": $scope.products[i].amount,
+                                "productId": $scope.products[i].id,
+                                "price": $scope.products[i].productTotal,
+                                "name": $scope.products[i].name
+                            };
+                            checkOuts.push(checkOut);
+                        }
                     }
+                    $cookieStore.put("checkOuts", checkOuts);
+                    window.location.href = "/product/check-out";
                 }
-                $cookieStore.put("checkOuts", checkOuts);
-                window.location.href = "";
             }
         };
             

@@ -278,6 +278,7 @@
     <Compile Include="Models\RequestModel\CreateProductModel.cs" />
     <Compile Include="Models\RequestModel\Customer.cs" />
     <Compile Include="Models\RequestModel\FromUri.cs" />
+    <Compile Include="Models\RequestModel\Invoice.cs" />
     <Compile Include="Models\RequestModel\Merchant.cs" />
     <Compile Include="Models\RequestModel\ProductDetail.cs" />
     <Compile Include="Models\Token.cs" />
@@ -401,7 +402,6 @@
     <Content Include="Scripts\Client\Controller\Cart.js" />
     <Content Include="Scripts\Client\Controller\Category.js" />
     <Content Include="Scripts\Client\Controller\CategoryDetail.js" />
-    <Content Include="Scripts\Client\Controller\Checkout.js" />
     <Content Include="Scripts\Client\Controller\Index.js" />
     <Content Include="Scripts\Client\Controller\Invoice.js" />
     <Content Include="Scripts\Client\Controller\InvoiceDetail.js" />
@@ -414,7 +414,6 @@
     <Content Include="Scripts\Client\Service\Cart.js" />
     <Content Include="Scripts\Client\Service\Category.js" />
     <Content Include="Scripts\Client\Service\CategoryDetail.js" />
-    <Content Include="Scripts\Client\Service\Checkout.js" />
     <Content Include="Scripts\Client\Service\Helper.js" />
     <Content Include="Scripts\Client\Service\Invoice.js" />
     <Content Include="Scripts\Client\Service\InvoiceDetail.js" />

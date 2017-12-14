@@ -27,7 +27,7 @@
                 selectedProducts.push(product.id);
                 $cookieStore.put("selectedProducts", selectedProducts);
             } else {
-                if (Helper.checkItemExistInArray($scope.view.selectedProducts, product.id) === false) {
+                if (Helper.checkItemExistInArray($scope.view.selectedProducts, product.id) === false) {   
                     $scope.view.selectedProducts.push(product.id);
                     $cookieStore.put("selectedProducts", $scope.view.selectedProducts);
                 }

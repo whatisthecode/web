@@ -17,7 +17,6 @@ using static WebApplication2.Models.RequestModel.FromUri;
 
 namespace WebApplication2.Controllers.API
 {
-    [APIAuthorize]
     public class ProductController : ApiController
     {
 
@@ -95,7 +94,6 @@ namespace WebApplication2.Controllers.API
 
         [Route("api/product/{id}")]
         [HttpGet]
-        [AllowAnonymous]
         public IHttpActionResult getProductWithConditions(short id)
         {
             Response response = new Response();
@@ -130,7 +128,6 @@ namespace WebApplication2.Controllers.API
 
         [Route("api/products/")]
         [HttpGet]
-        [AllowAnonymous]
         public IHttpActionResult getProductslist([FromUri] PageRequest pageRequest)
         {
             Response response = new Response();
@@ -288,6 +285,7 @@ namespace WebApplication2.Controllers.API
                 response.code = "400";
                 response.status = "Sản phẩm không thuộc quyền sở hửu của bạn";
                 response.results = "";
+                return Content<Response>(HttpStatusCode.OK, response);
             }
             response.code = "200";
             response.status = "Lấy sản phẩm thành công";

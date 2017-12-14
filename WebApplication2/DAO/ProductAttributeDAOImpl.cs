@@ -51,10 +51,14 @@ namespace WebApplication2.DAO
 
         public List<ProductAttribute> getProAttrsByProId(short proId)
         {
-            var query = from p in base.getContext().productAttributes
-                        where p.productId == proId
-                        select p;
-            return query.ToList();
+            if(proId > 0)
+            {
+                var query = from p in base.getContext().productAttributes
+                            where p.productId == proId
+                            select p;
+                return query.ToList();
+            }
+            return null;
         }
     }
 }
