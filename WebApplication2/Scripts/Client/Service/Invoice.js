@@ -6,6 +6,8 @@
         return {
             createInvoice: function (req, success, fail) {
                 var data = Helper.toRealObject(req);
+                console.log(data);
+                console.log(typeof data);
                 var headers = {
                     'Content-Type': "application/json"
                 };

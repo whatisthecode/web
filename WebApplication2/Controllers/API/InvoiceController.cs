@@ -45,6 +45,12 @@ namespace WebApplication2.Controllers.API
             for(var i = 0; i < products.Count(); i++)
             {
                 Int16 saler = products[i].createdBy;
+                if(viewInvoiceModel.buyer == saler)
+                {
+                    response.code = "409";
+                    response.status = "Bạn không thể mua sản phẩm của chính mình";
+                    return Content<Response>(HttpStatusCode.Conflict, response);
+                }
                 bool existSaler = salers.Contains(saler);
                 if(existSaler == false)
                 {

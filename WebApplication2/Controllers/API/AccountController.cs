@@ -77,7 +77,7 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
 
         // GET api/Account/UserInfo
         [Route("UserInfo")]
-        public IHttpActionResult GetUserInfo()
+        public async Task<IHttpActionResult> GetUserInfoAsync()
         {
             Response response = new Response();
             String accessToken = HttpContext.Current.Request.Headers.Get("Authorization").Replace("Bearer ","");
@@ -90,7 +90,7 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
                 if (result <= 0)
                 {
                     UserInfo userInfo = new UserInfo();
-                    var user = Service._userManager.FindByEmail(token.userName);
+                    var user = await Service._userManager.FindByEmailAsync(token.userName);
                     user.UserInfo = Service.userInfoDAO.getUserInfo(user.userInfoId);
                     CurrentUserInfoLogin currentUserInfoLogin = new CurrentUserInfoLogin();
                     currentUserInfoLogin.dob = user.UserInfo.dob;
@@ -436,7 +436,7 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
             {
                 return this.BadRequest("Invalid user data");
             }
-            ApplicationUser identityUser = UserManager.FindByEmail(loginModel.email);
+            ApplicationUser identityUser = Service._userManager.FindByEmailAsync(loginModel.email).Result;
             if (identityUser != null)    //validate username
             {
                 bool result = UserManager.CheckPassword(identityUser, loginModel.password); //validate user password

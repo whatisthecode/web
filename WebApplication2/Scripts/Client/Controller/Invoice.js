@@ -1,5 +1,5 @@
 ﻿if ("undefined" !== typeof app) {
-    app.controller("InvoiceController", function ($scope, CONFIG, ProductDetail, Helper, Invoice, $cookieStore) {
+    app.controller("InvoiceController", function ($scope, CONFIG, ProductDetail, Helper, Invoice, $cookieStore, User) {
         console.log("This check out");
         $scope.view = {
             products: [],
@@ -10,7 +10,7 @@
         $scope.createInvoice = function () {
             var req = {
                 "products": $scope.view.products,
-                "buyer": 6,
+                "buyer": $scope.view.userData.id,
                 "total": $scope.view.total
             };
             Invoice.createInvoice(req, function (response) {
@@ -24,8 +24,21 @@
             });
         };
 
+        getUserInfo = function () {
+            User.getUserInfo(function (response) {
+                if (response) {
+                    $scope.view.userData = response.results;
+                    console.log($scope.view.userData);
+                }
+            }, function (err) {
+                if (err) {
+                    console.log(err);
+                }
+            });
+        };
+
         viewInit = function () {
-            $scope.userData = JSON.parse(localStorage.getItem("userData"));
+            getUserInfo();
             var checkOuts = $cookieStore.get("checkOuts");
             $scope.view.products = checkOuts;
             console.log(checkOuts);

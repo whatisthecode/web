@@ -107,7 +107,7 @@
             else {
                 if ($scope.products.length > 0)
                 {
-                    if (checkLogin === true)
+                    if (checkLogin() === true)
                     {
                         var checkOuts = [];
                         for (var i = 0; i < $scope.products.length; i++) {
@@ -122,22 +122,22 @@
                             }
                         }
                         $cookieStore.put("checkOuts", checkOuts);
-                        window.location.href = "/product/check-out";
+                        window.location.href = "/check-out";
                     }
                     else
                     {
                         validator.prototype.showWarning("#errors", "#checkLogin", "Vui lòng đăng nhập để tiếp tục thanh toán!");
-                        setTimeout(function () {
-                            window.location.href = "/dashboard";
-                        }, 2000);
+                        //setTimeout(function () {
+                        //    window.location.href = "/login";
+                        //}, 2000);
                     }
                 }
             }
         };
 
         checkLogin = function () {
-            var userData = JSON.parse(localStorage.getItem("userData"));
-            if (Helper.notEmpty(userData))
+            var token = localStorage.getItem("token");
+            if (Helper.notEmpty(token))
                 return true;
             else
                 return false;
