@@ -24,7 +24,6 @@ namespace WebApplication2.Models
 
         public double price { get; set; }
 
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public Double subTotal
         {
             get
@@ -33,7 +32,7 @@ namespace WebApplication2.Models
             }
             private set
             {
-
+                
             }
         }
 
@@ -41,13 +40,12 @@ namespace WebApplication2.Models
 
         public Product Product { get; set; }
 
-        public InvoiceDetail(short invoice, short product, short amount, double price, double subTotal)
+        public InvoiceDetail(short invoice, short product, short amount, double price)
         {
             this.invoice = invoice;
             this.product = product;
             this.amount = amount;
             this.price = price;
-            this.subTotal = subTotal;
         }
     }
 }

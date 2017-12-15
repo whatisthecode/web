@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using WebApplication2.CustomAttribute;
-using WebApplication2.DAO;
 using WebApplication2.Models;
 using WebApplication2.Models.Mapping;
 using WebApplication2.Services;
@@ -73,9 +71,8 @@ namespace WebApplication2.Controllers.API
                     List<ProductAttribute> proAttrs = Service.productAttributeDAO.getProAttrsByProId(lists[j].id);
                     var amount = invoiceProduct.amount;
                     var price = proAttrs[0].value;
-                    double subTotal = amount * double.Parse(price);
-                    total = total + subTotal;
                     InvoiceDetail invoiceDetail = new InvoiceDetail(createInvoice.id, lists[j].id, amount, double.Parse(price));
+                    total = total + invoiceDetail.subTotal; //tính Total của cái hóa đơn
                     Service.invoiceDetailDAO.insertInvoiceDetail(invoiceDetail);
                     Service.invoiceDetailDAO.saveInvoiceDetail();
                 }

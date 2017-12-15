@@ -216,6 +216,7 @@
     <Compile Include="Controllers\API\AccountController.cs" />
     <Compile Include="Controllers\API\CategoryController.cs" />
     <Compile Include="Controllers\API\CategoryProductController.cs" />
+    <Compile Include="Controllers\API\ImageController.cs" />
     <Compile Include="Controllers\API\InvoiceController.cs" />
     <Compile Include="Controllers\API\ProductAttributeController.cs" />
     <Compile Include="Controllers\API\ProductController.cs" />
