@@ -15,6 +15,8 @@
             Invoice.createInvoice(req, function (response) {
                 if (response) {
                     console.log(response);
+                    $cookieStore.remove("checkOuts");
+                    $cookieStore.remove("selectedProducts");
                 }
             }, function (err) {
                 if (err) {
@@ -46,6 +48,12 @@
                     console.log(err);
                 }
             });
+        };
+
+        $scope.removeInvoice = function () {
+            $cookieStore.remove("checkOuts");
+            $cookieStore.remove("selectedProducts");
+            window.location.href = "/";
         };
 
         viewInit = function () {

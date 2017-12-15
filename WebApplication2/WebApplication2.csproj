@@ -215,7 +215,7 @@
     <Compile Include="Controllers\Admin\AdminUserController.cs" />
     <Compile Include="Controllers\API\AccountController.cs" />
     <Compile Include="Controllers\API\CategoryController.cs" />
-    <Compile Include="Controllers\API\CategoryProductController.cs" />
+    <Compile Include="Controllers\API\CategoryTypeController.cs" />
     <Compile Include="Controllers\API\ImageController.cs" />
     <Compile Include="Controllers\API\InvoiceController.cs" />
     <Compile Include="Controllers\API\ProductAttributeController.cs" />
@@ -276,6 +276,7 @@
     <Compile Include="Models\IdentityModels\RoleViewModel.cs" />
     <Compile Include="Models\Invoice.cs" />
     <Compile Include="Models\InvoiceDetail.cs" />
+    <Compile Include="Models\RequestModel\CategoryViewModels.cs" />
     <Compile Include="Models\Mapping\PagedResult.cs" />
     <Compile Include="Models\Mapping\PageResponse.cs" />
     <Compile Include="Models\Mapping\Response.cs" />
@@ -435,6 +436,7 @@
     <Content Include="Scripts\Client\Service\ProductDetail.js" />
     <Content Include="Scripts\Client\Service\Register.js" />
     <Content Include="Scripts\Client\Service\User.js" />
+    <Content Include="Scripts\Client\Shared\Footer.js" />
     <Content Include="Scripts\Client\Shared\Top.js" />
     <Content Include="Scripts\Client\View\cart.html" />
     <Content Include="Scripts\Client\View\check-out.html" />

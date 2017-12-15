@@ -83,7 +83,7 @@ namespace WebApplication2.DAO
 
         public PagedResult<T> PageView(IQueryable<T> query, int page, int pageSize)
         {
-            var result = new PagedResult<T>();
+            PagedResult<T> result = new PagedResult<T>();
             result.currentPage = page;
             result.pageSize = pageSize;
             result.rowCount = query.Count();
@@ -92,7 +92,6 @@ namespace WebApplication2.DAO
             var skip = (page - 1) * pageSize;
 
             result.items = Queryable.Skip(query, skip).Take(pageSize).ToList();
-
             return result;
         }
 

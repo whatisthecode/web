@@ -8,7 +8,7 @@
                     <a href="/">Trang Chủ</a>
                 </li>
                 <li>
-                    <a href="/view.currentCategory">{{view.currentCategory}}</a>
+                    <a href="/{{view.currentCategory}}">{{categoryName}}</a>
                 </li>
                 <li>{{view.productDetail.name}}</li>
             </ul>
@@ -17,63 +17,19 @@
 
         <div class="col-md-3">
             <!-- *** MENUS AND FILTERS ***
-            _________________________________________________________ -->
+    _________________________________________________________ -->
             <div class="panel panel-default sidebar-menu">
 
                 <div class="panel-heading">
-                    <h3 class="panel-title">Categories</h3>
+                    <h3 class="panel-title">Sản phẩm</h3>
                 </div>
 
                 <div class="panel-body">
                     <ul class="nav nav-pills nav-stacked category-menu">
                         <li>
-                            <a href="category.html">Men <span class="badge pull-right">42</span></a>
                             <ul>
-                                <li>
-                                    <a href="category.html">T-shirts</a>
-                                </li>
-                                <li>
-                                    <a href="category.html">Shirts</a>
-                                </li>
-                                <li>
-                                    <a href="category.html">Pants</a>
-                                </li>
-                                <li>
-                                    <a href="category.html">Accessories</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="active">
-                            <a href="category.html">Ladies  <span class="badge pull-right">123</span></a>
-                            <ul>
-                                <li>
-                                    <a href="category.html">T-shirts</a>
-                                </li>
-                                <li>
-                                    <a href="category.html">Skirts</a>
-                                </li>
-                                <li>
-                                    <a href="category.html">Pants</a>
-                                </li>
-                                <li>
-                                    <a href="category.html">Accessories</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="category.html">Kids  <span class="badge pull-right">11</span></a>
-                            <ul>
-                                <li>
-                                    <a href="category.html">T-shirts</a>
-                                </li>
-                                <li>
-                                    <a href="category.html">Skirts</a>
-                                </li>
-                                <li>
-                                    <a href="category.html">Pants</a>
-                                </li>
-                                <li>
-                                    <a href="category.html">Accessories</a>
+                                <li ng-repeat="cate in cateProducts">
+                                    <a href="/{{cate.code}}">{{cate.name}}</a>
                                 </li>
                             </ul>
                         </li>
@@ -86,36 +42,21 @@
             <div class="panel panel-default sidebar-menu">
 
                 <div class="panel-heading">
-                    <h3 class="panel-title">Brands <a class="btn btn-xs btn-danger pull-right" href="#"><i class="fa fa-times-circle"></i> Clear</a></h3>
+                    <h3 class="panel-title">Thương hiệu <a class="btn btn-xs btn-danger pull-right" href="#"><i class="fa fa-times-circle"></i> Xóa</a></h3>
                 </div>
 
                 <div class="panel-body">
 
                     <form>
                         <div class="form-group">
-                            <div class="checkbox">
+                            <div class="checkbox" ng-repeat="cate in cateBrands">
                                 <label>
-                                    <input type="checkbox">Armani (10)
-                                </label>
-                            </div>
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox">Versace (12)
-                                </label>
-                            </div>
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox">Carlo Bruni (15)
-                                </label>
-                            </div>
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox">Jack Honey (14)
+                                    <input type="checkbox">{{cate.name}} (10)
                                 </label>
                             </div>
                         </div>
 
-                        <button class="btn btn-default btn-sm btn-primary"><i class="fa fa-pencil"></i> Apply</button>
+                        <button class="btn btn-default btn-sm btn-primary"><i class="fa fa-pencil"></i> Áp dụng</button>
 
                     </form>
 
@@ -125,43 +66,20 @@
             <div class="panel panel-default sidebar-menu">
 
                 <div class="panel-heading">
-                    <h3 class="panel-title">Colours <a class="btn btn-xs btn-danger pull-right" href="#"><i class="fa fa-times-circle"></i> Clear</a></h3>
+                    <h3 class="panel-title">Thuộc tính</h3>
                 </div>
 
                 <div class="panel-body">
+                    <ul class="nav nav-pills nav-stacked category-menu">
+                        <li>
+                            <ul>
+                                <li ng-repeat="cate in cateAttrs">
+                                    <a href="category.html">{{cate.name}}</a>
+                                </li>
+                            </ul>
+                        </li>
 
-                    <form>
-                        <div class="form-group">
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox"> <span class="colour white"></span> White (14)
-                                </label>
-                            </div>
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox"> <span class="colour blue"></span> Blue (10)
-                                </label>
-                            </div>
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox"> <span class="colour green"></span> Green (20)
-                                </label>
-                            </div>
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox"> <span class="colour yellow"></span> Yellow (13)
-                                </label>
-                            </div>
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox"> <span class="colour red"></span> Red (10)
-                                </label>
-                            </div>
-                        </div>
-
-                        <button class="btn btn-default btn-sm btn-primary"><i class="fa fa-pencil"></i> Apply</button>
-
-                    </form>
+                    </ul>
 
                 </div>
             </div>
@@ -180,17 +98,17 @@
             <div class="row" id="productMain">
                 <div class="col-sm-6">
                     <div id="mainImage">
-                        <img src="./Assets/IMG/detailbig1.jpg" alt="" class="img-responsive">
+                        <img src="{{view.productDetail.details[0].url}}" alt="{{view.productDetail.name}}" class="img-responsive">
                     </div>
 
                     <div class="ribbon sale">
-                        <div class="theribbon">SALE</div>
+                        <div class="theribbon">Sale</div>
                         <div class="ribbon-background"></div>
                     </div>
                     <!-- /.ribbon -->
 
                     <div class="ribbon new">
-                        <div class="theribbon">NEW</div>
+                        <div class="theribbon">Mới</div>
                         <div class="ribbon-background"></div>
                     </div>
                     <!-- /.ribbon -->
@@ -201,7 +119,7 @@
                         <h2 class="">{{view.productDetail.name}}</h2>
                         <p class="price">{{view.productDetail.attributes[0].value}} Đồng</p>
                         <p style="font-size:15px"><strong>Giá giảm:</strong> {{view.productDetail.attributes[2].value}} Đồng</p>
-                        <p><strong>Màu sắc:</strong> <button class="btn btn-sm" style="background-color: {{view.productDetail.attributes[3].value}}"></button></p>
+                        <p><strong>Màu sắc:</strong> {{view.productDetail.attributes[3].value}}</p>
                         <p><strong>Còn lại:</strong> {{view.productDetail.attributes[1].value}}</p>
                         <p class="goToDescription">
                             <a href="#details" class="scroll-to">Bấm để xem chi tiết sản phẩm</a>
@@ -215,19 +133,9 @@
                     </div>
 
                     <div class="row" id="thumbs">
-                        <div class="col-xs-4">
-                            <a href="./Assets/IMG/detailbig1.jpg" class="thumb">
-                                <img src="./Assets/IMG/detailsquare.jpg" alt="" class="img-responsive">
-                            </a>
-                        </div>
-                        <div class="col-xs-4">
-                            <a href="./Assets/IMG/detailbig2.jpg" class="thumb">
-                                <img src="./Assets/IMG/detailsquare2.jpg" alt="" class="img-responsive">
-                            </a>
-                        </div>
-                        <div class="col-xs-4">
-                            <a href="./Assets/IMG/detailbig3.jpg" class="thumb">
-                                <img src="./Assets/IMG/detailsquare3.jpg" alt="" class="img-responsive">
+                        <div class="col-md-4" ng-repeat="img in view.productDetail.details">
+                            <a href="{{img.url}}" class="thumb">
+                                <img src="{{img.url}}" alt="" class="img-responsive" style="width:100%; height:100%">
                             </a>
                         </div>
                     </div>

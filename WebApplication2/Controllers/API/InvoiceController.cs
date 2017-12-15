@@ -71,7 +71,16 @@ namespace WebApplication2.Controllers.API
                     List<ProductAttribute> proAttrs = Service.productAttributeDAO.getProAttrsByProId(lists[j].id);
                     var amount = invoiceProduct.amount;
                     var price = proAttrs[0].value;
-                    InvoiceDetail invoiceDetail = new InvoiceDetail(createInvoice.id, lists[j].id, amount, double.Parse(price));
+                    var discount = proAttrs[2].value;
+                    InvoiceDetail invoiceDetail = null;
+                    if (double.Parse(discount) > 0)
+                    {
+                        invoiceDetail = new InvoiceDetail(createInvoice.id, lists[j].id, amount, double.Parse(discount));
+                    }
+                    else
+                    {
+                        invoiceDetail = new InvoiceDetail(createInvoice.id, lists[j].id, amount, double.Parse(price));
+                    }
                     total = total + invoiceDetail.subTotal; //tính Total của cái hóa đơn
                     Service.invoiceDetailDAO.insertInvoiceDetail(invoiceDetail);
                     Service.invoiceDetailDAO.saveInvoiceDetail();

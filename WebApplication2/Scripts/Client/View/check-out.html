@@ -1,7 +1,7 @@
 ﻿<div id="content" data-ng-controller="InvoiceController">
     <div class="container">
         <div class="row">
-            <div class="col-md-offset-4 col-md-4">
+            <div class="col-md-offset-3 col-md-6">
                 <blockquote>
                     <p>Đây là thông tin đơn hàng của bạn. Nhấn <b>xác nhận</b> để hoàn tất việc thanh toán.</p>
                     <p>Nhấn <b>Hủy</b> để trờ lại trang chủ</p>
@@ -35,7 +35,7 @@
                         </table>
                     </div>
                     <div id="#errors" class="text-right"></div>
-                    <a href="/" class="btn btn-default text-primary">Hủy</a>
+                    <a ng-click="removeInvoice()" class="btn btn-default text-primary">Hủy</a>
                     <a ng-click="createInvoice()"class="btn btn-primary pull-right">Xác nhận</a>
                 </div>
             </div>

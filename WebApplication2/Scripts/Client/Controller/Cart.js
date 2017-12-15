@@ -7,14 +7,11 @@
 
         viewOninit = function () {
             $scope.selectedProducts = $cookieStore.get("selectedProducts");
-            console.log($scope.selectedProducts);
-            if ($scope.selectedProducts !== undefined || $scope.selectedProducts.length > 0) {
+            if (Helper.notEmpty($scope.selectedProducts)) {
                 getAllProducts();
                 $scope.selectedProductsLength = $scope.selectedProducts.length.toString();
-                $(".table-responsive").show();
             }
             else {
-                $(".table-responsive").hide();
                 $scope.selectedProductsLength = "0";
             }
         };
@@ -31,7 +28,6 @@
                             response.results.attributes[2].value = Helper.addCommasToMoney(response.results.attributes[2].value);
                         }
                         $scope.products.push(response.results);
-                        console.log($scope.products);
                         $scope.totalInvoice = sumInvoice($scope.products);
                     }
                 }, function (err) {
@@ -97,10 +93,11 @@
                     $cookieStore.put("selectedProducts", $scope.selectedProducts);
                 }
             }
-            for (var j = 0; j < $scope.products.length; j) {
+            for (var j = 0; j < $scope.products.length; j++) {
                 if ($scope.products[j].id === productId)
                     $scope.products.splice(j, 1);
             }
+            $scope.selectedProductsLength = $scope.products.length;
             $scope.totalInvoice = sumInvoice($scope.products);
         };
 
