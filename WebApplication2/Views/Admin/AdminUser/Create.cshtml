@@ -1,0 +1,90 @@
+﻿
+@{
+    ViewBag.Title = "Create";
+    ViewBag.pageTitle = "Tạo người dùng mới";
+    ViewBag.pageLink = "/dashboard/user/create";
+    ViewBag.currentAction = "user";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="content">
+                    <a href="~/dashboard/user/create" class="btn btn-primary btn-wd btn-fill btn-flat">Thêm người dùng</a>
+                </div>
+            </div>
+            <div class="card">
+                <div class="header">
+                    <h4 class="title">Danh sách người dùng</h4>
+                </div>
+                <div class="content container">
+                    <form>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Địa chỉ email</label>
+                                    <input class="form-control border-input" type="email" name="Email" value="@if (Model.Email != null) { @Model.Email; }" placeholder="Nhập email" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Mật khẩu</label>
+                                    <input class="form-control border-input" type="password" name="Password" value="@if (Model.Password != null) { @Model.Password; }" placeholder="Nhập mật khẩu" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Số điện thoại</label>
+                                    <input class="form-control border-input" type="text" name="PhoneNumber" value="@if (Model.PhoneNumber != null) { @Model.PhoneNumber; }" placeholder="Nhập số điện thoại" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Ngày sinh</label>
+                                    <input class="form-control border-input" type="text" name="dob" value="@if (Model.dob != null) { @Model.dob; }" placeholder="Nhập ngày sinh" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Họ</label>
+                                    <input class="form-control border-input" type="text" name="firstName" value="@if (Model.firstName != null) { @Model.firstName; }" placeholder="Nhập Họ" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Tên</label>
+                                    <input class="form-control border-input" type="text" name="lastName" value="@if (Model.lastName != null) { @Model.lastName; }" placeholder="Nhập tên" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Số CMND</label>
+                                    <input class="form-control border-input" type="text" name="identityNumber" value="@if (Model.identityNumber != null) { @Model.identityNumber;}" placeholder="Nhập số CMND" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <button type="submit" class="btn btn-info btn-wd btn-flat btn-fill">Lưu</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

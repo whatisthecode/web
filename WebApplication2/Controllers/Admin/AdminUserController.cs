@@ -11,6 +11,7 @@ using WebApplication2.CustomAttribute;
 using WebApplication2.Models;
 using WebApplication2.Models.Mapping;
 using WebApplication2.Models.RequestModel;
+using static WebApplication2.Models.AccountBindingModels;
 
 namespace WebApplication2.Controllers.Admin
 {
@@ -38,11 +39,34 @@ namespace WebApplication2.Controllers.Admin
                     users = pageResult.items;
                 return View(users);
             }
-            else if(response.StatusCode == HttpStatusCode.Forbidden)
+            else if (response.StatusCode == HttpStatusCode.Forbidden)
             {
                 return RedirectToAction("Forbidden", "Error");
             }
             return RedirectToAction("NotFound", "Error");
+        }
+
+        public ActionResult Detail()
+        {
+            
+            return View();
+        }
+        [HttpPost]
+        public ActionResult Detail(RegisterBindingModel createUser)
+        {
+            return null;
+        }
+
+        public ActionResult Create()
+        {
+            RegisterBindingModel createUser = new RegisterBindingModel();
+            return View(createUser);
+        }
+
+        [HttpPost]
+        public ActionResult Create(RegisterBindingModel createUser)
+        {
+            return null;
         }
     }
 }

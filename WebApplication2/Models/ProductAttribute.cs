@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
+using Newtonsoft.Json.Linq;
 
 namespace WebApplication2.Models
 {
@@ -42,6 +43,11 @@ namespace WebApplication2.Models
         public ProductAttribute()
         {
             
+        }
+
+        public static implicit operator JObject(ProductAttribute v)
+        {
+            throw new NotImplementedException();
         }
     }
 }
