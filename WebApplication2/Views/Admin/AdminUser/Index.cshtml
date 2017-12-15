@@ -23,6 +23,13 @@
                             <tr>
                                 <th>STT</th>
                                 <th>Email</th>
+                                <th>Họ tên</th>
+                                <th>Quyền</th>
+                                <th>Ngày tạo</th>
+                                <th>Tình trạng</th>
+                                <th>Trạng thái</th>
+                                <th></th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -33,8 +40,33 @@
                             {
                                 @:<tr>
                                 @:<td>@(flag++)</td>
-                                @:<td>@user.dob</td>
-                                @:</tr>
+                                @:<td>@user.email</td>
+                                @:<td>@user.fullname</td>
+                                @:<td>@(user.groupName == "SuperAdmin" ? "Quản trị hệ thống" : (user.groupName == "Admin" ? "Quản trị viên" : (user.groupName == "Merchant" ? "Người bán" : "Khách hàng"))) </td>
+                                @:<td>@user.createdAt</td>
+                                if (user.status == 1)
+                                {
+                                    @:<td>Đã kích hoạt</td>
+                                }
+                                else if(user.staus == 0)
+                                {
+                                    @:<td>Chưa kích hoạt</td>
+                                }
+                                else
+                                {
+                                    @:<td>Đã bị khóa</td>
+                                }
+                                if (user.isLogin)
+                                {
+                                    <span class="user-active"></span>
+                                }
+                                else
+                                {
+                                @:<td><span class="user-inactive"></span></td>
+                                }
+                                @:<td><a href="/dashboard/user/@user.id" class="text-info"><i class="ti-pencil-alt"></i> Chi tiết</a></td>
+                                @:<td><a href="/dashboard/user/remove/@user.id" class="text-danger"><i class="ti-trash"></i> Xóa</a></td>
+                             @:</tr>
                             }
                         </tbody>
                     </table>

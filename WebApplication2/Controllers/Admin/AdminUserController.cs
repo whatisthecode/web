@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using WebApplication2.CustomAttribute;
 using WebApplication2.Models;
 using WebApplication2.Models.Mapping;
+using WebApplication2.Models.RequestModel;
 
 namespace WebApplication2.Controllers.Admin
 {
@@ -31,11 +32,11 @@ namespace WebApplication2.Controllers.Admin
             if (response.IsSuccessStatusCode)
             {
                 Response content = response.Content.ReadAsAsync<Response>().Result;
-                PagedResult<UserInfo> pageResult = ((JObject)content.results).ToObject<PagedResult<UserInfo>>();
-                ICollection<UserInfo> userInfos = new List<UserInfo>();
+                PagedResult<UserGeneral> pageResult = ((JObject)content.results).ToObject<PagedResult<UserGeneral>>();
+                ICollection<UserGeneral> users = new List<UserGeneral>();
                 if (pageResult.items.Count > 0)
-                    userInfos = pageResult.items;
-                return View(userInfos);
+                    users = pageResult.items;
+                return View(users);
             }
             else if(response.StatusCode == HttpStatusCode.Forbidden)
             {

@@ -113,19 +113,19 @@ namespace WebApplication2.Controllers.API
             }
 
             //TODO : CREATE 6 account superAdmin, admin, 2 merchants, 2 customers
-            ApplicationUser uSuperAdmin = new ApplicationUser() { UserName = "superadmin@aletaobao.com", Email = "superadmin@aletaobao.com" };
-            ApplicationUser uAdmin = new ApplicationUser() { UserName = "admin@aletaobao.com", Email = "admin@aletaobao.com" };
-            ApplicationUser uMerchant1 = new ApplicationUser() { UserName = "hggntg@gmail.com", Email = "hggntg@gmail.com" };
-            ApplicationUser uMerchant2 = new ApplicationUser() { UserName = "ledinhnam1131@gmail.com", Email = "ledinhnam1131@gmail.com" };
-            ApplicationUser uCustomer1 = new ApplicationUser() { UserName = "hungtienphan1995@gmail.com", Email = "hungtienphan1995@gmail.com" };
-            ApplicationUser uCustomer2 = new ApplicationUser() { UserName = "ngodonghong@gmail.com", Email = "ngodonghong@gmail.com" };
+            ApplicationUser uSuperAdmin = new ApplicationUser() { UserName = "superadmin@aletaobao.com", Email = "superadmin@aletaobao.com", PhoneNumber = "0901789012" };
+            ApplicationUser uAdmin = new ApplicationUser() { UserName = "admin@aletaobao.com", Email = "admin@aletaobao.com", PhoneNumber = "0956719201" };
+            ApplicationUser uMerchant1 = new ApplicationUser() { UserName = "hggntg@gmail.com", Email = "hggntg@gmail.com", PhoneNumber = "09103019283" };
+            ApplicationUser uMerchant2 = new ApplicationUser() { UserName = "ledinhnam1131@gmail.com", Email = "ledinhnam1131@gmail.com", PhoneNumber = "0981625371" };
+            ApplicationUser uCustomer1 = new ApplicationUser() { UserName = "hungtienphan1995@gmail.com", Email = "hungtienphan1995@gmail.com", PhoneNumber = "0920981729" };
+            ApplicationUser uCustomer2 = new ApplicationUser() { UserName = "ngodonghong@gmail.com", Email = "ngodonghong@gmail.com", PhoneNumber = "0909090872" };
 
-            uSuperAdmin.UserInfo = new UserInfo(true, "Super", "Admin", new DateTime(1989, 11, 1), "262816900");
-            uAdmin.UserInfo = new UserInfo(true, "Admin", "", new DateTime(1992, 8, 1), "202916901");
-            uMerchant1.UserInfo = new UserInfo(true, "Ngô Bảo", "Hoàng Minh", new DateTime(1994, 06, 25), "332226911");
-            uMerchant2.UserInfo = new UserInfo(true, "Đào Hữu", "Tình", new DateTime(1988, 12, 30), "122006320");
-            uCustomer1.UserInfo = new UserInfo(true, "Đoàn", "Dự", new DateTime(1992, 06, 10), "332666999");
-            uCustomer2.UserInfo = new UserInfo(true, "Đoàn Chính", "Thuần", new DateTime(1993, 11, 11), "272333978");
+            uSuperAdmin.UserInfo = new UserInfo(1, "Super", "Admin", new DateTime(1989, 11, 1), "262816900");
+            uAdmin.UserInfo = new UserInfo(1, "Admin", "", new DateTime(1992, 8, 1), "202916901");
+            uMerchant1.UserInfo = new UserInfo(1, "Ngô Bảo", "Hoàng Minh", new DateTime(1994, 06, 25), "332226911");
+            uMerchant2.UserInfo = new UserInfo(1, "Đào Hữu", "Tình", new DateTime(1988, 12, 30), "122006320");
+            uCustomer1.UserInfo = new UserInfo(1, "Đoàn", "Dự", new DateTime(1992, 06, 10), "332666999");
+            uCustomer2.UserInfo = new UserInfo(1, "Đoàn Chính", "Thuần", new DateTime(1993, 11, 11), "272333978");
 
             IdentityResult userSuperAdmin = await Service._userManager.CreateAsync(uSuperAdmin, "123456");
             IdentityResult userAdmin = await Service._userManager.CreateAsync(uAdmin, "123456");

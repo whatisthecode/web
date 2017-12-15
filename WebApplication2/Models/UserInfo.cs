@@ -13,7 +13,7 @@ namespace WebApplication2.Models
     {
         public Int16 id { get; set; }
 
-        public Boolean status { get; set; }
+        public Int16 status { get; set; }
 
         [Column("first_name")]
         public String firstName { get; set; }
@@ -27,7 +27,7 @@ namespace WebApplication2.Models
         [Column("identity_number")]
         public String identityNumber { get; set; }
 
-        public UserInfo(bool status, string firstName, string lastName, DateTime dob, string identityNumber)
+        public UserInfo(Int16 status, string firstName, string lastName, DateTime dob, string identityNumber)
         {
             this.status = status;
             this.firstName = firstName;
@@ -38,7 +38,7 @@ namespace WebApplication2.Models
 
         public UserInfo()
         {
-            this.status = false;
+            this.status = 0;
         }
     }
 }

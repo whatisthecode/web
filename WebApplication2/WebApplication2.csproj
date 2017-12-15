@@ -290,6 +290,7 @@
     <Compile Include="Models\RequestModel\Merchant.cs" />
     <Compile Include="Models\RequestModel\ProductDetail.cs" />
     <Compile Include="Models\RequestModel\SidebarModel.cs" />
+    <Compile Include="Models\RequestModel\UserGeneral.cs" />
     <Compile Include="Models\Token.cs" />
     <Compile Include="Models\UserInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

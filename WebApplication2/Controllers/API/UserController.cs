@@ -10,6 +10,7 @@ using WebApplication2.CustomAttribute;
 using WebApplication2.DAO;
 using WebApplication2.Models;
 using WebApplication2.Models.Mapping;
+using WebApplication2.Models.RequestModel;
 using static WebApplication2.Models.RequestModel.FromUri;
 
 namespace WebApplication2.Controllers.API
@@ -46,7 +47,44 @@ namespace WebApplication2.Controllers.API
             }
             if (isAdmin)
             {
-                PagedResult<UserInfo> pv = Service.userInfoDAO.AdminPageView(user.userInfoId, pageRequest.pageIndex, pageRequest.pageSize, pageRequest.order);
+                PagedResult<UserInfo> tempPv = Service.userInfoDAO.AdminPageView(user.userInfoId, pageRequest.pageIndex, pageRequest.pageSize, pageRequest.order);
+                List<UserGeneral> users = new List<UserGeneral>();
+                foreach(var item in tempPv.items)
+                {
+                    ApplicationUser appUser = DatabaseFactory.context.Users.Where(au => au.userInfoId == item.id).FirstOrDefault();
+                    Token userToken = Service.tokenDAO.getByUsername(appUser.Email);
+                    Boolean isLogin = false;
+                    if (userToken != null)
+                        isLogin = userToken.isLogin;
+                    appUser.groups = Service.userGroupDAO.getUserGroupByUser(appUser.Id).ToList();
+                    String groupName = "Customer";
+                    foreach(var group in appUser.groups)
+                    {
+                        if(group.Group.name == "SuperAdmin")
+                        {
+                            groupName = "SuperAdmin";
+                            break;
+                        }
+                        else if(group.Group.name == "Admin")
+                        {
+                            groupName = "Admin";
+                            break;
+                        }
+                        else if(group.Group.name == "Merchant")
+                        {
+                            groupName = "Merchant";
+                            break;
+                        }
+                    }
+                    users.Add(new UserGeneral(item.id,appUser.Email, item.firstName + " " + item.lastName, groupName, item.status, isLogin, item.createdAt));
+                }
+                PagedResult<UserGeneral> pv = new PagedResult<UserGeneral>();
+                pv.currentPage = tempPv.currentPage;
+                pv.pageCount = tempPv.pageCount;
+                pv.pageSize = tempPv.pageSize;
+                pv.rowCount = tempPv.rowCount;
+                pv.items = users;
+
                 response.code = "200";
                 response.status = "Danh sách người dùng :";
                 response.results = pv;
