@@ -13,6 +13,7 @@ using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using WebApplication2.Models;
 using WebApplication2.CustomAttribute;
+using WebApplication2.Models.Mapping;
 
 namespace WindowsFormsApp1
 {
@@ -27,6 +28,12 @@ namespace WindowsFormsApp1
         private void button1_Click(object sender, EventArgs e)
         {
 
+        }
+
+        public static class LoginInfo
+        {
+            public static string token;
+            public static Int16 id;
         }
 
         private void btnLogin_Click(object sender, EventArgs e)
@@ -52,11 +59,12 @@ namespace WindowsFormsApp1
                     loginModel.email = username;
                     loginModel.password = password;
                     HttpContent httpContent = new ObjectContent<LoginModel>(loginModel, new JsonMediaTypeFormatter());
-
                     var response = httpClient.PostAsync("api/account/login", httpContent).Result;
                     if (response.IsSuccessStatusCode)
                     {
-                        Console.WriteLine("success");
+                        var contents = ((JObject)response.Content.ReadAsAsync<Response>().Result.results).ToObject<Token>();
+                        LoginInfo.token = contents.accessToken;
+                        LoginInfo.id = contents.id;
                         this.Hide();
                         Product pr = new Product();
                         pr.ShowDialog();
@@ -79,6 +87,11 @@ namespace WindowsFormsApp1
         private void txtPass_TextChanged(object sender, EventArgs e)
         {
             txtPass.PasswordChar = '*';
+        }
+
+        private void Login_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

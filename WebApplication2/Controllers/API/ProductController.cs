@@ -17,7 +17,6 @@ using static WebApplication2.Models.RequestModel.FromUri;
 
 namespace WebApplication2.Controllers.API
 {
-    [APIAuthorize]
     public class ProductController : ApiController
     {
 
