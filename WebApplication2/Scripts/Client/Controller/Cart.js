@@ -138,7 +138,7 @@
                     }
                     else
                     {
-                        validator.prototype.showWarning("#errors", "#checkLogin", "Vui lòng đăng nhập để tiếp tục thanh toán!");
+                        validator.prototype.showWarning("#errors", "checkLogin", "Vui lòng đăng nhập để tiếp tục thanh toán!");
                         //setTimeout(function () {
                         //    window.location.href = "/login";
                         //}, 2000);

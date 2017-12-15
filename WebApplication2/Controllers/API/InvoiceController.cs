@@ -73,9 +73,9 @@ namespace WebApplication2.Controllers.API
                     List<ProductAttribute> proAttrs = Service.productAttributeDAO.getProAttrsByProId(lists[j].id);
                     var amount = invoiceProduct.amount;
                     var price = proAttrs[0].value;
-                    Double subTotal = amount * int.Parse(price);
+                    double subTotal = amount * double.Parse(price);
                     total = total + subTotal;
-                    InvoiceDetail invoiceDetail = new InvoiceDetail(createInvoice.id, lists[j].id, amount, int.Parse(price), subTotal);
+                    InvoiceDetail invoiceDetail = new InvoiceDetail(createInvoice.id, lists[j].id, amount, double.Parse(price));
                     Service.invoiceDetailDAO.insertInvoiceDetail(invoiceDetail);
                     Service.invoiceDetailDAO.saveInvoiceDetail();
                 }
