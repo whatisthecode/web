@@ -55,17 +55,52 @@ namespace WebApplication2.DAO
             base.insert(invoice);
         }
 
-        public PagedResult<Invoice> PageView(int pageIndex, int pageSize, string columnName)
+        public PagedResult<Invoice> PageView(short buyerId, short salerId, int pageIndex, int pageSize, bool descending = false)
         {
+            PagedResult<Invoice> pv = new PagedResult<Invoice>();
             var query = from c in base.getContext().invoices select c;
-            switch (columnName)
+            if (buyerId == 0 && salerId == 0)
             {
-                case "name":
-                    query = query.OrderBy(n => n.code);
-                    break;
+                if (descending)
+                    query = query.OrderByDescending(n => n.createdAt);
+                else
+                    query = query.OrderBy(n => n.createdAt);
+
+                pv = base.PageView(query, pageIndex, pageSize);
             }
 
-            PagedResult<Invoice> pv = base.PageView(query, pageIndex, pageSize);
+            if (buyerId == 0 && salerId != 0)
+            {
+                query = query.Where(inv => inv.salerId == salerId);
+                if (descending)
+                    query = query.OrderByDescending(n => n.createdAt);
+                else
+                    query = query.OrderBy(n => n.createdAt);
+
+                pv = base.PageView(query, pageIndex, pageSize);
+            }
+
+            if(buyerId != 0 && salerId == 0)
+            {
+                query = query.Where(inv => inv.buyerId == buyerId);
+                if (descending)
+                    query = query.OrderByDescending(n => n.createdAt);
+                else
+                    query = query.OrderBy(n => n.createdAt);
+
+                pv = base.PageView(query, pageIndex, pageSize);
+            }
+
+            if(salerId != 0 && salerId != 0)
+            {
+                query = query.Where(inv => inv.buyerId == buyerId || inv.salerId == salerId);
+                if (descending)
+                    query = query.OrderByDescending(n => n.createdAt);
+                else
+                    query = query.OrderBy(n => n.createdAt);
+
+                pv = base.PageView(query, pageIndex, pageSize);
+            }
             return pv;
         }
 

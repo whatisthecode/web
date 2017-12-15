@@ -62,5 +62,14 @@ namespace WebApplication2.DAO
         {
             base.update(invoicedetail);
         }
+
+        public IEnumerable<InvoiceDetail> getListDetailByInvoiceId(short invoiceId)
+        {
+            var query = from invoice in base.getContext().invoiceDetails
+                        where invoice.invoice.Equals(invoiceId)
+                        select invoice;
+            return query;
+
+        }
     }
 }
