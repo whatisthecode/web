@@ -5,12 +5,12 @@ _________________________________________________________ -->
         <div class="col-md-offset-6 col-md-6" data-animate="fadeInDown">
             <ul class="menu">
                 <li>
-                    <a ng-show="!isLogin" href="#" data-toggle="modal" data-target="#login-modal">Đăng nhập</a>
-                    <a ng-hide="!isLogin">Hi! {{$scope.email}}</a>
+                    <a ng-show="!isLogin" href="" ng-click="login()">Đăng nhập</a>
+                    <a ng-hide="!isLogin" href="" ng-click="info()">Xin chào, @Session["username"]</a>
                 </li>
                 <li>
                     <a ng-show="!isLogin" href="/register">Đăng ký</a>
-                    <a ng-hide="!isLogin" ng-click="logOut()">Đăng Xuất</a>
+                    <a ng-hide="!isLogin" href="" ng-click="logout()">Đăng Xuất</a>
                 </li>
                 <li>
                     <a href="/contact">Liên hệ</a>
@@ -18,37 +18,6 @@ _________________________________________________________ -->
             </ul>
         </div>
     </div>
-    <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
-        <div class="modal-dialog modal-sm">
-
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="Login">Đăng nhập</h4>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="form-group">
-                            <input type="text" class="form-control" id="email-modal" data-ng-model="email" placeholder="Nhập email">
-                        </div>
-                        <div class="form-group">
-                            <input type="password" class="form-control" id="password-modal" data-ng-model="password" placeholder="Nhập mật khẩu">
-                        </div>
-                        <p id="errors"></p>
-                        <p class="text-center">
-                            <button class="btn btn-primary" data-ng-click="login()"><i class="fa fa-sign-in"></i> Đăng nhập</button>
-                        </p>
-
-                    </form>
-
-                    <p class="text-center text-muted">Bạn chưa có tài khoản?</p>
-                    <p class="text-center text-muted"><a href="/register"><strong>Đăng ký ngay</strong></a></p>
-
-                </div>
-            </div>
-        </div>
-    </div>
-
 </div>
 
 <!-- *** TOP BAR END *** -->

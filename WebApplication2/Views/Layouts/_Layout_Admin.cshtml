@@ -26,5 +26,8 @@
     </div>
     @Scripts.Render("~/bundles/admin_js")
     @RenderSection("script", false)
+    <script>
+        localStorage.setItem("token", "@Session["currentUser"]");
+    </script>
 </body>
 </html>

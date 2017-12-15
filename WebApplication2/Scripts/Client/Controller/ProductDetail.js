@@ -22,12 +22,12 @@
 
         $scope.addProductToCart = function (product) {
             $scope.view.selectedProducts = $cookieStore.get("selectedProducts");
-            if ($scope.view.selectedProducts === undefined) {
+            if (Helper.notEmpty($scope.view.selectedProducts) === false) {
                 var selectedProducts = [];
                 selectedProducts.push(product.id);
                 $cookieStore.put("selectedProducts", selectedProducts);
             } else {
-                if (Helper.checkItemExistInArray($scope.view.selectedProducts, product.id) === false) {
+                if (Helper.checkItemExistInArray($scope.view.selectedProducts, product.id) === false) {   
                     $scope.view.selectedProducts.push(product.id);
                     $cookieStore.put("selectedProducts", $scope.view.selectedProducts);
                 }

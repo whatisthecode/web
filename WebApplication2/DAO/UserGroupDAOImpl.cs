@@ -40,6 +40,16 @@ namespace WebApplication2.DAO
             return base.get();
         }
 
+        public IEnumerable<ApplicationUserGroup> getUserGroupByUser(String userId)
+        {
+            var userGroups = base.get().Where(ug => ug.userId == userId).ToList();
+            foreach(var userGroup in userGroups)
+            {
+                userGroup.Group = Service.groupDAO.getGroupById(userGroup.groupId);
+            }
+            return userGroups;
+        }
+
         public ApplicationUserGroup getUserGroupById(String userId, Int16 groupId)
         {
             ApplicationUserGroup userGroup = base.get().Where(ug => ug.userId == userId && ug.groupId == groupId).FirstOrDefault();

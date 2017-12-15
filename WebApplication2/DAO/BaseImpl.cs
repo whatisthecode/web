@@ -33,7 +33,7 @@ namespace WebApplication2.DAO
 
         public void delete(Int16 id)
         {
-            T instance = context.Set<T>().Find(id);
+            T instance = this.getById(id);
             this.context.Set<T>().Remove(instance);
         }
 
@@ -51,7 +51,7 @@ namespace WebApplication2.DAO
 
         public IEnumerable<T> get()
         {
-            return this.context.Set<T>().ToList<T>();
+            return this.context.Set<T>().AsNoTracking<T>().ToList<T>();
         }
 
         public T getById(Int16 id)

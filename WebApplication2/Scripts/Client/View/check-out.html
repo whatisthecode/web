@@ -1,1 +1,44 @@
-﻿
+﻿<div id="content" data-ng-controller="InvoiceController">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-offset-4 col-md-4">
+                <blockquote>
+                    <p>Đây là thông tin đơn hàng của bạn. Nhấn <b>xác nhận</b> để hoàn tất việc thanh toán.</p>
+                    <p>Nhấn <b>Hủy</b> để trờ lại trang chủ</p>
+                </blockquote>
+                <div class="box order-summary">
+                    <div class="box-header">
+                        <span style="font-size:25px; font-weight:400;">Hóa Đơn </span>
+                        <img class="pull-right" src="Assets/img/logo.jpg" alt="White Blouse Armani" height="50" width="50" />
+                    </div>
+                    <p class="text-muted"><b>Họ tên:</b> {{view.userData.userInfo.firstName}} {{view.userData.userInfo.lastName}}</p>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th colspan="2">Sản phẩm</th>
+                                    <th>SL</th>
+                                    <th class="text-right">Thành tiền</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="product in view.products">
+                                    <td colspan="2">{{product.name}}</td>
+                                    <th>{{product.amount}}</th>
+                                    <th class="text-right">{{product.price}}</th>
+                                </tr>
+                                <tr class="total">
+                                    <td colspan="3">Tổng cộng</td>
+                                    <th class="text-right">{{view.total}}</th>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="#errors" class="text-right"></div>
+                    <a href="/" class="btn btn-default text-primary">Hủy</a>
+                    <a ng-click="createInvoice()"class="btn btn-primary pull-right">Xác nhận</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

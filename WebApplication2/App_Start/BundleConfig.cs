@@ -43,7 +43,6 @@ namespace WebApplication2
 
             bundles.Add(new ScriptBundle("~/bundles/client_controller").Include(
                        "~/Scripts/Client/Shared/Top.js",
-                       "~/Scripts/Client/Shared/Error.js",
                        "~/Scripts/Client/Controller/Index.js",
                        "~/Scripts/Client/Controller/Cart.js",
                        "~/Scripts/Client/Controller/Product.js",
@@ -51,7 +50,8 @@ namespace WebApplication2
                        "~/Scripts/Client/Controller/AccountConfirm.js",
                        "~/Scripts/Client/Controller/SetPassword.js",
                        "~/Scripts/Client/Controller/Login.js",
-                       "~/Scripts/Client/Controller/Register.js"));
+                       "~/Scripts/Client/Controller/Register.js",
+                       "~/Scripts/Client/Controller/Invoice.js"));
             bundles.Add(new ScriptBundle("~/bundles/client_service").Include(
                         "~/Scripts/Client/Service/Helper.js",
                         "~/Scripts/Client/Service/Oauth2.js",
@@ -60,7 +60,9 @@ namespace WebApplication2
                         "~/Scripts/Client/Service/User.js",
                         "~/Scripts/Client/Service/Product.js",
                         "~/Scripts/Client/Service/ProductDetail.js",
-                        "~/Scripts/Client/Service/Card.js"));
+                        "~/Scripts/Client/Service/Card.js",
+                        "~/Scripts/Client/Service/Invoice.js",
+                        "~/Scripts/Client/Service/InvoiceDetail.js"));
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
             // ready for production, use the build tool at https://modernizr.com to pick only the tests you need.
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(

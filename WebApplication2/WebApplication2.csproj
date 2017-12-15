@@ -205,11 +205,18 @@
     <Compile Include="App_Start\Service.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\Admin\AdminCategoryController.cs" />
     <Compile Include="Controllers\Admin\AdminHomeController.cs" />
+    <Compile Include="Controllers\Admin\AdminInfoController.cs" />
+    <Compile Include="Controllers\Admin\AdminInvoiceController.cs" />
     <Compile Include="Controllers\Admin\AdminLoginController.cs" />
+    <Compile Include="Controllers\Admin\AdminProductController.cs" />
+    <Compile Include="Controllers\Admin\AdminStatisticController.cs" />
+    <Compile Include="Controllers\Admin\AdminUserController.cs" />
     <Compile Include="Controllers\API\AccountController.cs" />
     <Compile Include="Controllers\API\CategoryController.cs" />
     <Compile Include="Controllers\API\CategoryProductController.cs" />
+    <Compile Include="Controllers\API\ImageController.cs" />
     <Compile Include="Controllers\API\InvoiceController.cs" />
     <Compile Include="Controllers\API\ProductAttributeController.cs" />
     <Compile Include="Controllers\API\ProductController.cs" />
@@ -218,6 +225,7 @@
     <Compile Include="Controllers\API\UserController.cs" />
     <Compile Include="Controllers\Base.cs" />
     <Compile Include="Controllers\Client\HomeController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="DAO\Base.cs" />
     <Compile Include="DAO\BaseImpl.cs" />
     <Compile Include="DAO\CategoryDAO.cs" />
@@ -275,11 +283,15 @@
     <Compile Include="Models\ProductAttribute.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\Rating.cs" />
+    <Compile Include="Models\RequestModel\CreateImageModel.cs" />
     <Compile Include="Models\RequestModel\CreateProductModel.cs" />
     <Compile Include="Models\RequestModel\Customer.cs" />
     <Compile Include="Models\RequestModel\FromUri.cs" />
+    <Compile Include="Models\RequestModel\Invoice.cs" />
     <Compile Include="Models\RequestModel\Merchant.cs" />
     <Compile Include="Models\RequestModel\ProductDetail.cs" />
+    <Compile Include="Models\RequestModel\SidebarModel.cs" />
+    <Compile Include="Models\RequestModel\UserGeneral.cs" />
     <Compile Include="Models\Token.cs" />
     <Compile Include="Models\UserInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -306,6 +318,7 @@
     <Content Include="Assets\FONT\flexslider-icon.svg" />
     <Content Include="Assets\FONT\fontawesome-webfont.svg" />
     <Content Include="Assets\FONT\themify.svg" />
+    <Content Include="Assets\IMG\add.png" />
     <Content Include="Assets\IMG\AjaxLoader.gif" />
     <Content Include="Assets\IMG\aletaobao.ico" />
     <Content Include="Assets\IMG\background.jpg" />
@@ -401,7 +414,6 @@
     <Content Include="Scripts\Client\Controller\Cart.js" />
     <Content Include="Scripts\Client\Controller\Category.js" />
     <Content Include="Scripts\Client\Controller\CategoryDetail.js" />
-    <Content Include="Scripts\Client\Controller\Checkout.js" />
     <Content Include="Scripts\Client\Controller\Index.js" />
     <Content Include="Scripts\Client\Controller\Invoice.js" />
     <Content Include="Scripts\Client\Controller\InvoiceDetail.js" />
@@ -414,7 +426,6 @@
     <Content Include="Scripts\Client\Service\Cart.js" />
     <Content Include="Scripts\Client\Service\Category.js" />
     <Content Include="Scripts\Client\Service\CategoryDetail.js" />
-    <Content Include="Scripts\Client\Service\Checkout.js" />
     <Content Include="Scripts\Client\Service\Helper.js" />
     <Content Include="Scripts\Client\Service\Invoice.js" />
     <Content Include="Scripts\Client\Service\InvoiceDetail.js" />
@@ -424,7 +435,6 @@
     <Content Include="Scripts\Client\Service\ProductDetail.js" />
     <Content Include="Scripts\Client\Service\Register.js" />
     <Content Include="Scripts\Client\Service\User.js" />
-    <Content Include="Scripts\Client\Shared\Error.js" />
     <Content Include="Scripts\Client\Shared\Top.js" />
     <Content Include="Scripts\Client\View\cart.html" />
     <Content Include="Scripts\Client\View\check-out.html" />
@@ -467,6 +477,17 @@
     <Content Include="Views\Admin\Shared\Sidebar.cshtml" />
     <Content Include="Views\Admin\Shared\Header.cshtml" />
     <Content Include="Views\Admin\Shared\Footer.cshtml" />
+    <Content Include="Views\Admin\Error\NotFound.cshtml" />
+    <Content Include="Views\Admin\Error\Forbidden.cshtml" />
+    <Content Include="Views\Admin\AdminProduct\Index.cshtml" />
+    <Content Include="Views\Admin\AdminProduct\Detail.cshtml" />
+    <Content Include="Views\Admin\AdminProduct\Create.cshtml" />
+    <Content Include="Views\Admin\AdminCategory\Index.cshtml" />
+    <Content Include="Views\Admin\AdminInfo\Index.cshtml" />
+    <Content Include="Views\Admin\AdminInvoice\Index.cshtml" />
+    <Content Include="Views\Admin\AdminStatistic\Index.cshtml" />
+    <Content Include="Views\Admin\AdminUser\Index.cshtml" />
+    <Content Include="Views\Admin\AdminUser\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

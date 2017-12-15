@@ -3,7 +3,7 @@
         $scope.products = [];
         $scope.selectedProducts = [];
         $scope.totalInvoice = 0;
-        $scope.selectedProductsLength = 0;
+        $scope.selectedProductsLength = "0";
 
         viewOninit = function () {
             $scope.selectedProducts = $cookieStore.get("selectedProducts");
@@ -15,6 +15,7 @@
             }
             else {
                 $(".table-responsive").hide();
+                $scope.selectedProductsLength = "0";
             }
         };
 
@@ -25,8 +26,13 @@
                         response.results["amount"] = 1;
                         response.results["productTotal"] = productTotal(response.results.attributes[0].value, response.results.amount, response.results.attributes[2].value);
                         response.results.attributes[0].value = Helper.addCommasToMoney(response.results.attributes[0].value);
+                        if (Helper.notEmpty(response.results.attributes[2].value))
+                        {
+                            response.results.attributes[2].value = Helper.addCommasToMoney(response.results.attributes[2].value);
+                        }
                         $scope.products.push(response.results);
                         console.log($scope.products);
+                        $scope.totalInvoice = sumInvoice($scope.products);
                     }
                 }, function (err) {
                     if (err) {
@@ -65,7 +71,14 @@
         };
 
         productTotal = function (price, amount, discount) {
-            return Helper.addCommasToMoney((parseInt(Helper.removeCommas(price)) - parseInt(Helper.removeCommas(discount))) * parseInt(amount).toString());
+            if (Number(Helper.removeCommas(discount)) > 0 && Helper.notEmpty(discount))
+            {
+                return Helper.addCommasToMoney(Number(Helper.removeCommas(discount)) * Number(amount).toString());
+            }
+            else
+            {
+                return Helper.addCommasToMoney(Number(Helper.removeCommas(price)) * Number(amount).toString());
+            }
         };
 
         sumInvoice = function (products) {
@@ -83,12 +96,12 @@
                     $scope.selectedProducts.splice(i, 1);
                     $cookieStore.put("selectedProducts", $scope.selectedProducts);
                 }
-
             }
             for (var j = 0; j < $scope.products.length; j) {
                 if ($scope.products[j].id === productId)
                     $scope.products.splice(j, 1);
             }
+            $scope.totalInvoice = sumInvoice($scope.products);
         };
 
         validateInputAmount = function (productAmount, buyAmount) {
@@ -98,32 +111,51 @@
                 return false;
         };
 
-        $scope.checkout = function () {
+        $scope.checkOut = function () {
             if ($("#errors").children().length > 0) {
                 console.log("Have errors");
                 return;
             }
             else {
-                var checkOuts = [];
-                for (var i = 0; i < $scope.products.length; i++) {
-                    if ($scope.products[i].amount > 0) {
-                        var checkOut = {
-                            "amount": $scope.products[i].amount,
-                            "productId": $scope.products[i].id
-                        };
-                        checkOuts.push(checkOut);
+                if ($scope.products.length > 0)
+                {
+                    if (checkLogin() === true)
+                    {
+                        var checkOuts = [];
+                        for (var i = 0; i < $scope.products.length; i++) {
+                            if ($scope.products[i].amount > 0) {
+                                var checkOut = {
+                                    "amount": $scope.products[i].amount,
+                                    "productId": $scope.products[i].id,
+                                    "price": $scope.products[i].productTotal,
+                                    "name": $scope.products[i].name
+                                };
+                                checkOuts.push(checkOut);
+                            }
+                        }
+                        $cookieStore.put("checkOuts", checkOuts);
+                        window.location.href = "/check-out";
+                    }
+                    else
+                    {
+                        validator.prototype.showWarning("#errors", "checkLogin", "Vui lòng đăng nhập để tiếp tục thanh toán!");
+                        //setTimeout(function () {
+                        //    window.location.href = "/login";
+                        //}, 2000);
                     }
                 }
-                $cookieStore.put("checkOuts", checkOuts);
-                window.location.href = "";
             }
+        };
+
+        checkLogin = function () {
+            var token = localStorage.getItem("token");
+            if (Helper.notEmpty(token))
+                return true;
+            else
+                return false;
         };
             
 
         viewOninit();
-        setTimeout(function () {
-            $scope.totalInvoice = sumInvoice($scope.products);
-            console.log($scope.totalInvoice);
-        }, 200);
     });
 }

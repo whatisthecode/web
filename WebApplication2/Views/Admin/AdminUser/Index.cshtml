@@ -1,0 +1,78 @@
+﻿
+@{
+    ViewBag.Title = "Quản lý người dùng";
+    ViewBag.pageTitle = "Danh sách người dùng";
+    ViewBag.pageLink = "/dashboard/users?pageSize=10&pageIndex=1";
+    ViewBag.currentAction = "user";
+}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="content">
+                    <a href="~/dashboard/user/create" class="btn btn-primary btn-wd btn-fill btn-flat">Thêm người dùng</a>
+                </div>
+            </div>
+            <div class="card">
+                <div class="header">
+                    <h4 class="title">Danh sách người dùng</h4>
+                </div>
+                <div class="content table-responsive table-full-width">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Email</th>
+                                <th>Họ tên</th>
+                                <th>Quyền</th>
+                                <th>Ngày tạo</th>
+                                <th>Tình trạng</th>
+                                <th>Trạng thái</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{ 
+                                Int16 flag = 1;
+                            }
+                            @foreach(var user in Model)
+                            {
+                                @:<tr>
+                                @:<td>@(flag++)</td>
+                                @:<td>@user.email</td>
+                                @:<td>@user.fullname</td>
+                                @:<td>@(user.groupName == "SuperAdmin" ? "Quản trị hệ thống" : (user.groupName == "Admin" ? "Quản trị viên" : (user.groupName == "Merchant" ? "Người bán" : "Khách hàng"))) </td>
+                                @:<td>@user.createdAt</td>
+                                if (user.status == 1)
+                                {
+                                    @:<td>Đã kích hoạt</td>
+                                }
+                                else if(user.staus == 0)
+                                {
+                                    @:<td>Chưa kích hoạt</td>
+                                }
+                                else
+                                {
+                                    @:<td>Đã bị khóa</td>
+                                }
+                                if (user.isLogin)
+                                {
+                                    <span class="user-active"></span>
+                                }
+                                else
+                                {
+                                @:<td><span class="user-inactive"></span></td>
+                                }
+                                @:<td><a href="/dashboard/user/@user.id" class="text-info"><i class="ti-pencil-alt"></i> Chi tiết</a></td>
+                                @:<td><a href="/dashboard/user/remove/@user.id" class="text-danger"><i class="ti-trash"></i> Xóa</a></td>
+                             @:</tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

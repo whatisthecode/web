@@ -3,13 +3,14 @@
     ViewBag.Title = "Trang quản lý sản phẩm";
     ViewBag.pageTitle = "Sản phẩm";
     ViewBag.pageLink = "/dashboard/products?pageSize=10&pageIndex=1";
+    ViewBag.currentAction = "product";
 }
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
             <div class="card">
                 <div class="content">
-                    <button class="btn btn-primary btn-wd btn-fill btn-flat">Thêm sản phẩm</button>
+                    <a href="~/dashboard/product/create" class="btn btn-primary btn-wd btn-fill btn-flat">Thêm sản phẩm</a>
                 </div>
             </div>
             <div class="card">
@@ -29,7 +30,7 @@
                             </tr>        
                         </thead>
                         @{ 
-                                    Int16 flag = 1;
+                            Int16 flag = 1;
                         }
                         @foreach (var product in Model)
                         {

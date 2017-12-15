@@ -1,4 +1,4 @@
-﻿<div id="content" ng-controller="CartController">
+﻿<div id="content" data-ng-controller="CartController">
     <div class="container">
 
         <div class="col-md-12">
@@ -47,7 +47,7 @@
                                     <td>{{product.attributes[2].value}}</td>
                                     <td>{{product.productTotal}}</td>
                                     <td>
-                                        <span class="btn btn-simple btn-sm btn-primary" ng-click="removeSelectedProduct(product.id)"><i class="fa fa-trash-o"></i></span>
+                                        <span class="btn" ng-click="removeSelectedProduct(product.id)"><i class="fa fa-trash-o"></i></span>
                                     </td>
                                 </tr>
                             </tbody>
@@ -61,13 +61,13 @@
 
                     </div>
                     <!-- /.table-responsive -->
-                    <span id="errors"></span>
+                    <div id="errors" class="text-right"></div>
                     <div class="box-footer">
                         <div class="pull-left">
                             <a href="/" class="btn btn-default"><i class="fa fa-chevron-left"></i> Tiếp tục mua hàng</a>
                         </div>
                         <div class="pull-right">
-                            <a ng-click="checkout()" class="btn btn-primary">
+                            <a ng-click="checkOut()" class="btn btn-primary">
                                 Thanh toán <i class="fa fa-chevron-right"></i>
                             </a>
                         </div>

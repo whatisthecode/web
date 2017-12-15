@@ -23,6 +23,9 @@ namespace WebApplication2.Models.RequestModel
 
         public JObject attributes { get; set; }
 
+        public List<JObject> thumbnails { get; set; }
+        public List<JObject> details { get; set; }
+
         public CreateProductModel()
         {
         }

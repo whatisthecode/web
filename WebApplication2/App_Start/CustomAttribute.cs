@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Web.Http.Controllers;
@@ -37,6 +39,8 @@ namespace WebApplication2.CustomAttribute
                     if (token == null)
                     {
                         filterContext.HttpContext.Session["currentUser"] = null;
+                        filterContext.HttpContext.Session["username"] = null;
+                        filterContext.HttpContext.Session["sidebar"] = null;
                         String returnUrl = filterContext.HttpContext.Server.UrlEncode(filterContext.HttpContext.Request.Url.AbsoluteUri);
                         filterContext.Result = new RedirectResult("/login?returnUrl=" + returnUrl);
                     }
@@ -45,6 +49,8 @@ namespace WebApplication2.CustomAttribute
                         if (!token.isLogin)
                         {
                             filterContext.HttpContext.Session["currentUser"] = null;
+                            filterContext.HttpContext.Session["username"] = null;
+                            filterContext.HttpContext.Session["sidebar"] = null;
                             String returnUrl = filterContext.HttpContext.Server.UrlEncode(filterContext.HttpContext.Request.Url.AbsoluteUri);
                             filterContext.Result = new RedirectResult("/login?returnUrl=" + returnUrl);
                         }
@@ -56,6 +62,8 @@ namespace WebApplication2.CustomAttribute
                             if (compare >= 0)
                             {
                                 filterContext.HttpContext.Session["currentUser"] = null;
+                                filterContext.HttpContext.Session["username"] = null;
+                                filterContext.HttpContext.Session["sidebar"] = null;
                                 String returnUrl = filterContext.HttpContext.Server.UrlEncode(filterContext.HttpContext.Request.Url.AbsoluteUri);
                                 filterContext.Result = new RedirectResult("/login?returnUrl=" + returnUrl);
                             }
@@ -94,6 +102,7 @@ namespace WebApplication2.CustomAttribute
     {
         public override void OnAuthorization(HttpActionContext actionContext)
         {
+
             //var authentication = filterContext.HttpContext.GetOwinContext().Authentication;
             if (actionContext.Request.Headers.Authorization == null)
             {

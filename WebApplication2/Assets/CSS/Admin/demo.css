@@ -129,24 +129,75 @@ ul.select-box {
 
 .image-box {
     min-height: 120px;
+    width:90%;
 }
 
 .image-box img {
     height: 120px;
     display: inline-block;
+    cursor:pointer;
 }
 
-.image-box img:not(:first-child) {
-    margin-left:-4px;
+.image-box img{
+    margin-right:-4px;
+    margin-bottom:4px;
 }
-
-
-
+.image-box-item{
+    display:inline-block;
+    position:relative;
+    margin-right:-4px;
+    margin-bottom:-2px;
+    height:120px;
+}
+.image-box-item img{
+    margin:0;
+}
+.image-box-item span.menu{
+    display:block;
+    position:absolute;
+    top:calc(50% - 30px);
+    background:rgba(0,0,0,0.8);
+    width:135px;
+    height:50%;
+    border-radius:10px;
+    left:0;
+    right:0;
+    margin-left:auto;
+    margin-right:auto;
+    z-index:1000;
+}
+span.menu a{
+    width:45px;
+    display:inline-block;
+    margin-right:-4px;
+    text-align:center;
+    color:white;
+    font-size:18px;
+    height:100%;
+    cursor:pointer;
+}
+span.menu a:first-child{
+    border-top-left-radius:10px;
+    border-bottom-left-radius:10px;
+}
+span.menu a:last-child{
+    border-top-right-radius:10px;
+    border-bottom-right-radius:10px;
+}
+span.menu a:hover{
+    background:rgba(255,255,255,0.2);
+}
+span.menu a i{
+    vertical-align:middle;
+}
+.image-box-item img{
+    margin:0;
+}
 /* The Modal (background) */
 .modal {
     display: none;
     position: fixed;
-    z-index: 1;
+    z-index: 1000;
     padding-top: 100px;
     left: 0;
     top: 0;
@@ -287,4 +338,16 @@ img.hover-shadow {
 
 .hover-shadow:hover {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)
+}
+.user-inactive,.user-inactive{
+    display:block;
+    width:15px;
+    height:15px;
+    border-radius:100%;
+}
+.user-inactive {
+    background-color: #F44336;
+}
+.user-active {
+    background-color: #4CAF50;
 }

@@ -1,5 +1,5 @@
 ﻿if ("undefined" !== typeof app) {
-    app.controller("ProductController", function ($scope, Product, CONFIG, Helper, $routeParams) {
+    app.controller("ProductController", function ($scope, Product, CONFIG, Helper, $routeParams, $cookieStore) {
         $scope.products = [];
         $scope.pageSize = 10;
         $scope.pageIndex = 1;
@@ -25,6 +25,11 @@
             Product.getProduct(categoryId, pageIndex, pageSize, filter, function (response) {
                 if (response)
                 {
+                    
+                    for (var i = 0; i < response.items.length; i++)
+                    {
+                        response.items[i].attributes[0].value = Helper.addCommasToMoney(response.items[i].attributes[0].value);
+                    }
                     $scope.products = response.items;
                     $scope.pageSize = response.pageSize;
                     $scope.pageIndex = response.currentPage;
@@ -55,6 +60,22 @@
 
         $scope.viewDetail = function (productId) {
             window.location.href = $routeParams.category + "/" + productId;
+        };
+
+        var selectedProducts = [];
+        $scope.addProductToCart = function (product) {
+            selectedProducts = $cookieStore.get("selectedProducts");
+            if (Helper.notEmpty(selectedProducts) === false) {
+                var selectedProducts = [];
+                selectedProducts.push(product.id);
+                $cookieStore.put("selectedProducts", selectedProducts);
+            } else {
+                if (Helper.checkItemExistInArray(selectedProducts, product.id) === false) {
+                    selectedProducts.push(product.id);
+                    $cookieStore.put("selectedProducts", selectedProducts);
+                }
+            }
+
         };
     });
 }
