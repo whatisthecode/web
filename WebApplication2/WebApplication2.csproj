@@ -308,6 +308,7 @@
     <Content Include="Assets\CSS\Admin\paper-dashboard.css" />
     <Content Include="Assets\CSS\Admin\themify-icons.css" />
     <Content Include="Assets\CSS\animate.min.css" />
+    <Content Include="Assets\CSS\bootstrap-datetimepicker.min.css" />
     <Content Include="Assets\CSS\bootstrap.min.css" />
     <Content Include="Assets\CSS\Client\animate.min.css" />
     <Content Include="Assets\CSS\Client\custom.css" />
@@ -318,6 +319,7 @@
     <Content Include="Assets\CSS\jquery-confirm.min.css" />
     <Content Include="Assets\FONT\flexslider-icon.svg" />
     <Content Include="Assets\FONT\fontawesome-webfont.svg" />
+    <Content Include="Assets\FONT\glyphicons-halflings-regular.svg" />
     <Content Include="Assets\FONT\themify.svg" />
     <Content Include="Assets\IMG\add.png" />
     <Content Include="Assets\IMG\AjaxLoader.gif" />
@@ -364,6 +366,9 @@
     <Content Include="Assets\JS\Admin\chartist.min.js" />
     <Content Include="Assets\JS\Admin\demo.js" />
     <Content Include="Assets\JS\Admin\paper-dashboard.js" />
+    <Content Include="Assets\JS\bootstrap.transition.min.js" />
+    <Content Include="Assets\JS\bootstrap-datetimepicker.min.js" />
+    <Content Include="Assets\JS\bootstrap.collapse.min.js" />
     <Content Include="Assets\JS\bootstrap.min.js" />
     <Content Include="Assets\JS\Client\bootstrap-hover-dropdown.js" />
     <Content Include="Assets\JS\Client\custom.js" />
@@ -372,6 +377,7 @@
     <Content Include="Assets\JS\Client\owl.carousel.min.js" />
     <Content Include="Assets\JS\Client\waypoints.min.js" />
     <Content Include="Assets\JS\jquery-confirm.min.js" />
+    <Content Include="Assets\JS\moment.min.js" />
     <Content Include="Assets\JS\ui-bootstrap-tpls-2.5.0.min.js" />
     <Content Include="Assets\JS\validator.js" />
     <Content Include="Content\Site.css" />
@@ -396,6 +402,10 @@
     <Content Include="Assets\FONT\themify.eot" />
     <Content Include="Assets\FONT\themify.ttf" />
     <Content Include="Assets\FONT\themify.woff" />
+    <Content Include="Assets\FONT\glyphicons-halflings-regular.eot" />
+    <Content Include="Assets\FONT\glyphicons-halflings-regular.ttf" />
+    <Content Include="Assets\FONT\glyphicons-halflings-regular.woff" />
+    <Content Include="Assets\FONT\glyphicons-halflings-regular.woff2" />
     <None Include="Assets\JS\jquery-1.10.2.intellisense.js" />
     <Content Include="Assets\JS\jquery-1.10.2.js" />
     <Content Include="Assets\JS\jquery-1.10.2.min.js" />

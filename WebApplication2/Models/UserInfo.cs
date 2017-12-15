@@ -21,7 +21,7 @@ namespace WebApplication2.Models
         [Column("last_name")]
         public String lastName { get; set; }
 
-        [Column("dob", TypeName = "datetime2")]
+        [Column("dob", TypeName = "date")]
         public DateTime? dob { get; set; }
 
         [Column("identity_number")]

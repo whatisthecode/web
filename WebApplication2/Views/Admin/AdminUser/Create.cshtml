@@ -10,11 +10,6 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <div class="content">
-                    <a href="~/dashboard/user/create" class="btn btn-primary btn-wd btn-fill btn-flat">Thêm người dùng</a>
-                </div>
-            </div>
-            <div class="card">
                 <div class="header">
                     <h4 class="title">Danh sách người dùng</h4>
                 </div>
@@ -48,7 +43,12 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label>Ngày sinh</label>
-                                    <input class="form-control border-input" type="text" name="dob" value="@if (Model.dob != null) { @Model.dob; }" placeholder="Nhập ngày sinh" />
+                                    <div class='input-group date border-input' id='dateDOB'>
+                                        <input type='text' name="dobDisplay" class="form-control border-input" value="@if (Model.dobDisplay != null) { @Model.dob; } else { @ViewBag.now}" />
+                                        <span class="input-group-addon">
+                                            <span class="ti-calendar"></span>
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -87,4 +87,13 @@
         </div>
     </div>
 </div>
+@section script{
+ <script type="text/javascript">
+     $(function () {
+         $('#dateDOB').datetimepicker({
+             format : "DD/MM/YYYY"
+         });
+     });
+</script>   
+}
 

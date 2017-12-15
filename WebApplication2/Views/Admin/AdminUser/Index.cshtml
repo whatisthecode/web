@@ -58,11 +58,11 @@
                                 }
                                 if (user.isLogin)
                                 {
-                                    <span class="user-active"></span>
+                                    @:<td><span class="user-active"></span></td>
                                 }
                                 else
                                 {
-                                @:<td><span class="user-inactive"></span></td>
+                                    @:<td><span class="user-inactive"></span></td>
                                 }
                                 @:<td><a href="/dashboard/user/@user.id" class="text-info"><i class="ti-pencil-alt"></i> Chi tiết</a></td>
                                 @:<td><a href="/dashboard/user/remove/@user.id" class="text-danger"><i class="ti-trash"></i> Xóa</a></td>

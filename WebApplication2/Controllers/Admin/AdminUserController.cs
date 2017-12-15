@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -60,13 +61,15 @@ namespace WebApplication2.Controllers.Admin
         public ActionResult Create()
         {
             RegisterBindingModel createUser = new RegisterBindingModel();
+            ViewBag.now = DateTime.Now.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
             return View(createUser);
         }
 
         [HttpPost]
         public ActionResult Create(RegisterBindingModel createUser)
         {
-            return null;
+            ViewBag.now = DateTime.Now.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
+            return View(createUser);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 
 namespace WebApplication2.Models
 {
@@ -62,7 +63,16 @@ namespace WebApplication2.Models
             [Display(Name = "Confirm Phone Number")]
             public string ConfirmPhoneNumber { get; set; }
 
-            public DateTime dob { get; set; }
+            public DateTime dob {
+                get
+                {
+                    return DateTime.ParseExact(this.dobDisplay, "yyyy/MM/dd", CultureInfo.InvariantCulture);
+                }
+                private set { }
+            }
+
+            public String dobDisplay { get; set; }
+
             [Required]
             public string firstName { get; set; }
             [Required]
