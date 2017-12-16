@@ -1,11 +1,10 @@
 ﻿
 @{
-    ViewBag.Title = "Tạo người dùng mới";
-    ViewBag.pageTitle = "Tạo người dùng mới";
-    ViewBag.pageLink = "/dashboard/user/create";
+    ViewBag.Title = "Thông tin người dùng";
+    ViewBag.pageTitle = "Thông tin người dùng " + Model.fullName;
+    ViewBag.pageLink = "/dashboard/user/" + Model.Id;
     ViewBag.currentAction = "user";
 }
-
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
@@ -18,8 +17,16 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
+                                    <label>Mã người dùng</label>
+                                    <input class="form-control border-input" type="text" name="Id" value="@if (Model.Id != null) { @Model.Id; }" readonly/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
                                     <label>Địa chỉ email</label>
-                                    <input class="form-control border-input" type="email" name="Email" value="@if (Model.Email != null) { @Model.Email; }" placeholder="Nhập email" />
+                                    <input class="form-control border-input" type="email" name="Email" value="@if (Model.Email != null) { @Model.Email; }" placeholder="Nhập email" readonly/>
                                 </div>
                             </div>
                         </div>
@@ -27,7 +34,7 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label>Mật khẩu</label>
-                                    <input class="form-control border-input" type="password" name="Password" value="@if (Model.Password != null) { @Model.Password; }" placeholder="Nhập mật khẩu" />
+                                    <input class="form-control border-input" type="text" name="text" value="@if (Model.Password != null) { @Model.Password; }" placeholder="Nhập mật khẩu" readonly/>
                                 </div>
                             </div>
                         </div>
@@ -44,7 +51,7 @@
                                 <div class="form-group">
                                     <label>Ngày sinh</label>
                                     <div class='input-group date border-input' id='dateDOB'>
-                                        <input type='text' name="dobDisplay" class="form-control border-input" value="@if (Model.dobDisplay != null) { @Model.dob; } else { @ViewBag.now}" />
+                                        <input type='text' name="dobDisplay" class="form-control border-input" value="@if (Model.dobDisplay != null) { @Model.dobDisplay; } else { @ViewBag.now;}" />
                                         <span class="input-group-addon">
                                             <span class="ti-calendar"></span>
                                         </span>
@@ -80,13 +87,12 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label>Quyền</label>
-                                    <select name="groupName" class="form-control border-input">
+                                    <select name="groupName" class="form-control border-input" value="@Model.groupName">
                                         @foreach (var group in ViewBag.groups)
                                         {
                                             if (group.name == "SuperAdmin")
                                             {
-                                                @:<option value="@group.name" selected>Quản trị hệ thống</option>
-
+                                                @:<option value="@group.name">Quản trị hệ thống</option>
                                             }
                                             else if (group.name == "Admin")
                                             {
@@ -129,4 +135,7 @@
         });
     </script>
 }
+
+
+
 

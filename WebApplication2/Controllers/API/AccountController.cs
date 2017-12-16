@@ -30,7 +30,6 @@ using WebApplication2.CustomAttribute;
 
 namespace WebAPI_NG_TokenbasedAuth.Controllers
 {
-    [APIAuthorize]
     [RoutePrefix("api/Account")]
     public class AccountController : ApiController
     {
@@ -225,15 +224,10 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
         }
 
         // POST api/Account/Register
-        [AllowAnonymous]//khong can dang nhap
         [Route("Register")]
         [System.Web.Mvc.ValidateAntiForgeryToken]
         public async Task<IHttpActionResult> Register([FromBody]RegisterBindingModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
 
             Response response = new Response();
 
@@ -265,6 +259,15 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
             }
             else
             {
+                if(model.groupName == "Merchant")
+                {
+                    model.groups.Add("Customer");
+                    model.groups.Add("Merchant");
+                }
+                else
+                {
+                    model.groups.Add(model.groupName);
+                }
                 foreach (var group in model.groups)
                 {
                     Group gr = Service.groupDAO.getGroupByName(group);
@@ -279,8 +282,8 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
                 await this.UserManager.SendEmailAsync(identityUser.Id, "Xác thực tài khoản của bạn", "Vui lòng nhấn vào link sau: <a href=\"" + callbackUrl + "\">link</a>");
                 var message = "Chúng tôi đã gửi email xác thực tài khoản vào mail " + identityUser.Email + " . Vui lòng kiểm tra email để xác thực.";
                 response.code = "201";
-                response.status = "Đăng ký thành công";
-                response.results = message;
+                response.status = "Đăng ký thành công. " + message;
+                response.results = identityUser;
                 return Content<Response>(HttpStatusCode.Created, response);
             }
         }

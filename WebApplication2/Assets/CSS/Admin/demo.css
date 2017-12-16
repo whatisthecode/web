@@ -351,3 +351,7 @@ img.hover-shadow {
 .user-active {
     background-color: #4CAF50;
 }
+.bootstrap-datetimepicker-widget{
+    visibility:visible;
+    opacity:1;
+}

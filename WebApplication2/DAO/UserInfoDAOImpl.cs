@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using LaptopWebsite.Models.Mapping;
 using WebApplication2.Models;
+using WebApplication2.Models.RequestModel;
+using System.Globalization;
 
 namespace WebApplication2.DAO
 {
@@ -128,6 +130,26 @@ namespace WebApplication2.DAO
             }
             PagedResult<UserInfo> pv = base.PageView(query, indexnum, pagesize);
             return pv;
+        }
+
+        public UserDetail getUserDetail(string appUserId)
+        {
+            UserDetail userDetail = new UserDetail();
+            ApplicationUser user = Service._userManager.FindByIdAsync(appUserId).Result;
+            Token token = Service.tokenDAO.getByUsername(user.Email);
+            UserInfo userInfo = Service.userInfoDAO.getUserInfo(user.userInfoId);
+            userDetail.Id = user.Id;
+            userDetail.createdAt = userInfo.createdAt;
+            userDetail.dobDisplay = ((DateTime)userInfo.dob).ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
+            userDetail.Email = user.Email;
+            userDetail.firstName = userInfo.firstName;
+            userDetail.lastName = userInfo.lastName;
+            userDetail.Password = user.PasswordHash;
+            userDetail.status = userInfo.status;
+            userDetail.PhoneNumber = user.PhoneNumber;
+            userDetail.isLogin = token != null ? token.isLogin : false;
+            userDetail.identityNumber = userInfo.identityNumber;
+            return userDetail;
         }
     }
 }

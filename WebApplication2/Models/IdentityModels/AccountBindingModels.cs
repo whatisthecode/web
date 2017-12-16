@@ -58,7 +58,6 @@ namespace WebApplication2.Models
             [Display(Name = "Phone Number")]
             public string PhoneNumber { get; set; }
 
-            [Compare("PhoneNumber", ErrorMessage = "The {0} must be at least {2} characters long.")]
             [DataType(DataType.PhoneNumber)]
             [Display(Name = "Confirm Phone Number")]
             public string ConfirmPhoneNumber { get; set; }
@@ -66,7 +65,8 @@ namespace WebApplication2.Models
             public DateTime dob {
                 get
                 {
-                    return DateTime.ParseExact(this.dobDisplay, "yyyy/MM/dd", CultureInfo.InvariantCulture);
+                    String temp = this.dobDisplay.Split('/')[2] + "/" + this.dobDisplay.Split('/')[1] + "/" + this.dobDisplay.Split('/')[0];
+                    return DateTime.Parse(temp);
                 }
                 private set { }
             }
@@ -81,6 +81,8 @@ namespace WebApplication2.Models
             public string identityNumber { get; set; }
             [Required]
             public List<string> groups { get; set; }
+
+            public String groupName { get; set; }
         }
     }
 

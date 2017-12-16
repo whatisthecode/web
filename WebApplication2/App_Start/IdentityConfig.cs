@@ -18,8 +18,7 @@ namespace WebApplication2
 
     public class ApplicationUserManager : UserManager<ApplicationUser>
     {
-        public ApplicationUserManager(IUserStore<ApplicationUser> store)
-            : base(store)
+        public ApplicationUserManager(IUserStore<ApplicationUser> store) : base(store)
         {
         }
 
@@ -56,6 +55,7 @@ namespace WebApplication2
             
             return manager;
         }
+        public void aaaaaaaa() { }
     }
 
     public class ApplicationRoleManager : RoleManager<ApplicationRole>

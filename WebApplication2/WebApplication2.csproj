@@ -290,8 +290,10 @@
     <Compile Include="Models\RequestModel\FromUri.cs" />
     <Compile Include="Models\RequestModel\Invoice.cs" />
     <Compile Include="Models\RequestModel\Merchant.cs" />
+    <Compile Include="Models\RequestModel\PersonalInfo.cs" />
     <Compile Include="Models\RequestModel\ProductDetail.cs" />
     <Compile Include="Models\RequestModel\SidebarModel.cs" />
+    <Compile Include="Models\RequestModel\UserDetail.cs" />
     <Compile Include="Models\RequestModel\UserGeneral.cs" />
     <Compile Include="Models\Token.cs" />
     <Compile Include="Models\UserInfo.cs" />
@@ -500,6 +502,7 @@
     <Content Include="Views\Admin\AdminStatistic\Index.cshtml" />
     <Content Include="Views\Admin\AdminUser\Index.cshtml" />
     <Content Include="Views\Admin\AdminUser\Create.cshtml" />
+    <Content Include="Views\Admin\AdminUser\Detail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

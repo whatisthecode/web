@@ -24,10 +24,25 @@ namespace WebApplication2.Controllers.API
         [APIAuthorize(Roles = "VIEW_USER")]
         [Route("api/user/{id}")]
         [HttpGet]
-        public IHttpActionResult getuser(Int16 id)
+        public IHttpActionResult getuser(String id)
         {
-            return null;
+            Response response = new Response();
+            UserDetail userDetail = Service.userInfoDAO.getUserDetail(id);
+            if(userDetail != null)
+            {
+                response.code = "200";
+                response.status = "Thông tin người dùng:";
+                response.results = userDetail;
+            }
+            else
+            {
+                response.code = "404";
+                response.status = "Không tìm thấy người dùng";
+                response.results = null;
+            }
+            return Content<Response>(HttpStatusCode.OK, response);
         }
+
         [APIAuthorize(Roles = "VIEW_USER")]
         [Route("api/users")]
         [HttpGet]
@@ -76,7 +91,7 @@ namespace WebApplication2.Controllers.API
                             break;
                         }
                     }
-                    users.Add(new UserGeneral(item.id,appUser.Email, item.firstName + " " + item.lastName, groupName, item.status, isLogin, item.createdAt));
+                    users.Add(new UserGeneral(appUser.Id,appUser.Email, item.firstName + " " + item.lastName, groupName, item.status, isLogin, item.createdAt));
                 }
                 PagedResult<UserGeneral> pv = new PagedResult<UserGeneral>();
                 pv.currentPage = tempPv.currentPage;
@@ -98,5 +113,6 @@ namespace WebApplication2.Controllers.API
                 return Content<Response>(HttpStatusCode.Forbidden, response);
             }
         }
+
     }
 }
