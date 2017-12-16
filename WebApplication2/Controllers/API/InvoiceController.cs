@@ -241,10 +241,26 @@ namespace WebApplication2.Controllers.API
                     {
                         Invoice invoice = new Invoice();
                         SalerInvoice salerInvoice = new SalerInvoice();
+                        invoice = pageResult.items[i];
+
+                        if(invoice.buyer == null)
+                        {
+                            invoice.buyer = Service.userInfoDAO.getUserInfo(invoice.buyerId);
+                        }
+
+                        if(invoice.saler == null)
+                        {
+                            invoice.saler = Service.userInfoDAO.getUserInfo(invoice.salerId);
+                        }
 
                         IEnumerable<InvoiceDetail> iEListInvoices = Service.invoiceDetailDAO.getListDetailByInvoiceId(invoice.id);
-                        invoice = pageResult.items[i];
+
                         List<InvoiceDetail> listInvoices = iEListInvoices.ToList();
+                        foreach (var detail in listInvoices)
+                        {
+                            detail.Product = Service.productDAO.getProduct(detail.product);
+                            detail.Product.attributes = Service.productAttributeDAO.getProAttrsByProId(detail.product);
+                        }
 
                         salerInvoice.invoice = invoice;
                         salerInvoice.details = listInvoices;
