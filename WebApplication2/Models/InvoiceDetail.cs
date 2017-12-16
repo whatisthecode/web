@@ -47,5 +47,10 @@ namespace WebApplication2.Models
             this.amount = amount;
             this.price = price;
         }
+
+        public InvoiceDetail()
+        {
+
+        }
     }
 }

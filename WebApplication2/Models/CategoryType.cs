@@ -14,5 +14,10 @@ namespace WebApplication2.Models
         public String name { get; set; }
 
         public String code { get; set; }
+
+        public CategoryType()
+        {
+
+        }
     }
 }

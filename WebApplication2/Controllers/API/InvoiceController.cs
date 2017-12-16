@@ -1,13 +1,16 @@
-﻿using System;
+﻿using LaptopWebsite.Models.Mapping;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Web;
 using System.Web.Http;
 using WebApplication2.CustomAttribute;
 using WebApplication2.Models;
 using WebApplication2.Models.Mapping;
 using WebApplication2.Services;
-using static WebApplication2.Models.RequestModel.Invoice;
+using static WebApplication2.Models.RequestModel.FromUri;
+using static WebApplication2.Models.RequestModel.InvoiceView;
 
 namespace WebApplication2.Controllers.API
 {
@@ -166,16 +169,113 @@ namespace WebApplication2.Controllers.API
             return Content<Response>(HttpStatusCode.OK, response);
 
         }
+
         [Route("api/invoice")]
+        [APIAuthorize]
         [HttpGet]
-        public IHttpActionResult getInvoices()
+        public async System.Threading.Tasks.Task<IHttpActionResult> getInvoicesAsync([FromUri]PageRequest pageRequest)
         {
-            IEnumerable<Invoice> invoices = Service.invoiceDAO.getInvoice();
+            String accessToken = HttpContext.Current.Request.Headers.Get("Authorization").Replace("Bearer ", "");
             Response response = new Response();
-            response.code = "200";
-            response.status = "Thành công";
-            response.results = invoices.ToList();
-            return Content<Response>(HttpStatusCode.OK, response);
+            if (accessToken != null)
+            {
+                Token token = Service.tokenDAO.getByAccessToken(accessToken);
+                DateTime currentDate = DateTime.Now;
+                DateTime expiresDate = token.expires;
+                int result = DateTime.Compare(currentDate, expiresDate);
+                if (result <= 0)
+                {
+                    var user = await Service._userManager.FindByEmailAsync(token.userName);
+                    user.groups = Service.userGroupDAO.getUserGroupByUser(user.Id).ToList();
+
+                    UserInfo userInfo = new UserInfo();
+                    userInfo = Service.userInfoDAO.getUserInfo(user.userInfoId);
+
+                    bool isAdmin = false;
+                    bool isMerchant = false;
+                    bool isCustomer = false;
+                    foreach(var group in user.groups)
+                    {
+                        if (group.Group.name == "Admin" || group.Group.name == "SuperAdmin")
+                        {
+                            isAdmin = true;
+                        } else if (group.Group.name == "Merchant")
+                        {
+                            isMerchant = true;
+                        } else if(group.Group.name == "Customer")
+                        {
+                            isCustomer = true;
+                        }
+                    }
+
+                    PagedResult<Invoice> pageResult = new PagedResult<Invoice>();
+
+                    if (isAdmin)
+                    {
+                        pageResult = Service.invoiceDAO.PageView(0, 0, pageRequest.pageIndex, pageRequest.pageSize, pageRequest.ascending);
+                    }
+
+                    if(isMerchant)
+                    {
+                        pageResult = Service.invoiceDAO.PageView(0, user.userInfoId, pageRequest.pageIndex, pageRequest.pageSize, pageRequest.ascending);
+                    }
+
+                    if(isCustomer)
+                    {
+                        pageResult = Service.invoiceDAO.PageView(user.userInfoId, 0, pageRequest.pageIndex, pageRequest.pageSize, pageRequest.ascending);
+                    }
+
+                    if(isMerchant && isCustomer)
+                    {
+                        pageResult = Service.invoiceDAO.PageView(user.userInfoId, user.userInfoId, pageRequest.pageIndex, pageRequest.pageSize, pageRequest.ascending);
+                    }
+
+                    PagedResult<SalerInvoice> salerPagedResult = new PagedResult<SalerInvoice>();
+                    salerPagedResult.currentPage = pageResult.currentPage;
+                    salerPagedResult.pageCount = pageResult.pageCount;
+                    salerPagedResult.rowCount = pageResult.rowCount;
+                    salerPagedResult.pageSize = pageResult.pageSize;
+
+                    List<SalerInvoice> listSalerInvoices = new List<SalerInvoice>();
+                    for(var i = 0; i < pageResult.rowCount; i++)
+                    {
+                        Invoice invoice = new Invoice();
+                        SalerInvoice salerInvoice = new SalerInvoice();
+
+                        IEnumerable<InvoiceDetail> iEListInvoices = Service.invoiceDetailDAO.getListDetailByInvoiceId(invoice.id);
+                        invoice = pageResult.items[i];
+                        List<InvoiceDetail> listInvoices = iEListInvoices.ToList();
+
+                        salerInvoice.invoice = invoice;
+                        salerInvoice.details = listInvoices;
+
+                        listSalerInvoices.Add(salerInvoice);
+                    }
+
+                    salerPagedResult.items = listSalerInvoices;
+                    response.code = "200";
+                    response.status = "Thành công";
+                    response.results = salerPagedResult;
+                    return Content<Response>(HttpStatusCode.OK, response);
+                }
+                else
+                {
+                    Service.tokenDAO.delete(token.id);     //remove token from database
+                    Service.tokenDAO.save();
+                    response.status = "Phiên đăng nhập của bạn đã hết hạn, vui lòng đăng nhập lại";
+                    response.code = "401";
+                    response.results = "";
+                    return Content<Response>(HttpStatusCode.OK, response);
+                }
+            }
+            else
+            {
+                response.status = "Phiên đăng nhập của bạn đã hết hạn, vui lòng đăng nhập lại";
+                response.code = "401";
+                response.results = "";
+                return Content<Response>(HttpStatusCode.OK, response);
+            }
+            
 
         }
 

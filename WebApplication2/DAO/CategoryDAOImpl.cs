@@ -119,11 +119,10 @@ namespace WebApplication2.DAO
 
         public IEnumerable<Category> getCategoryByTypeId(short id)
         {
-            List<Category> listItem = new List<Category>();
-            listItem = (from cate in base.getContext().categories
+            var query = from cate in base.getContext().categories
                         where cate.typeId.Equals(id)
-                        select cate).ToList();
-            return listItem;
+                        select cate;
+            return query;
         }
     }
 }

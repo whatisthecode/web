@@ -24,8 +24,7 @@ namespace WebApplication2.Controllers.API
         public IHttpActionResult getCategoryType(short id)
         {
             Response response = new Response();
-            List<Category> categories = new List<Category>();
-            categories = Service.categoryDAO.getCategoryByTypeId(id).ToList();
+            IEnumerable<Category> categories = Service.categoryDAO.getCategoryByTypeId(id);
             response.code = "200";
             response.status = "Thành công";
             response.results = categories;

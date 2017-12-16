@@ -17,5 +17,10 @@ namespace WebApplication2.Models
         public ApplicationRole ApplicationRole { get; set; }
 
         public Group Group { get; set; }
+
+        public ApplicationRoleGroup()
+        {
+
+        }
     }
 }

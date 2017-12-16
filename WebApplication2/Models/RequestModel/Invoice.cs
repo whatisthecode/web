@@ -5,7 +5,7 @@ using System.Web;
 
 namespace WebApplication2.Models.RequestModel
 {
-    public class Invoice
+    public class InvoiceView
     {
         public class ViewInvoiceModel
         {
@@ -24,6 +24,23 @@ namespace WebApplication2.Models.RequestModel
             public Int16 amount { get; set; }
             public double price { get; set; }
             public string name { get; set; }
+
+            public InvoiceProducts()
+            {
+
+            }
+        }
+
+        public class SalerInvoice
+        {
+            public Invoice invoice { get; set; }
+
+            public List<InvoiceDetail> details { get; set; }
+
+            public SalerInvoice()
+            {
+                
+            }
         }
     }
 }
