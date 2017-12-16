@@ -19,7 +19,7 @@ namespace WebApplication2.DAO
         void updateInvoice(Invoice invoice);
         void saveInvoice();
         Boolean check(String column);
-        PagedResult<Invoice> PageView(int pageIndex, int pageSize, string columnName);
+        PagedResult<Invoice> PageView(short userId, short salerId, int pageIndex, int pageSize, bool descending);
         void dispose();
     }
 }

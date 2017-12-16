@@ -17,59 +17,15 @@
             <div class="panel panel-default sidebar-menu">
 
                 <div class="panel-heading">
-                    <h3 class="panel-title">Categories</h3>
+                    <h3 class="panel-title">Sản phẩm</h3>
                 </div>
 
                 <div class="panel-body">
                     <ul class="nav nav-pills nav-stacked category-menu">
                         <li>
-                            <a href="category.html">Men <span class="badge pull-right">42</span></a>
                             <ul>
-                                <li>
-                                    <a href="category.html">T-shirts</a>
-                                </li>
-                                <li>
-                                    <a href="category.html">Shirts</a>
-                                </li>
-                                <li>
-                                    <a href="category.html">Pants</a>
-                                </li>
-                                <li>
-                                    <a href="category.html">Accessories</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="active">
-                            <a href="category.html">Ladies  <span class="badge pull-right">123</span></a>
-                            <ul>
-                                <li>
-                                    <a href="category.html">T-shirts</a>
-                                </li>
-                                <li>
-                                    <a href="category.html">Skirts</a>
-                                </li>
-                                <li>
-                                    <a href="category.html">Pants</a>
-                                </li>
-                                <li>
-                                    <a href="category.html">Accessories</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="category.html">Kids  <span class="badge pull-right">11</span></a>
-                            <ul>
-                                <li>
-                                    <a href="category.html">T-shirts</a>
-                                </li>
-                                <li>
-                                    <a href="category.html">Skirts</a>
-                                </li>
-                                <li>
-                                    <a href="category.html">Pants</a>
-                                </li>
-                                <li>
-                                    <a href="category.html">Accessories</a>
+                                <li ng-repeat="cate in cateProducts">
+                                    <a href="/{{cate.code}}">{{cate.name}}</a>
                                 </li>
                             </ul>
                         </li>
@@ -82,36 +38,21 @@
             <div class="panel panel-default sidebar-menu">
 
                 <div class="panel-heading">
-                    <h3 class="panel-title">Brands <a class="btn btn-xs btn-danger pull-right" href="#"><i class="fa fa-times-circle"></i> Clear</a></h3>
+                    <h3 class="panel-title">Thương hiệu <a class="btn btn-xs btn-danger pull-right" href="#"><i class="fa fa-times-circle"></i> Xóa</a></h3>
                 </div>
 
                 <div class="panel-body">
 
                     <form>
                         <div class="form-group">
-                            <div class="checkbox">
+                            <div class="checkbox" ng-repeat="cate in cateBrands">
                                 <label>
-                                    <input type="checkbox">Armani (10)
-                                </label>
-                            </div>
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox">Versace (12)
-                                </label>
-                            </div>
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox">Carlo Bruni (15)
-                                </label>
-                            </div>
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox">Jack Honey (14)
+                                    <input type="checkbox">{{cate.name}} (10)
                                 </label>
                             </div>
                         </div>
 
-                        <button class="btn btn-default btn-sm btn-primary"><i class="fa fa-pencil"></i> Apply</button>
+                        <button class="btn btn-default btn-sm btn-primary"><i class="fa fa-pencil"></i> Áp dụng</button>
 
                     </form>
 
@@ -121,43 +62,20 @@
             <div class="panel panel-default sidebar-menu">
 
                 <div class="panel-heading">
-                    <h3 class="panel-title">Colours <a class="btn btn-xs btn-danger pull-right" href="#"><i class="fa fa-times-circle"></i> Clear</a></h3>
+                    <h3 class="panel-title">Thuộc tính</h3>
                 </div>
 
                 <div class="panel-body">
+                    <ul class="nav nav-pills nav-stacked category-menu">
+                        <li>
+                            <ul>
+                                <li ng-repeat="cate in cateAttrs">
+                                    <a href="category.html">{{cate.name}}</a>
+                                </li>
+                            </ul>
+                        </li>
 
-                    <form>
-                        <div class="form-group">
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox"> <span class="colour white"></span> White (14)
-                                </label>
-                            </div>
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox"> <span class="colour blue"></span> Blue (10)
-                                </label>
-                            </div>
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox"> <span class="colour green"></span> Green (20)
-                                </label>
-                            </div>
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox"> <span class="colour yellow"></span> Yellow (13)
-                                </label>
-                            </div>
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox"> <span class="colour red"></span> Red (10)
-                                </label>
-                            </div>
-                        </div>
-
-                        <button class="btn btn-default btn-sm btn-primary"><i class="fa fa-pencil"></i> Apply</button>
-
-                    </form>
+                    </ul>
 
                 </div>
             </div>
@@ -192,8 +110,9 @@
                                 </div>
                                 <div class="col-md-6 col-sm-6">
                                     <div class="products-sort-by">
-                                        <strong>Sort by</strong>
+                                        <strong>Sắp xếp</strong>
                                         <select name="sort-by" class="form-control" ng-model="filter" ng-change="rowChanged(pageIndex, pageSize, filter, asceding)">
+                                            <option value="name">Tên</option>
                                             <option value="priceUp">Giá tăng dần</option>
                                             <option value="priceDown">Giá giảm dần</option>
                                         </select>
@@ -230,7 +149,7 @@
                             <h3><a href="detail.html">{{product.name}}</a></h3>
                             <p class="price">{{product.attributes[0].value}}</p>
                             <p class="buttons">
-                                <a class="btn btn-default" ng-click="viewDetail(product.id)">Xem chi tiết</a>
+                                <a class="btn btn-default" ng-click="viewDetail(product.id)">Chi tiết</a>
                                 <a ng-click="addProductToCart(product)" class="btn btn-primary"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ</a>
                             </p>
                         </div>

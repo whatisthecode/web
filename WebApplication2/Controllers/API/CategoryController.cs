@@ -137,7 +137,6 @@ namespace WebApplication2.Controllers.API
 
         [Route("api/category/{categoryId}/products/")]
         [HttpGet]
-        [AllowAnonymous]
         public IHttpActionResult getProductByCategory(Int16 categoryId, [FromUri] PageRequest pageRequest)
         {
             Response response = new Response();

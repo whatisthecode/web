@@ -117,9 +117,12 @@ namespace WebApplication2.DAO
             return pv;
         }
 
-        public short idCatType(short id)
+        public IEnumerable<Category> getCategoryByTypeId(short id)
         {
-            throw new NotImplementedException();
+            var query = from cate in base.getContext().categories
+                        where cate.typeId.Equals(id)
+                        select cate;
+            return query;
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿if ("undefined" !== typeof app) {
-    app.controller("ProductController", function ($scope, Product, CONFIG, Helper, $routeParams, $cookieStore) {
+    app.controller("ProductController", function ($scope, Product, CONFIG, Helper, $routeParams, $cookieStore, Category) {
         $scope.products = [];
         $scope.pageSize = 10;
         $scope.pageIndex = 1;
@@ -7,16 +7,19 @@
         $scope.asceding = false;
         $scope.rowCount = null;
         $scope.currentPage = "";
+        $scope.cateBrands = null;
+        $scope.cateProducts = null;
+        $scope.cateAttrs = null;
 
         var categoryId = null;
         getProduct = function (pageIndex, pageSize, filter) {
             switch ($routeParams.category) {
-                case "ban-phim":
-                    categoryId = 1;
+                case "KEYBOARD":
+                    categoryId = 2;
                     $scope.currentPage = "Bàn Phím";
                     break;
-                case "chuot":
-                    categoryId = 2;
+                case "MOUSE":
+                    categoryId = 1;
                     $scope.currentPage = "Chuột";
                     break;
                 default:
@@ -41,8 +44,6 @@
                 }
             });
         };
-
-        getProduct($scope.pageIndex, $scope.pageSize, $scope.filter);
 
         $scope.pageChanged = function (pageSize, pageIndex, filter) {
             getProduct(pageIndex, pageSize, filter);
@@ -77,5 +78,38 @@
             }
 
         };
+
+        getCategoryType = function (id) {
+            Category.getCategoryByType(id, function (success) {
+                if (success) {
+                    switch (id)
+                    {
+                        case 1: $scope.cateBrands = success.results;
+                            break;
+                        case 2: $scope.cateProducts = success.results;
+                            console.log($scope.cateProducts);
+                            break;
+                        case 3: $scope.cateAttrs = success.results;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }, function (err) {
+                if (err) {
+                    console.log(err);
+                }
+            });
+        };
+
+        
+
+        viewInit = function() {
+            getProduct($scope.pageIndex, $scope.pageSize, $scope.filter);
+            getCategoryType(1);
+            getCategoryType(2);
+            getCategoryType(3);
+        };
+        viewInit();
     });
 }

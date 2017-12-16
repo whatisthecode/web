@@ -21,6 +21,6 @@ namespace WebApplication2.DAO
         Boolean check(String column);
         PagedResult<InvoiceDetail> PageView(int pageIndex, int pageSize, string columnName);
         void dispose();
-
+        IEnumerable<InvoiceDetail> getListDetailByInvoiceId(short invoiceId);
     }
 }

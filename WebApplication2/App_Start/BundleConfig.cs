@@ -43,6 +43,7 @@ namespace WebApplication2
 
             bundles.Add(new ScriptBundle("~/bundles/client_controller").Include(
                        "~/Scripts/Client/Shared/Top.js",
+                       "~/Scripts/Client/Shared/Footer.js",
                        "~/Scripts/Client/Controller/Index.js",
                        "~/Scripts/Client/Controller/Cart.js",
                        "~/Scripts/Client/Controller/Product.js",
@@ -61,6 +62,7 @@ namespace WebApplication2
                         "~/Scripts/Client/Service/Product.js",
                         "~/Scripts/Client/Service/ProductDetail.js",
                         "~/Scripts/Client/Service/Card.js",
+                        "~/Scripts/Client/Service/Category.js",
                         "~/Scripts/Client/Service/Invoice.js",
                         "~/Scripts/Client/Service/InvoiceDetail.js"));
             // Use the development version of Modernizr to develop with and learn from. Then, when you're

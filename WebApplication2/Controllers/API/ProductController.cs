@@ -174,13 +174,15 @@ namespace WebApplication2.Controllers.API
         {
             Response response = new Response();
 
-            PagedResult<Product> pagedResult = Service.productDAO.PageView(pageRequest.pageIndex, pageRequest.pageSize, pageRequest.order, false);
+            PagedResult<Product> pagedResult = new PagedResult<Product>();
+            pagedResult =  Service.productDAO.PageView(pageRequest.pageIndex, pageRequest.pageSize, pageRequest.order, false);
             IList<Product> products = pagedResult.items;
             Int16 productsLength = (Int16)products.Count;
             for (Int16 i = 0; i < productsLength; i++)
             {
                 Product product = products[i];
-                List<ProductAttribute> productAtts = Service.productAttributeDAO.getProAttrsByProId(product.id);
+                List<ProductAttribute> productAtts = new List<ProductAttribute>();
+                productAtts = Service.productAttributeDAO.getProAttrsByProId(product.id);
                 //UserInfo userInfo = Service.userInfoDAO.getUserInfo(product.createdBy);
                 products[i].attributes = productAtts;
                 products[i].UserInfo = Service.userInfoDAO.getUserInfo(products[i].createdBy);
