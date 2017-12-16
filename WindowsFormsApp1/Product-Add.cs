@@ -34,6 +34,14 @@ namespace WindowsFormsApp1
 
         private void Product_Add_Load(object sender, EventArgs e)
         {
+            HttpClient httpClient = new HttpClient();
+            httpClient.BaseAddress = baseUrl;
+            var response = httpClient.GetAsync("api/category").Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var result = response.Content.ReadAsStringAsync().Result;
+                Console.WriteLine(result);
+            }
             ComboBox comboBox1 = new ComboBox();
         }
 
@@ -45,7 +53,6 @@ namespace WindowsFormsApp1
         private void btnAdd_Click(object sender, EventArgs e)
         {
             Int16 status;
-
             string selectedItem = comboBox1.Items[comboBox1.SelectedIndex].ToString();
             if(selectedItem == "Invisible")
             {
@@ -84,6 +91,7 @@ namespace WindowsFormsApp1
                 cr.createdBy = userId;
                 cr.categories = ct;
                 cr.attributes = attributes;
+               
                 HttpContent httpContent = new ObjectContent<CreateProductModel>(cr, new JsonMediaTypeFormatter());
                 var response = httpClient.PostAsync("api/product", httpContent).Result;
                 
