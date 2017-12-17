@@ -11,6 +11,8 @@ namespace WebApplication2.Models
 {
     public class UserInfo : Base
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Int16 id { get; set; }
 
         public Int16 status { get; set; }
@@ -26,6 +28,8 @@ namespace WebApplication2.Models
 
         [Column("identity_number")]
         public String identityNumber { get; set; }
+
+        public Int16 postAmount { get; set; }
 
         public UserInfo(Int16 status, string firstName, string lastName, DateTime dob, string identityNumber)
         {

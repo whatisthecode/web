@@ -10,6 +10,7 @@ namespace WebApplication2.Models
     public class InvoiceDetail : Base
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key]
         public Int16 id { get; set; }
 
         [ForeignKey("Invoice")]

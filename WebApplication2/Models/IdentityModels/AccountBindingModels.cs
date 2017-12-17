@@ -83,6 +83,11 @@ namespace WebApplication2.Models
             public List<string> groups { get; set; }
 
             public String groupName { get; set; }
+
+            public RegisterBindingModel()
+            {
+
+            }
         }
     }
 
@@ -133,5 +138,10 @@ namespace WebApplication2.Models
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string password { get; set; }
+
+        public LoginModel()
+        {
+
+        }
     }
 }

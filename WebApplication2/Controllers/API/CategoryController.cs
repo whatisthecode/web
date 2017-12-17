@@ -22,7 +22,7 @@ namespace WebApplication2.Controllers.API
 
         [Route("api/category")]
         [HttpPost]
-        public IHttpActionResult insert([FromBody]Category category)
+        public IHttpActionResult insert([FromBody]CreateCategoryModel category)
         {
 
             Response response = new Response();
@@ -33,15 +33,15 @@ namespace WebApplication2.Controllers.API
                 return Content<Response>(HttpStatusCode.Conflict, response);
 
             }
-            else if(Service.categoryDAO.checkExist(category) != null)
+            else if(Service.categoryDAO.checkExist(category.id) != null)
             {
                 response = new Response("409", "Loại sản phẩm này đã tồn tại", null);
                 return Content<Response>(HttpStatusCode.Conflict, response);
             }
             else
             {
-                Service.categoryDAO.insertCategory(category);
-                Service.categoryDAO.saveCategory();
+                Service.categoryDAO.insertCategory(category.toCategory());
+
                 response = new Response("201", "Loại sản phẩm đã được thêm", category);
                 return Content<Response>(HttpStatusCode.Created, response);
             }
@@ -49,9 +49,9 @@ namespace WebApplication2.Controllers.API
 
         [Route("api/category")]
         [HttpPut]
-        public IHttpActionResult update([FromBody]Category category)
+        public IHttpActionResult update([FromBody]CreateCategoryModel category)
         {
-            Category category1 = Service.categoryDAO.checkExist(category);
+            Category category1 = Service.categoryDAO.checkExist(category.id);
             Response response = new Response();
             if (Service.categoryDAO.getCategoryById(category.id) == null)
             {
@@ -77,7 +77,7 @@ namespace WebApplication2.Controllers.API
                 category1.code = category.code;
                 category1.name = category.name;
                 Service.categoryDAO.updateCategory(category1);
-                Service.categoryDAO.saveCategory();
+
                 response = new Response("200", "Cập nhật loại sản phẩm thành công", category);
                 return Content<Response>(HttpStatusCode.OK, response);
             }

@@ -47,8 +47,12 @@ namespace WebApplication2.DAO
 
         public CategoryType getCategoryTypeByCode(String code)
         {
-            CategoryType categoryType = base.getContext().categoryTypes.Where(ct => ct.code == code).FirstOrDefault();
-            if(categoryType != null)
+            CategoryType categoryType = null;
+            using (DBContext context = new DBContext())
+            {
+                categoryType = context.categoryTypes.Where(ct => ct.code == code).FirstOrDefault();
+            }
+            if (categoryType != null)
             {
                 return categoryType;
             }
@@ -63,11 +67,6 @@ namespace WebApplication2.DAO
         public PagedResult<CategoryType> PageView(int pageIndex, int pageSize, string columnName)
         {
             throw new NotImplementedException();
-        }
-
-        public void saveCategoryType()
-        {
-            base.save();
         }
 
         public void updateCategoryType(CategoryType categoryType)

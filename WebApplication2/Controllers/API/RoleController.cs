@@ -91,7 +91,7 @@ namespace WebApplication2.Controllers.API
                 Group group = new Group();
                 group.name = groupName;
                 Service.groupDAO.insertGroup(group);
-                Service.groupDAO.saveGroup();
+
             }
             Response response = new Response("201", "Created", "");
             return Content<Response>(HttpStatusCode.Created, response);
@@ -154,7 +154,6 @@ namespace WebApplication2.Controllers.API
                 userGroup.groupId = gr.id;
                 userGroup.userId = user.Id;
                 Service.userGroupDAO.AddUserToGroup(userGroup);
-                Service.userGroupDAO.saveUserGroup();
             }
             Response response = new Response("200", "created", "");
             return Content<Response>(HttpStatusCode.Created, response);

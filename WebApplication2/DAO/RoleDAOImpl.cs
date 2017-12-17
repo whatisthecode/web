@@ -17,7 +17,11 @@ namespace WebApplication2.DAO
         }
         public void DeleteRole(String roleId)
         {
-            IQueryable<ApplicationUser> roleUsers = DatabaseFactory.context.Users.Where(u => u.Roles.Any(r => r.RoleId == roleId));
+            List<ApplicationUser> roleUsers = new List<ApplicationUser>();
+            using (DBContext context = new DBContext())
+            {
+                roleUsers = context.Users.Where(u => u.Roles.Any(r => r.RoleId == roleId)).ToList();
+            }
             ApplicationRole role = Service._roleManager.FindById(roleId);
 
             foreach (ApplicationUser user in roleUsers)
@@ -25,7 +29,6 @@ namespace WebApplication2.DAO
                 Service._userManager.RemoveFromRole(user.Id, role.Name);
             }
             Service._roleManager.Delete(role);
-            DatabaseFactory.context.SaveChanges();
         }
     }
 }

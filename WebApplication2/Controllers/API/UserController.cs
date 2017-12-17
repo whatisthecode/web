@@ -44,6 +44,42 @@ namespace WebApplication2.Controllers.API
         }
 
         [APIAuthorize(Roles = "VIEW_USER")]
+        [Route("api/user/info")]
+        [HttpGet]
+        public IHttpActionResult getUserInfo()
+        {
+            Response response = new Response();
+
+            String accessToken = HttpContext.Current.Request.Headers.Get("Authorization").Replace("Bearer ","");
+            Token token = Service.tokenDAO.getByAccessToken(accessToken);
+            if(token != null)
+            {
+                ApplicationUser appUser = Service._userManager.FindByEmailAsync(token.userName).Result;
+                UserDetail userDetail = Service.userInfoDAO.getUserDetail(appUser.Id);
+                if (userDetail != null)
+                {
+                    response.code = "200";
+                    response.status = "Thông tin người dùng:";
+                    response.results = userDetail;
+                }
+                else
+                {
+                    response.code = "404";
+                    response.status = "Không tìm thấy người dùng";
+                    response.results = null;
+                }
+            }
+            else
+            {
+                response.code = "401";
+                response.status = "Lỗi xác thực người dùng";
+                response.results = null;
+            }
+            
+            return Content<Response>(HttpStatusCode.OK, response);
+        }
+
+        [APIAuthorize(Roles = "VIEW_USER")]
         [Route("api/users")]
         [HttpGet]
         public IHttpActionResult getusers([FromUri] PageRequest pageRequest)
@@ -66,7 +102,7 @@ namespace WebApplication2.Controllers.API
                 List<UserGeneral> users = new List<UserGeneral>();
                 foreach(var item in tempPv.items)
                 {
-                    ApplicationUser appUser = DatabaseFactory.context.Users.Where(au => au.userInfoId == item.id).FirstOrDefault();
+                    ApplicationUser appUser = Service.userInfoDAO.getApplicationUserByUserInfoId(item.id);
                     Token userToken = Service.tokenDAO.getByUsername(appUser.Email);
                     Boolean isLogin = false;
                     if (userToken != null)
