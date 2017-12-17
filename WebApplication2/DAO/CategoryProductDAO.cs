@@ -17,7 +17,6 @@ namespace WebApplication2.DAO
         void insertCategoryProduct(CategoryProduct catepro);
         void updateCategoryProduct(CategoryProduct catepro);
         void deleteCategoryProduct(Int16 idcatepro);
-        void save();
         void dispose();
     }
 }

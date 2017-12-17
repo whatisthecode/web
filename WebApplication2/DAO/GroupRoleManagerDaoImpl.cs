@@ -32,11 +32,14 @@ namespace WebApplication2.DAO
             if (!roleGroups.Contains(newGroupRole))
             {
                 base.insert(newGroupRole);
-                base.save();
             }
 
             //Add all of the users in this group to the new role:
-            IQueryable<ApplicationUser> groupUsers = base.getContext().Users.Where(u => u.groups.Any(g => g.groupId.Equals(group.id)));
+            List<ApplicationUser> groupUsers = new List<ApplicationUser>();
+            using (DBContext context = new DBContext())
+            {
+                groupUsers = context.Users.Where(u => u.groups.Any(g => g.groupId.Equals(group.id))).ToList();
+            }
             foreach (ApplicationUser user in groupUsers)
             {
                 if (!(Service._userManager.IsInRole(user.Id, roleName)))
@@ -49,7 +52,11 @@ namespace WebApplication2.DAO
         public void ClearGroupRoles(Int16 groupId)
         {
             Group group = Service.groupDAO.getGroupById(groupId);
-            IQueryable<ApplicationUser> users = base.getContext().Users.Where(u => u.groups.Any(g => g.groupId.Equals(group.id)));
+            List<ApplicationUser> users = new List<ApplicationUser>();
+            using (DBContext context = new DBContext())
+            {
+                users = context.Users.Where(u => u.groups.Any(g => g.groupId.Equals(group.id))).ToList();
+            }
             ICollection<ApplicationRoleGroup> roleGroups = this.getGroupRoles(groupId);
 
             foreach (ApplicationRoleGroup role in roleGroups)
@@ -64,8 +71,11 @@ namespace WebApplication2.DAO
                         Service._userManager.RemoveFromRole(user.Id, role.ApplicationRole.Name);
                     }
                 }
-                base.getContext().roleGroups.Remove(role);
-                base.save();
+                using (DBContext context = new DBContext())
+                {
+                    context.roleGroups.Remove(role);
+                    context.SaveChanges();
+                }
             }
         }
 

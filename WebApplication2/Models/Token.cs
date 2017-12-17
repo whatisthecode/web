@@ -10,6 +10,7 @@ namespace WebApplication2.Models
     public class Token : Base
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key]
         public Int16 id { get; set; }
 
         [Column("access_token")]

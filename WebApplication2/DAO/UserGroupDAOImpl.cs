@@ -19,15 +19,17 @@ namespace WebApplication2.DAO
         public void deleteUserGroup(String userId, Int16 groupId)
         {
             ApplicationUserGroup userGroup = this.getUserGroupById(userId, groupId);
-            base.getContext().userGroups.Remove(userGroup);
+            base.delete(userGroup.id);
         }
 
         public void ClearUserGroups(String userId)
         {
-            //TO DO
-            ApplicationUser user = base.getContext().Users.Find(userId);
-            user.groups.Clear();
-            base.getContext().SaveChanges();
+            ApplicationUser user = Service._userManager.FindById(userId);
+            using (DBContext context = new DBContext())
+            {
+                user.groups.Clear();
+                context.SaveChanges();
+            }
         }
 
         public void dispose()
@@ -58,8 +60,7 @@ namespace WebApplication2.DAO
 
         public void AddUserToGroup(ApplicationUserGroup userGroup)
         {
-            Group group = Service.groupDAO.getGroupById(userGroup.groupId);
-
+        
             ApplicationUser user = Service._userManager.FindById(userGroup.userId);
             ICollection<ApplicationRoleGroup> roleGroups = Service.groupRoleManagerDAO.getGroupRoles(userGroup.groupId);
 
@@ -70,11 +71,6 @@ namespace WebApplication2.DAO
             }
 
             base.insert(userGroup);
-        }
-
-        public void saveUserGroup()
-        {
-            base.save();
         }
 
         public void updateUserGroup(ApplicationUserGroup userGroup)

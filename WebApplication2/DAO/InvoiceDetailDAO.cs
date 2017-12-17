@@ -17,7 +17,6 @@ namespace WebApplication2.DAO
 
         void deleteInvoiceDetail(Int16 InvoiceDetailId);
         void updateInvoiceDetail(InvoiceDetail invoicedetail);
-        void saveInvoiceDetail();
         Boolean check(String column);
         PagedResult<InvoiceDetail> PageView(int pageIndex, int pageSize, string columnName);
         void dispose();

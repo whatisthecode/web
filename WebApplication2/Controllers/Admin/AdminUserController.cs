@@ -2,9 +2,12 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Formatting;
+using System.Net.Http.Headers;
 using System.Web;
 using System.Web.Mvc;
 using WebApplication2.CustomAttribute;
@@ -46,10 +49,22 @@ namespace WebApplication2.Controllers.Admin
             return RedirectToAction("NotFound", "Error");
         }
 
-        public ActionResult Detail()
+        public ActionResult Detail(String id)
         {
-            
-            return View();
+            ViewBag.groups = Service.groupDAO.getGroup();
+            String accessToken = Session["currentUser"].ToString();
+            HttpClient httpClient = new HttpClient();
+            httpClient.BaseAddress = baseUrl;
+            httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + accessToken);
+
+            var response = httpClient.GetAsync("api/user/" + id).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var content = response.Content.ReadAsAsync<Response>().Result;
+                UserDetail userDetail = ((JObject)content.results).ToObject<UserDetail>();
+                return View(userDetail);
+            }
+            return RedirectToAction("NotFound","Error");
         }
         [HttpPost]
         public ActionResult Detail(RegisterBindingModel createUser)
@@ -60,13 +75,29 @@ namespace WebApplication2.Controllers.Admin
         public ActionResult Create()
         {
             RegisterBindingModel createUser = new RegisterBindingModel();
+            ViewBag.now = DateTime.Now.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
+            ViewBag.groups = Service.groupDAO.getGroup();
             return View(createUser);
         }
 
         [HttpPost]
         public ActionResult Create(RegisterBindingModel createUser)
         {
-            return null;
+            ViewBag.now = DateTime.Now.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
+            ViewBag.groups = Service.groupDAO.getGroup();
+            HttpClient httpClient = new HttpClient();
+            httpClient.BaseAddress = baseUrl;
+            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            HttpContent httpContent = new ObjectContent<RegisterBindingModel>(createUser, new JsonMediaTypeFormatter());
+
+            var response = httpClient.PostAsync("api/account/register", httpContent).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var content = response.Content.ReadAsAsync<Response>().Result;
+                ApplicationUser user = ((JObject)content.results).ToObject<ApplicationUser>();
+                return RedirectToAction("Detail", "AdminUser", new { id = user.Id });
+            }
+            return View(createUser);
         }
     }
 }

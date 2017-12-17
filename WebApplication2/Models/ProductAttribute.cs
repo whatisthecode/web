@@ -16,6 +16,7 @@ namespace WebApplication2.Models
     {
 
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key]
         public Int16 id { get; set; }
 
         [ForeignKey("Product")]

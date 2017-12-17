@@ -47,10 +47,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AI.Agent.Intercept, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.4.0\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
@@ -284,14 +284,18 @@
     <Compile Include="Models\ProductAttribute.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\Rating.cs" />
+    <Compile Include="Models\RequestModel\CreateCategoryModel.cs" />
     <Compile Include="Models\RequestModel\CreateImageModel.cs" />
     <Compile Include="Models\RequestModel\CreateProductModel.cs" />
+    <Compile Include="Models\RequestModel\CreateUserGroupModel.cs" />
     <Compile Include="Models\RequestModel\Customer.cs" />
     <Compile Include="Models\RequestModel\FromUri.cs" />
     <Compile Include="Models\RequestModel\Invoice.cs" />
     <Compile Include="Models\RequestModel\Merchant.cs" />
+    <Compile Include="Models\RequestModel\PersonalInfo.cs" />
     <Compile Include="Models\RequestModel\ProductDetail.cs" />
     <Compile Include="Models\RequestModel\SidebarModel.cs" />
+    <Compile Include="Models\RequestModel\UserDetail.cs" />
     <Compile Include="Models\RequestModel\UserGeneral.cs" />
     <Compile Include="Models\Token.cs" />
     <Compile Include="Models\UserInfo.cs" />
@@ -308,6 +312,7 @@
     <Content Include="Assets\CSS\Admin\paper-dashboard.css" />
     <Content Include="Assets\CSS\Admin\themify-icons.css" />
     <Content Include="Assets\CSS\animate.min.css" />
+    <Content Include="Assets\CSS\bootstrap-datetimepicker.min.css" />
     <Content Include="Assets\CSS\bootstrap.min.css" />
     <Content Include="Assets\CSS\Client\animate.min.css" />
     <Content Include="Assets\CSS\Client\custom.css" />
@@ -318,6 +323,7 @@
     <Content Include="Assets\CSS\jquery-confirm.min.css" />
     <Content Include="Assets\FONT\flexslider-icon.svg" />
     <Content Include="Assets\FONT\fontawesome-webfont.svg" />
+    <Content Include="Assets\FONT\glyphicons-halflings-regular.svg" />
     <Content Include="Assets\FONT\themify.svg" />
     <Content Include="Assets\IMG\add.png" />
     <Content Include="Assets\IMG\AjaxLoader.gif" />
@@ -364,6 +370,9 @@
     <Content Include="Assets\JS\Admin\chartist.min.js" />
     <Content Include="Assets\JS\Admin\demo.js" />
     <Content Include="Assets\JS\Admin\paper-dashboard.js" />
+    <Content Include="Assets\JS\bootstrap.transition.min.js" />
+    <Content Include="Assets\JS\bootstrap-datetimepicker.min.js" />
+    <Content Include="Assets\JS\bootstrap.collapse.min.js" />
     <Content Include="Assets\JS\bootstrap.min.js" />
     <Content Include="Assets\JS\Client\bootstrap-hover-dropdown.js" />
     <Content Include="Assets\JS\Client\custom.js" />
@@ -372,6 +381,7 @@
     <Content Include="Assets\JS\Client\owl.carousel.min.js" />
     <Content Include="Assets\JS\Client\waypoints.min.js" />
     <Content Include="Assets\JS\jquery-confirm.min.js" />
+    <Content Include="Assets\JS\moment.min.js" />
     <Content Include="Assets\JS\ui-bootstrap-tpls-2.5.0.min.js" />
     <Content Include="Assets\JS\validator.js" />
     <Content Include="Content\Site.css" />
@@ -396,6 +406,10 @@
     <Content Include="Assets\FONT\themify.eot" />
     <Content Include="Assets\FONT\themify.ttf" />
     <Content Include="Assets\FONT\themify.woff" />
+    <Content Include="Assets\FONT\glyphicons-halflings-regular.eot" />
+    <Content Include="Assets\FONT\glyphicons-halflings-regular.ttf" />
+    <Content Include="Assets\FONT\glyphicons-halflings-regular.woff" />
+    <Content Include="Assets\FONT\glyphicons-halflings-regular.woff2" />
     <None Include="Assets\JS\jquery-1.10.2.intellisense.js" />
     <Content Include="Assets\JS\jquery-1.10.2.js" />
     <Content Include="Assets\JS\jquery-1.10.2.min.js" />
@@ -490,6 +504,8 @@
     <Content Include="Views\Admin\AdminStatistic\Index.cshtml" />
     <Content Include="Views\Admin\AdminUser\Index.cshtml" />
     <Content Include="Views\Admin\AdminUser\Create.cshtml" />
+    <Content Include="Views\Admin\AdminUser\Detail.cshtml" />
+    <Content Include="Views\Admin\AdminInfo\BuyingPost.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

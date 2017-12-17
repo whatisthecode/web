@@ -67,7 +67,7 @@ namespace WebApplication2.Controllers.API
                 Double total = 0;
                 Invoice createInvoice = new Invoice(code, viewInvoiceModel.buyer, salers[i], total);
                 Service.invoiceDAO.insertInvoice(createInvoice);
-                Service.invoiceDAO.saveInvoice();
+
                 for ( var j = 0; j < lists.Count(); j++)
                 {
                     InvoiceProducts invoiceProduct = viewInvoiceModel.products.First(p => p.productId == lists[j].id);
@@ -81,7 +81,6 @@ namespace WebApplication2.Controllers.API
                     updateAttrs = Service.productAttributeDAO.getProductAttributeById(proAttrs[1].id);
                     updateAttrs.value = productAmount.ToString();
                     Service.productAttributeDAO.updateProductAttribute(updateAttrs);
-                    Service.productAttributeDAO.saveProductAttribute();
 
                     InvoiceDetail invoiceDetail = null;
                     if (double.Parse(discount) > 0)
@@ -94,12 +93,12 @@ namespace WebApplication2.Controllers.API
                     }
                     total = total + invoiceDetail.subTotal; //tính Total của cái hóa đơn
                     Service.invoiceDetailDAO.insertInvoiceDetail(invoiceDetail);
-                    Service.invoiceDetailDAO.saveInvoiceDetail();
+
                 }
                 Invoice updateInvoice = createInvoice;
                 updateInvoice.total = total;
                 Service.invoiceDAO.updateInvoice(updateInvoice);
-                Service.invoiceDAO.saveInvoice();
+
                 //var message = "<p>Thông tin đơn hàng của bạn</p> " +
                 //              "<p>Mã hóa đơn: " + createInvoice.id +"</p>" +
                 //              "<p></p>";
@@ -143,8 +142,9 @@ namespace WebApplication2.Controllers.API
 
                 invoiceInDB.status = invoice.status;
                 Service.invoiceDAO.updateInvoice(invoiceInDB);
-                Service.invoiceDAO.saveInvoice();
+
                 response = new Response("200", "Cập nhật hóa đơn thành công", invoiceInDB);
+
                 return Content<Response>(HttpStatusCode.OK, response);
             }
         }
@@ -295,7 +295,6 @@ namespace WebApplication2.Controllers.API
                 else
                 {
                     Service.tokenDAO.delete(token.id);     //remove token from database
-                    Service.tokenDAO.save();
                     response.status = "Phiên đăng nhập của bạn đã hết hạn, vui lòng đăng nhập lại";
                     response.code = "401";
                     response.results = "";

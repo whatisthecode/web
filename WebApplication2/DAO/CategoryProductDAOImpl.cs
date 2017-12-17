@@ -18,10 +18,13 @@ namespace WebApplication2.DAO
         }
         public Int16 getProductCategoriesID(short idCategory, short idProduct)
         {
-            var query = from c in base.getContext().categoryProducts
-                        where c.productId == idProduct && c.categoryId == idCategory
-                        select c.id;
-            return query.FirstOrDefault();
+            using (DBContext context = new DBContext())
+            {
+                var query = from c in context.categoryProducts
+                            where c.productId == idProduct && c.categoryId == idCategory
+                            select c.id;
+                return query.FirstOrDefault();
+            }
         }
 
         public void deleteCategoryProduct(short idcatepro)
@@ -57,6 +60,70 @@ namespace WebApplication2.DAO
         public IEnumerable<CategoryProduct> getListCategoryProductByProdId(Int16 prodId)
         {
             return base.get().Where(cp => cp.productId == prodId).ToList();
+        }
+        PagedResult<Product> pageView(short categoryId, short pageindex, short pagesize, string orderBy, bool ascending)
+        {
+            PagedResult<CategoryProduct> pv = new PagedResult<CategoryProduct>();
+            using (DBContext context = new DBContext())
+            {
+                var query = from c in context.categoryProducts select c;
+                query = query.Where(cate => cate.categoryId == categoryId);
+                query = query.OrderBy(o => o.productId);
+                pv = base.PageView(query, pageindex, pagesize);
+            }          
+            List<Product> listProducts = new List<Product>();
+            PagedResult<Product> pvProduct = new PagedResult<Product>();
+            pvProduct.rowCount = pv.rowCount;
+            pvProduct.pageSize = pv.pageSize;
+            pvProduct.currentPage = pv.currentPage;
+            pvProduct.pageCount = pv.pageCount;
+            for(var i = 0; i < pv.items.Count(); i++)
+            {
+                CategoryProduct categoryProduct = pv.items[i];
+                Product product = productDAO.getProduct(categoryProduct.productId);
+                List<ProductAttribute> proAttrs = Service.productAttributeDAO.getProAttrsByProId(product.id);
+                product.attributes = proAttrs;
+                listProducts.Add(product);
+            }
+            for (var i = 0; i < listProducts.Count() - 1; i++)
+            {
+                List<ProductAttribute> proAttrs = listProducts[i].attributes.ToList();
+                for(var j = 1; j < listProducts.Count(); j++)
+                {
+                    List<ProductAttribute> proAttrs2 = listProducts[j].attributes.ToList();
+                    switch (orderBy)
+                    {
+                        case "price":
+                            if (ascending)
+                            {
+                                if(proAttrs[0].key == "price" && proAttrs2[0].key == "price")
+                                {
+                                    if (int.Parse(proAttrs[0].value) > int.Parse(proAttrs2[0].value))
+                                    {
+                                        listProducts = Utils.swap(listProducts, i, j);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (proAttrs[0].key == "price" && proAttrs2[0].key == "price")
+                                {
+                                    if (int.Parse(proAttrs[0].value) < int.Parse(proAttrs2[0].value))
+                                    {
+                                        listProducts = Utils.swap(listProducts, i, j);
+                                    }
+                                }
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                
+            }
+            
+            pvProduct.items = listProducts;
+            return pvProduct;
         }
     }
 }

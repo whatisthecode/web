@@ -10,74 +10,78 @@ using System.Web;
 
 namespace WebApplication2.DAO
 {
-    public class BaseImpl<T, Int16> : Base<T, Int16>, IDisposable where T : class
+    public class BaseImpl<T, Int16> : Base<T, Int16> where T : class
     {
-        private Boolean disposed;
-        private DBContext context;
 
         public BaseImpl()
         {
-            this.context = DatabaseFactory.context;
         }
 
-        public DBContext getContext()
-        {
-            return this.context;
-        }
-
-        public void detach(T entity)
-        {
-            this.context.Entry<T>(entity).State = EntityState.Detached;
-            this.save();
-        }
 
         public void delete(Int16 id)
         {
-            T instance = this.getById(id);
-            this.context.Set<T>().Remove(instance);
-        }
-
-        public virtual void Dispose(Boolean disposing)
-        {
-            if (!this.disposed)
+            using (DBContext context = new DBContext())
             {
-                if (disposing)
-                {
-                    context.Dispose();
-                }
+                T instance = this.getById(id);
+                context.Set<T>().Remove(instance);
+                context.SaveChanges();
             }
-            this.disposed = true;
+
         }
 
         public IEnumerable<T> get()
         {
-            return this.context.Set<T>().AsNoTracking<T>().ToList<T>();
+            using (DBContext context = new DBContext())
+            {
+                return context.Set<T>().AsNoTracking<T>().ToList<T>();
+            }          
         }
 
         public T getById(Int16 id)
         {
-            return this.context.Set<T>().Find(id);
+            using (DBContext context = new DBContext())
+            {
+                try
+                {
+                    T result = context.Set<T>().Find(id);
+                    return result;
+                }
+                catch (Exception e)
+                {
+                    System.Diagnostics.Debug.WriteLine(e.ToString());
+                    return null;
+                }
+            }
         }
 
         public void insert(T entity)
         {
-            this.context.Set<T>().Add(entity);
-        }
-
-        public void save()
-        {
-            this.context.SaveChanges();
+            using (DBContext context = new DBContext())
+            {
+                try
+                {
+                    context.Set<T>().Add(entity);
+                    context.SaveChanges();
+                }
+                catch (Exception e)
+                {
+                    System.Diagnostics.Debug.WriteLine(e.ToString());
+                }
+            }
         }
 
         public void update(T entity)
         {
-            this.context.Set<T>().Attach(entity);
-            this.context.Entry<T>(entity).State = EntityState.Modified;
+            using (DBContext context = new DBContext())
+            {
+                context.Set<T>().Attach(entity);
+                context.Entry<T>(entity).State = EntityState.Modified;
+                context.SaveChanges();
+            }
         }
 
         public void Dispose()
         {
-            Dispose(true);
             GC.SuppressFinalize(this);
         }
 

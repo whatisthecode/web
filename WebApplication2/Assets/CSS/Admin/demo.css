@@ -194,7 +194,7 @@ span.menu a i{
     margin:0;
 }
 /* The Modal (background) */
-.modal {
+.modal.lightbox {
     display: none;
     position: fixed;
     z-index: 1000;
@@ -208,26 +208,26 @@ span.menu a i{
 }
 
 /* Modal Content */
-.modal-content {
+.lightbox .modal-content {
     position: relative;
-    background:black;
-    height:100%;
+    background: black;
+    height: 100%;
     margin: auto;
     padding: 0;
     width: 90%;
     max-width: 1200px;
 }
 
-.modal-body {
+.lightbox .modal-body {
     height: calc(100% - 120px);
 }
-.modal-footer{
-    border-top:0;
-    height:120px;
+.lightbox .modal-footer {
+    border-top: 0;
+    height: 120px;
 }
 
 /* The Close Button */
-.close {
+.lightbox .close {
     color: white;
     position: absolute;
     top: 10px;
@@ -236,8 +236,8 @@ span.menu a i{
     font-weight: bold;
 }
 
-.close:hover,
-.close:focus {
+.lightbox.close:hover,
+.lightbox.close:focus {
     color: #999;
     text-decoration: none;
     cursor: pointer;
@@ -339,7 +339,7 @@ img.hover-shadow {
 .hover-shadow:hover {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)
 }
-.user-inactive,.user-inactive{
+.user-active, .user-inactive{
     display:block;
     width:15px;
     height:15px;
@@ -350,4 +350,8 @@ img.hover-shadow {
 }
 .user-active {
     background-color: #4CAF50;
+}
+.bootstrap-datetimepicker-widget{
+    visibility:visible;
+    opacity:1;
 }

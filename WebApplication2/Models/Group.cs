@@ -18,7 +18,6 @@ namespace WebApplication2.Models
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Required]
         public Int16 id { get; set; }
 
         public String name { get; set; }

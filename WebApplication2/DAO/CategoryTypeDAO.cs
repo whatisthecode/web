@@ -18,7 +18,6 @@ namespace WebApplication2.DAO
 
         void deleteCategoryType(Int16 categoryTypeId);
         void updateCategoryType(CategoryType categoryType);
-        void saveCategoryType();
         Boolean check(String column);
         PagedResult<CategoryType> PageView(int pageIndex, int pageSize, string columnName);
         void dispose();

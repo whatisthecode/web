@@ -37,12 +37,6 @@ namespace WebApplication2.DAO
         {
             base.insert(proat);
         }
-
-        public void saveProductAttribute()
-        {
-            base.save();
-        }
-
         public void updateProductAttribute(ProductAttribute proat)
         {
             proat.updatedAt = DateTime.Now;
@@ -51,14 +45,17 @@ namespace WebApplication2.DAO
 
         public List<ProductAttribute> getProAttrsByProId(short proId)
         {
-            if(proId > 0)
+            using (DBContext context = new DBContext())
             {
-                var query = from p in base.getContext().productAttributes
-                            where p.productId == proId
-                            select p;
-                return query.ToList();
+                if (proId > 0)
+                {
+                    var query = from p in context.productAttributes
+                                where p.productId == proId
+                                select p;
+                    return query.ToList();
+                }
+                return null;
             }
-            return null;
         }
     }
 }

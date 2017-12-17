@@ -6,12 +6,18 @@ namespace WebApplication2.Models
 {
     public class ApplicationRoleGroup : Base
     {
-        [Key, Column("role_id", Order = 0)]
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public Int16 id { get; set; }
+
+        [Column("role_id", Order = 0)]
         [ForeignKey("ApplicationRole")]
+        [Index("IX_roleId_groupId", 1, IsUnique = true)]
         public String roleId { get; set; }
 
-        [Key, Column("group_id", Order = 1)]
+        [Column("group_id", Order = 1)]
         [ForeignKey("Group")]
+        [Index("IX_roleId_groupId", 2, IsUnique = true)]
         public Int16 groupId { get; set; }
 
         public ApplicationRole ApplicationRole { get; set; }

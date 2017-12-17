@@ -18,14 +18,13 @@ namespace WebApplication2
 
     public class ApplicationUserManager : UserManager<ApplicationUser>
     {
-        public ApplicationUserManager(IUserStore<ApplicationUser> store)
-            : base(store)
+        public ApplicationUserManager(IUserStore<ApplicationUser> store) : base(store)
         {
         }
 
         public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context)
         {
-            var manager = new ApplicationUserManager(new UserStore<ApplicationUser>(context.Get<DBContext>()));
+            var manager = new ApplicationUserManager(new UserStore<ApplicationUser>(DBContext.Create()));
             // Configure validation logic for usernames
             manager.UserValidator = new UserValidator<ApplicationUser>(manager)
             {
@@ -60,13 +59,11 @@ namespace WebApplication2
 
     public class ApplicationRoleManager : RoleManager<ApplicationRole>
     {
-        private DBContext context;
         public ApplicationRoleManager(IRoleStore<ApplicationRole,string> roleStore) : base(roleStore){
-            this.context = DatabaseFactory.context;
         }
         public static ApplicationRoleManager Create(IdentityFactoryOptions<ApplicationRoleManager> options, IOwinContext context)
         {
-            var applicationRoleManager = new ApplicationRoleManager(new RoleStore<ApplicationRole>(context.Get<DBContext>()));
+            var applicationRoleManager = new ApplicationRoleManager(new RoleStore<ApplicationRole>(DBContext.Create()));
             return applicationRoleManager;
         }
     }

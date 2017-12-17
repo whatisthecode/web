@@ -15,7 +15,6 @@ namespace WebApplication2.DAO
         void insertGroup(Group group);
         void deleteGroup(Int16 groupId);
         void updateGroup(Group group);
-        void saveGroup();
         void dispose();
     }
 }

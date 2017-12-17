@@ -43,11 +43,6 @@ namespace WebApplication2.DAO
             base.insert(group);
         }
 
-        public void saveGroup()
-        {
-            base.save();
-        }
-
         public void updateGroup(Group group)
         {
             base.update(group);
