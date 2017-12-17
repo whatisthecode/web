@@ -1,5 +1,5 @@
 ﻿if ("undefined" !== typeof app) {
-    app.controller("CartController", function ($scope, $cookieStore, ProductDetail, Helper, CONFIG) {
+    app.controller("CartController", function ($scope, $cookieStore, ProductDetail, Helper, CONFIG, Product) {
         $scope.products = [];
         $scope.selectedProducts = [];
         $scope.totalInvoice = 0;
@@ -13,6 +13,25 @@
             else {
                 $scope.selectedProductsLength = "0";
             }
+            getProduct(1, 10, null);
+        };
+
+        $scope.products1 = [];
+
+        getProduct = function (pageIndex, pageSize, filter) {
+            Product.getProducts(pageIndex, pageSize, filter, function (response) {
+                if (response) {
+
+                    for (var i = 0; i < response.items.length; i++) {
+                        response.items[i].attributes[0].value = Helper.addCommasToMoney(response.items[i].attributes[0].value);
+                    }
+                    $scope.products1 = response.items;
+                }
+            }, function (err) {
+                if (err) {
+                    console.log(err);
+                }
+            });
         };
 
         getAllProducts = function () {
@@ -165,6 +184,61 @@
             return Number(productAmount) - Number(buyAmount);
         };
 
+        var selectedProducts = [];
+        $scope.addProductToCart = function (product) {
+            selectedProducts = $cookieStore.get("selectedProducts");
+            if (Helper.notEmpty(selectedProducts) === false) {
+                var selectedProducts = [];
+                selectedProducts.push(product.id);
+                $cookieStore.put("selectedProducts", selectedProducts);
+                $window.location.reload();
+                $(document).ready(function () {
+                    location.reload();
+                });
+            } else {
+                if (Helper.checkItemExistInArray(selectedProducts, product.id) === false) {
+                    selectedProducts.push(product.id);
+                    $cookieStore.put("selectedProducts", selectedProducts);
+                    $(document).ready(function () {
+                        location.reload();
+                    });
+
+                }
+            }
+
+        };
+
         viewOninit();
-    });
+    }).directive("owlCarousel", function () {
+        return {
+            restrict: 'E',
+            transclude: false,
+            link: function (scope) {
+                scope.initCarousel = function (element) {
+                    // provide any default options you want
+                    var defaultOptions = {
+                    };
+                    var customOptions = scope.$eval($(element).attr('data-options'));
+                    // combine the two options objects
+                    for (var key in customOptions) {
+                        defaultOptions[key] = customOptions[key];
+                    }
+                    // init carousel
+                    $(element).owlCarousel(defaultOptions);
+                };
+            }
+        };
+    })
+        .directive('owlCarouselItem', [function () {
+            return {
+                restrict: 'A',
+                transclude: false,
+                link: function (scope, element) {
+                    // wait for the last item in the ng-repeat then call init
+                    if (scope.$last) {
+                        scope.initCarousel(element.parent());
+                    }
+                }
+            };
+        }]);
 }
