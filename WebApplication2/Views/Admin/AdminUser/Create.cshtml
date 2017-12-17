@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Tạo người dùng mới";
     ViewBag.pageTitle = "Tạo người dùng mới";
     ViewBag.pageLink = "/dashboard/user/create";
     ViewBag.currentAction = "user";
@@ -10,16 +10,11 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <div class="content">
-                    <a href="~/dashboard/user/create" class="btn btn-primary btn-wd btn-fill btn-flat">Thêm người dùng</a>
-                </div>
-            </div>
-            <div class="card">
                 <div class="header">
-                    <h4 class="title">Danh sách người dùng</h4>
+                    <h4 class="title">Thông tin người dùng</h4>
                 </div>
                 <div class="content container">
-                    <form>
+                    <form action="~/dashboard/user/create" method="post">
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
@@ -48,7 +43,12 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label>Ngày sinh</label>
-                                    <input class="form-control border-input" type="text" name="dob" value="@if (Model.dob != null) { @Model.dob; }" placeholder="Nhập ngày sinh" />
+                                    <div class='input-group date border-input' id='dateDOB'>
+                                        <input type='text' name="dobDisplay" class="form-control border-input" value="@if (Model.dobDisplay != null) { @Model.dob; } else { @ViewBag.now}" />
+                                        <span class="input-group-addon">
+                                            <span class="ti-calendar"></span>
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -78,6 +78,36 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Quyền</label>
+                                    <select name="groupName" class="form-control border-input">
+                                        @foreach (var group in ViewBag.groups)
+                                        {
+                                            if (group.name == "SuperAdmin")
+                                            {
+                                                @:<option value="@group.name" selected>Quản trị hệ thống</option>
+
+                                            }
+                                            else if (group.name == "Admin")
+                                            {
+                                                @:<option value="@group.name">Quản trị viên</option>
+                                            }
+                                            else if (group.name == "Merchant")
+                                            {
+                                                @:<option value="@group.name">Người bán</option>
+                                            }
+                                            else
+                                            {
+                                                @:<option value="@group.name">Khách hàng</option>
+                                            }
+
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
                                 <button type="submit" class="btn btn-info btn-wd btn-flat btn-fill">Lưu</button>
                             </div>
                         </div>
@@ -87,4 +117,16 @@
         </div>
     </div>
 </div>
+@section script{
+    <script type="text/javascript">
+        $(function () {
+            $('#dateDOB').datetimepicker({
+                format: "DD/MM/YYYY"
+            });
+            $('#dateDOB').on("dp.change", function (e) {
+                $("input[name='dobDisplay']").val(e.date.date() + "/" + (e.date.month() + 1) + "/" + e.date.year());
+            });
+        });
+    </script>
+}
 

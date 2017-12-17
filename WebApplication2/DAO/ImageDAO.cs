@@ -14,7 +14,6 @@ namespace WebApplication2.DAO
 
         void deleteImage(Int16 imageId);
         void updateImage(Image image);
-        void saveImage();
         IEnumerable<Image> getThumbnail(Int16 prodId);
         IEnumerable<Image> getDetailImage(Int16 prodId);
         Boolean check(String column);

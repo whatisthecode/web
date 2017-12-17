@@ -10,11 +10,11 @@ namespace WebApplication2.DAO
 {
     public class ProductDAOImpl : BaseImpl<Product, Int16>, ProductDAO, IDisposable
     {
-        public ProductDAOImpl():base()
+        public ProductDAOImpl() : base()
         {
         }
 
-        
+
 
         public void deleteProduct(Int16 idproduct)
         {
@@ -36,49 +36,39 @@ namespace WebApplication2.DAO
 
             IList<Product> products = base.get().Where(p => p.status >= 0).ToList();
             Int16 productsLength = (Int16)products.Count;
-            for(Int16 productIndex = 0; productIndex < productsLength; productIndex++)
+            for (Int16 productIndex = 0; productIndex < productsLength; productIndex++)
             {
                 products[productIndex].UserInfo = Service.userInfoDAO.getUserInfo(products[productIndex].id);
-                base.getContext().Entry<Product>(products[productIndex]).Collection(p => p.attributes).Load();
+                using (DBContext context = new DBContext())
+                {
+                    context.Entry<Product>(products[productIndex]).Collection(p => p.attributes).Load();
+                }
             }
             return products;
         }
         public Product checkexist(string code)
         {
-            Product product2compare = base.getContext().products.Where(p=> p.code == code).FirstOrDefault();
+            Product product2compare = null;
+            using (DBContext context = new DBContext())
+            {
+                product2compare = context.products.Where(p => p.code == code).FirstOrDefault();
+            }
             if (product2compare != null)
             {
                 return product2compare;
             }
             return null;
-                
         }
         public void insertProduct(Product product)
         {
             base.insert(product);
         }
-        
+
         public PagedResult<Product> PageView(Int16 indexnum, Int16 pagesize, String Orderby)
         {
-            var query = from c in base.getContext().products select c;
-            switch (Orderby)
+            using (DBContext context = new DBContext())
             {
-                case "name":
-                    query = query.OrderBy(n => n.name);
-                    break;
-
-            }
-            PagedResult<Product> pv = base.PageView(query,indexnum, pagesize);
-            return pv;
-            
-        }
-
-        public PagedResult<Product> PageView(short indexnum, short pagesize, string Orderby, bool ascending = false)
-        {
-            var query = from c in base.getContext().products select c;
-            query.Where(p => p.status >= 0);
-            if (query != null && ascending)
-            {
+                var query = from c in context.products select c;
                 switch (Orderby)
                 {
                     case "name":
@@ -86,18 +76,39 @@ namespace WebApplication2.DAO
                         break;
 
                 }
+                PagedResult<Product> pv = base.PageView(query, indexnum, pagesize);
+                return pv;
             }
-            if (query != null && !ascending)
+        }
+
+        public PagedResult<Product> PageView(short indexnum, short pagesize, string Orderby, bool ascending = false)
+        {
+            using (DBContext context = new DBContext())
             {
-                switch (Orderby)
+                var query = from c in context.products select c;
+                query.Where(p => p.status >= 0);
+                if (query != null && ascending)
                 {
-                    case "name":
-                            query = query.OrderByDescending(d => d.name);
-                        break;
+                    switch (Orderby)
+                    {
+                        case "name":
+                            query = query.OrderBy(n => n.name);
+                            break;
+
+                    }
                 }
+                if (query != null && !ascending)
+                {
+                    switch (Orderby)
+                    {
+                        case "name":
+                            query = query.OrderByDescending(d => d.name);
+                            break;
+                    }
+                }
+                PagedResult<Product> pv = base.PageView(query, indexnum, pagesize);
+                return pv;
             }
-            PagedResult<Product> pv = base.PageView(query, indexnum, pagesize);
-            return pv;
         }
 
         public void updateProduct(Product product)
@@ -111,16 +122,15 @@ namespace WebApplication2.DAO
             throw new NotImplementedException();
         }
 
-        public void saveProduct()
-        {
-            base.save();
-        }
         public Int16[] getProductCategoriesId(short idProduct)
         {
-            var query = from c in base.getContext().categoryProducts
-                        where c.productId == idProduct
-                        select c.categoryId;
-            return query.ToArray();
+            using (DBContext context = new DBContext())
+            {
+                var query = from c in context.categoryProducts
+                            where c.productId == idProduct
+                            select c.categoryId;
+                return query.ToArray();
+            }
         }
 
         /* public void checkProductCode(Product product)
@@ -133,18 +143,36 @@ namespace WebApplication2.DAO
 
         public PagedResult<Product> AdminPageView(Int16 userId, Int16 indexnum, Int16 pagesize, String Orderby)
         {
-            var query = from c in base.getContext().products select c;
-            query = query.Where(u => u.createdBy == userId);
-            switch (Orderby)
+            using (DBContext context = new DBContext())
             {
-                case "name":
-                    query = query.OrderBy(n => n.name);
-                    break;
+                var query = from c in context.products select c;
+                query = query.Where(u => u.createdBy == userId);
+                switch (Orderby)
+                {
+                    case "name":
+                        query = query.OrderBy(n => n.name);
+                        break;
 
+                }
+                PagedResult<Product> pv = base.PageView(query, indexnum, pagesize);
+                return pv;
             }
-            PagedResult<Product> pv = base.PageView(query, indexnum, pagesize);
-            return pv;
+        }
 
+        PagedResult<Product> ProductDAO.pageViewByCategoryId(short categoryId, short pageindex, short pagesize)
+        {
+            using (DBContext context = new DBContext())
+            {
+                var query = from c in context.categoryProducts
+                            where c.categoryId == categoryId
+                            join pro in context.products on c.productId equals pro.id
+                            where pro.status > 0
+                            orderby pro.name
+                            select pro;
+
+                PagedResult<Product> pv = base.PageView(query, pageindex, pagesize);
+                return pv;
+            }
         }
     }
 }

@@ -30,7 +30,6 @@ using WebApplication2.CustomAttribute;
 
 namespace WebAPI_NG_TokenbasedAuth.Controllers
 {
-    [APIAuthorize]
     [RoutePrefix("api/Account")]
     public class AccountController : ApiController
     {
@@ -44,33 +43,7 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
         public AccountController(ApplicationUserManager userManager, ApplicationRoleManager roleManager,
             ISecureDataFormat<AuthenticationTicket> accessTokenFormat)
         {
-            UserManager = userManager;
             AccessTokenFormat = accessTokenFormat;
-            RoleManager = roleManager;
-        }
-
-        public ApplicationUserManager UserManager
-        {
-            get
-            {
-                return (ApplicationUserManager)Service._userManager ?? Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
-            }
-            private set
-            {
-                Service._userManager = value;
-            }
-        }
-
-        public ApplicationRoleManager RoleManager
-        {
-            get
-            {
-                return (ApplicationRoleManager)Service._roleManager ?? Request.GetOwinContext().GetUserManager<ApplicationRoleManager>();
-            }
-            private set
-            {
-                Service._roleManager = value;
-            }
         }
 
         public ISecureDataFormat<AuthenticationTicket> AccessTokenFormat { get; private set; }
@@ -116,7 +89,6 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
                 else
                 {
                     Service.tokenDAO.delete(token.id);     //remove token from database
-                    Service.tokenDAO.save();
                     response.status = "Phiên đăng nhập của bạn đã hết hạn, vui lòng đăng nhập lại";
                     response.code = "401";
                     response.results = "";
@@ -146,12 +118,10 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
             {
                 token.isLogin = false;
                 Service.tokenDAO.update(token);
-                Service.tokenDAO.save();
             }
             else
             {
                 Service.tokenDAO.delete(token.id);
-                Service.tokenDAO.save();
             }
             return Ok();
         }
@@ -169,7 +139,7 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
                 return Content<Response>(HttpStatusCode.BadRequest, response);
             }
 
-            IdentityResult result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword,
+            IdentityResult result = await Service._userManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword,
                 model.NewPassword);
 
             if (!result.Succeeded)
@@ -199,10 +169,10 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
                 return Content<Response>(HttpStatusCode.BadRequest, response);
             }
 
-            IdentityUser user = await UserManager.FindByEmailAsync(model.email);
+            IdentityUser user = await Service._userManager.FindByEmailAsync(model.email);
             if (user.Id != null)
             {
-                IdentityResult result = await UserManager.AddPasswordAsync(user.Id, model.newPassword);
+                IdentityResult result = await Service._userManager.AddPasswordAsync(user.Id, model.newPassword);
                 if (!result.Succeeded)
                 {
                     response.code = "500";
@@ -225,15 +195,10 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
         }
 
         // POST api/Account/Register
-        [AllowAnonymous]//khong can dang nhap
         [Route("Register")]
         [System.Web.Mvc.ValidateAntiForgeryToken]
         public async Task<IHttpActionResult> Register([FromBody]RegisterBindingModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
 
             Response response = new Response();
 
@@ -245,15 +210,18 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
                 return Content<Response>(HttpStatusCode.Conflict, response);
             }
 
-            UserInfo createUserInfo = new UserInfo();
-            createUserInfo.firstName = model.firstName;
-            createUserInfo.lastName = model.lastName;
-            createUserInfo.identityNumber = model.identityNumber;
-            createUserInfo.dob = model.dob;
 
             var identityUser = new ApplicationUser() { UserName = model.Email, Email = model.Email , PhoneNumber = model.PhoneNumber};
-            identityUser.UserInfo = createUserInfo;
-            IdentityResult result = await UserManager.CreateAsync(identityUser, model.Password);
+            identityUser.UserInfo = new UserInfo(0, model.firstName, model.lastName, model.dob, model.identityNumber);
+            IdentityResult result = new IdentityResult();
+            try
+            {
+                result = Service._userManager.Create(identityUser, model.Password);
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine(e.ToString());
+            }
 
             if (!result.Succeeded)
             {
@@ -265,6 +233,16 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
             }
             else
             {
+                model.groups = new List<string>();
+                if(model.groupName == "Merchant")
+                {
+                    model.groups.Add("Customer");
+                    model.groups.Add("Merchant");
+                }
+                else
+                {
+                    model.groups.Add(model.groupName);
+                }
                 foreach (var group in model.groups)
                 {
                     Group gr = Service.groupDAO.getGroupByName(group);
@@ -272,15 +250,14 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
                     userGroup.groupId = gr.id;
                     userGroup.userId = identityUser.Id;
                     Service.userGroupDAO.AddUserToGroup(userGroup);
-                    Service.userGroupDAO.saveUserGroup();
                 }
-                string code = await this.UserManager.GenerateEmailConfirmationTokenAsync(identityUser.Id);
+                string code = Service._userManager.GenerateEmailConfirmationTokenAsync(identityUser.Id).Result;
                 var callbackUrl = new Uri(Url.Link("ConfirmEmail", new { userId = identityUser.Id, code = code }));
-                await this.UserManager.SendEmailAsync(identityUser.Id, "Xác thực tài khoản của bạn", "Vui lòng nhấn vào link sau: <a href=\"" + callbackUrl + "\">link</a>");
+                await Service._userManager.SendEmailAsync(identityUser.Id, "Xác thực tài khoản của bạn", "Vui lòng nhấn vào link sau: <a href=\"" + callbackUrl + "\">link</a>");
                 var message = "Chúng tôi đã gửi email xác thực tài khoản vào mail " + identityUser.Email + " . Vui lòng kiểm tra email để xác thực.";
                 response.code = "201";
-                response.status = "Đăng ký thành công";
-                response.results = message;
+                response.status = "Đăng ký thành công. " + message;
+                response.results = identityUser;
                 return Content<Response>(HttpStatusCode.Created, response);
             }
         }
@@ -323,7 +300,7 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
                 response.status = "Missing Required fields";
                 return Content<Response>(HttpStatusCode.BadRequest, response);
             }
-            var result = await UserManager.ConfirmEmailAsync(userId, code);
+            var result = await Service._userManager.ConfirmEmailAsync(userId, code);
             if (result.Succeeded)
             {
                 return Redirect("http://localhost:54962/account/confirm");
@@ -341,7 +318,7 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
         public async Task<IHttpActionResult> ForgotPassword([FromBody]RegisterExternalBindingModel registerExternalBindingModel)
         {
             Response response = new Response();
-            var user = await UserManager.FindByEmailAsync(registerExternalBindingModel.Email);
+            var user = await Service._userManager.FindByEmailAsync(registerExternalBindingModel.Email);
             if (user == null)
             {
                 response.code = "404";
@@ -349,7 +326,7 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
                 Content<Response>(HttpStatusCode.NotFound, response);
             }
 
-            var userConfirmed = await UserManager.IsEmailConfirmedAsync(user.Id);
+            var userConfirmed = await Service._userManager.IsEmailConfirmedAsync(user.Id);
             if (!userConfirmed)
             {
                 response.code = "403";
@@ -357,9 +334,9 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
                 Content<Response>(HttpStatusCode.Forbidden, response);
             }
 
-            string code = await this.UserManager.GeneratePasswordResetTokenAsync(user.Id);
+            string code = await Service._userManager.GeneratePasswordResetTokenAsync(user.Id);
             var callbackUrl = new Uri(Url.Link("ForgotPassword", new { userId = user.Id, code = code }));
-            await this.UserManager.SendEmailAsync(user.Id, "Lấy lại mật khẩu", "Vui lòng nhấn vào link sau: <a href=\"" + callbackUrl + "\">link</a>");
+            await Service._userManager.SendEmailAsync(user.Id, "Lấy lại mật khẩu", "Vui lòng nhấn vào link sau: <a href=\"" + callbackUrl + "\">link</a>");
             var message = "Chúng tôi đã gửi email lấy lại mật khẩu tài khoản vào mail " + user.Email + " . Vui lòng kiểm tra email để đặt lại mật khẩu mới.";
             response.code = "200";
             response.status = "Thành công";
@@ -380,7 +357,7 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
                 response.status = "Missing Required fields";
                 return Content<Response>(HttpStatusCode.BadRequest, response);
             }
-            var result = await UserManager.FindByIdAsync(userId);
+            var result = await Service._userManager.FindByIdAsync(userId);
             return Redirect("http://localhost:54962/account/set-password");
         }
 
@@ -408,7 +385,7 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
             }
 
             var flag = 0;
-            var user = UserManager.FindById(id);
+            var user = Service._userManager.FindById(id);
             var userInfoId = user.UserInfo.id;
             UserInfo userInfo = new UserInfo();
             userInfo = Service.userInfoDAO.getUserInfo(userInfoId);
@@ -434,7 +411,6 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
             if (flag > 0)
             {
                 Service.userInfoDAO.updateUserInfo(userInfo);
-                Service.userInfoDAO.saveUserinfo();
             }
             response.code = "200";
             response.status = "Success";
@@ -454,7 +430,7 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
             ApplicationUser identityUser = Service._userManager.FindByEmailAsync(loginModel.email).Result;
             if (identityUser != null)    //validate username
             {
-                bool result = UserManager.CheckPassword(identityUser, loginModel.password); //validate user password
+                bool result = Service._userManager.CheckPassword(identityUser, loginModel.password); //validate user password
                 if (result == true)
                 {
                     Token validateToken = Service.tokenDAO.getByUsername(loginModel.email); //user have logined yet?
@@ -488,7 +464,6 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
                                 token.isLogin = true;
 
                                 Service.tokenDAO.insert(token);
-                                Service.tokenDAO.save();
 
                                 response.status = "Đăng nhập thành công";
                                 response.code = "200";
@@ -509,7 +484,6 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
                                 Token token = Service.tokenDAO.getById(validateToken.id);
                                 token.isLogin = true;
                                 Service.tokenDAO.update(token);
-                                Service.tokenDAO.save();
                                 response.status = "Đăng nhập thành công";
                                 response.code = "200";
                                 response.results = token;
@@ -518,7 +492,6 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
                             else        //Token expired
                             {
                                 Service.tokenDAO.delete(validateToken.id);     //remove token from database
-                                Service.tokenDAO.save();
                                 response.status = "Phiên đăng nhập của bạn đã hết hạn, vui lòng đăng nhập lại";
                                 response.code = "401";
                                 response.results = "";
@@ -538,7 +511,6 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
                             else
                             {
                                 Service.tokenDAO.delete(validateToken.id);     //remove token from database
-                                Service.tokenDAO.save();
                                 response.status = "Phiên đăng nhập của bạn đã hết hạn, vui lòng đăng nhập lại";
                                 response.code = "401";
                                 response.results = "";

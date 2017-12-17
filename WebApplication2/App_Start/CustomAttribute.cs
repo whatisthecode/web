@@ -146,7 +146,6 @@ namespace WebApplication2.CustomAttribute
                         if (compare >= 0)
                         {
                             Service.tokenDAO.delete(token.id);
-                            Service.tokenDAO.save();
                             Response response = new Response();
                             response.status = "Phiên đăng nhập của bạn đã hết hạn!";
                             response.code = "401";

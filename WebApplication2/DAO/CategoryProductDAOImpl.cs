@@ -18,10 +18,13 @@ namespace WebApplication2.DAO
         }
         public Int16 getProductCategoriesID(short idCategory, short idProduct)
         {
-            var query = from c in base.getContext().categoryProducts
-                        where c.productId == idProduct && c.categoryId == idCategory
-                        select c.id;
-            return query.FirstOrDefault();
+            using (DBContext context = new DBContext())
+            {
+                var query = from c in context.categoryProducts
+                            where c.productId == idProduct && c.categoryId == idCategory
+                            select c.id;
+                return query.FirstOrDefault();
+            }
         }
 
         public void deleteCategoryProduct(short idcatepro)
@@ -58,12 +61,16 @@ namespace WebApplication2.DAO
         {
             return base.get().Where(cp => cp.productId == prodId).ToList();
         }
-        PagedResult<Product> CategoryProductDAO.pageView(short categoryId, short pageindex, short pagesize, string orderBy, bool ascending)
+        PagedResult<Product> pageView(short categoryId, short pageindex, short pagesize, string orderBy, bool ascending)
         {
-            var query = from c in base.getContext().categoryProducts select c;
-            query = query.Where(cate => cate.categoryId == categoryId);
-            query = query.OrderBy(o => o.productId);
-            PagedResult<CategoryProduct> pv = base.PageView(query, pageindex, pagesize);
+            PagedResult<CategoryProduct> pv = new PagedResult<CategoryProduct>();
+            using (DBContext context = new DBContext())
+            {
+                var query = from c in context.categoryProducts select c;
+                query = query.Where(cate => cate.categoryId == categoryId);
+                query = query.OrderBy(o => o.productId);
+                pv = base.PageView(query, pageindex, pagesize);
+            }          
             List<Product> listProducts = new List<Product>();
             PagedResult<Product> pvProduct = new PagedResult<Product>();
             pvProduct.rowCount = pv.rowCount;

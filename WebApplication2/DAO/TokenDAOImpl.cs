@@ -31,12 +31,14 @@ namespace WebApplication2.DAO
 
         public void delete(string accessToken)
         {
-            var dbContext = base.getContext().token;
-            Token token = dbContext.FirstOrDefault(t => t.accessToken == accessToken);
-            if(token != null)
+            Token token = new Token();
+            using (DBContext context = new DBContext())
             {
-                delete(token.id);
-                save();
+                token = context.token.FirstOrDefault(t => t.accessToken == accessToken);
+            }
+            if (token != null)
+            {
+                base.delete(token.id);
             }
         }
 
@@ -52,8 +54,10 @@ namespace WebApplication2.DAO
 
         public Token getByAccessToken(string accessToken)
         {
-            var dbContext = base.getContext().token;
-            return dbContext.FirstOrDefault(t => t.accessToken == accessToken);
+            using (DBContext context = new DBContext())
+            {
+                return context.token.FirstOrDefault(t => t.accessToken == accessToken);
+            }
         }
 
         public new Token getById(short id)
@@ -63,18 +67,15 @@ namespace WebApplication2.DAO
 
         public Token getByUsername(string userName)
         {
-            var dbContext = base.getContext().token;
-            return dbContext.FirstOrDefault(t => t.userName == userName);
+            using (DBContext context = new DBContext())
+            {
+                return context.token.FirstOrDefault(t => t.userName == userName);
+            }          
         }
 
         public new void insert(Token entity)
         {
             base.insert(entity);
-        }
-
-        public new void save()
-        {
-            base.save();
         }
 
         public new void update(Token entity)

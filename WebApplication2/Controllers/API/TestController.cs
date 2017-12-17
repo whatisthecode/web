@@ -32,13 +32,13 @@ namespace WebApplication2.Controllers.API
         }
         [Route("api/initialize")]
         [HttpPost]
-        public async Task<IHttpActionResult> initializeAsync()
+        public IHttpActionResult initializeAsync()
         {
             Service.groupDAO.insertGroup(new Group("SuperAdmin"));
             Service.groupDAO.insertGroup(new Group("Admin"));
             Service.groupDAO.insertGroup(new Group("Merchant"));
             Service.groupDAO.insertGroup(new Group("Customer"));
-            Service.groupDAO.saveGroup();
+
             String[] userRoles = { "CREATE_USER", "VIEW_USER", "DELETE_USER", "UPDATE_USER" };
             String[] productRoles = { "CREATE_PRODUCT", "VIEW_PRODUCT", "DELETE_PRODUCT", "UPDATE_PRODUCT" };
             String[] productAttributeRoles = { "CREATE_PRODUCT_ATTRIBUTE", "VIEW_PRODUCT_ATTRIBUTE", "DELETE_PRODUCT_ATTRIBUTE", "UPDATE_PRODUCT_ATTRIBUTE" };
@@ -127,12 +127,12 @@ namespace WebApplication2.Controllers.API
             uCustomer1.UserInfo = new UserInfo(1, "Đoàn", "Dự", new DateTime(1992, 06, 10), "332666999");
             uCustomer2.UserInfo = new UserInfo(1, "Đoàn Chính", "Thuần", new DateTime(1993, 11, 11), "272333978");
 
-            IdentityResult userSuperAdmin = await Service._userManager.CreateAsync(uSuperAdmin, "123456");
-            IdentityResult userAdmin = await Service._userManager.CreateAsync(uAdmin, "123456");
-            IdentityResult userMerchant1 = await Service._userManager.CreateAsync(uMerchant1, "123456");
-            IdentityResult userMerchant2 = await Service._userManager.CreateAsync(uMerchant2, "123456");
-            IdentityResult userCustomer1 = await Service._userManager.CreateAsync(uCustomer1, "123456");
-            IdentityResult userCustomer2 = await Service._userManager.CreateAsync(uCustomer2, "123456");
+            IdentityResult userSuperAdmin = Service._userManager.Create(uSuperAdmin, "123456");
+            IdentityResult userAdmin = Service._userManager.Create(uAdmin, "123456");
+            IdentityResult userMerchant1 = Service._userManager.Create(uMerchant1, "123456");
+            IdentityResult userMerchant2 = Service._userManager.Create(uMerchant2, "123456");
+            IdentityResult userCustomer1 = Service._userManager.Create(uCustomer1, "123456");
+            IdentityResult userCustomer2 = Service._userManager.Create(uCustomer2, "123456");
             if (userSuperAdmin.Succeeded && userAdmin.Succeeded && userMerchant1.Succeeded && userMerchant2.Succeeded && userCustomer1.Succeeded && userCustomer2.Succeeded)
             {
                 Service.userGroupDAO.AddUserToGroup(new ApplicationUserGroup(uSuperAdmin.Id, superAdmin.id));
@@ -148,19 +148,16 @@ namespace WebApplication2.Controllers.API
                 Service.userGroupDAO.AddUserToGroup(new ApplicationUserGroup(uCustomer1.Id, customer.id));
 
                 Service.userGroupDAO.AddUserToGroup(new ApplicationUserGroup(uCustomer2.Id, customer.id));
-                Service.userGroupDAO.saveUserGroup();
             }
 
             //TODO : CREATE 3 category type brand, product and attribute
             Service.categoryTypeDAO.insertCategoryType(new CategoryType() { code = "BRAND", name = "Thương hiệu" });
             Service.categoryTypeDAO.insertCategoryType(new CategoryType() { code = "PRODUCT", name = "Sản phẩm" });
             Service.categoryTypeDAO.insertCategoryType(new CategoryType() { code = "ATTRIBUTE", name = "Thuộc tính" });
-            Service.categoryTypeDAO.saveCategoryType();
 
             //TODO : CREATE 2 category type product
             Service.categoryDAO.insertCategory(new Category() { code = "MOUSE", name = "Chuột", typeId = Service.categoryTypeDAO.getCategoryTypeByCode("PRODUCT").id});
             Service.categoryDAO.insertCategory(new Category(){ code = "KEYBOARD", name = "Bàn phím", typeId = Service.categoryTypeDAO.getCategoryTypeByCode("PRODUCT").id });
-            Service.categoryDAO.saveCategory();
 
             Response response = new Response("200", "Initializing a test enviroment!", null);
             return Content<Response>(HttpStatusCode.OK, response);

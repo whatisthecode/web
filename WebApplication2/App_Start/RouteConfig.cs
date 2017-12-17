@@ -63,8 +63,15 @@ namespace WebApplication2
             routes.MapRoute(
                 name: "Info",
                 url: "dashboard/info",
-                defaults: new { type = "Admin", controller = "AdminUser", action = "Info" }
+                defaults: new { type = "Admin", controller = "AdminInfo", action = "Index" }
             );
+
+            routes.MapRoute(
+                name: "Buy-Post",
+                url: "dashboard/buy",
+                defaults: new { type = "Admin", controller = "AdminInfo", action = "BuyingPost" }
+            );
+
             routes.MapRoute(
                 name: "User-Detail",
                 url: "dashboard/user/{id}",

@@ -7,7 +7,7 @@ namespace WebApplication2.Models.RequestModel
 {
     public class UserGeneral
     {
-        public Int16 id { get; set; }
+        public String Id { get; set; }
         public String email { get; set; }
         public Int16 status { get; set; }
         public DateTime createdAt { get; set; }
@@ -20,9 +20,9 @@ namespace WebApplication2.Models.RequestModel
 
         }
 
-        public UserGeneral(Int16 id, String email, String fullname, String groupName, Int16 status, Boolean isLogin, DateTime createdAt)
+        public UserGeneral(String Id, String email, String fullname, String groupName, Int16 status, Boolean isLogin, DateTime createdAt)
         {
-            this.id = id;
+            this.Id = Id;
             this.email = email;
             this.fullname = fullname;
             this.groupName = groupName;

@@ -18,7 +18,6 @@ namespace WebApplication2.DAO
         void insert(Token entity);
         Token getByAccessToken(string accessToken);
         void delete(string accessToken);
-        void save();
         Token getByUsername(string userName);
     }
 }

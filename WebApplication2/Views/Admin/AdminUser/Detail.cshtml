@@ -1,0 +1,137 @@
+﻿
+@{
+    ViewBag.Title = "Thông tin người dùng";
+    ViewBag.pageTitle = "Thông tin người dùng " + Model.fullName;
+    ViewBag.pageLink = "/dashboard/user/" + Model.Id;
+    ViewBag.currentAction = "user";
+}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="header">
+                    <h4 class="title">Thông tin người dùng</h4>
+                </div>
+                <div class="content container">
+                    <form action="~/dashboard/user/create" method="post">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Mã người dùng</label>
+                                    <input class="form-control border-input" type="text" name="Id" value="@if (Model.Id != null) { @Model.Id; }" readonly/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Địa chỉ email</label>
+                                    <input class="form-control border-input" type="email" name="Email" value="@if (Model.Email != null) { @Model.Email; }" placeholder="Nhập email" readonly/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Mật khẩu</label>
+                                    <input class="form-control border-input" type="text" name="text" value="@if (Model.Password != null) { @Model.Password; }" placeholder="Nhập mật khẩu" readonly/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Số điện thoại</label>
+                                    <input class="form-control border-input" type="text" name="PhoneNumber" value="@if (Model.PhoneNumber != null) { @Model.PhoneNumber; }" placeholder="Nhập số điện thoại" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Ngày sinh</label>
+                                    <div class='input-group date border-input' id='dateDOB'>
+                                        <input type='text' name="dobDisplay" class="form-control border-input" value="@if (Model.dobDisplay != null) { @Model.dobDisplay; } else { @ViewBag.now;}" />
+                                        <span class="input-group-addon">
+                                            <span class="ti-calendar"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Họ</label>
+                                    <input class="form-control border-input" type="text" name="firstName" value="@if (Model.firstName != null) { @Model.firstName; }" placeholder="Nhập Họ" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Tên</label>
+                                    <input class="form-control border-input" type="text" name="lastName" value="@if (Model.lastName != null) { @Model.lastName; }" placeholder="Nhập tên" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Số CMND</label>
+                                    <input class="form-control border-input" type="text" name="identityNumber" value="@if (Model.identityNumber != null) { @Model.identityNumber;}" placeholder="Nhập số CMND" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Quyền</label>
+                                    <select name="groupName" class="form-control border-input" value="@Model.groupName">
+                                        @foreach (var group in ViewBag.groups)
+                                        {
+                                            if (group.name == "SuperAdmin")
+                                            {
+                                                @:<option value="@group.name">Quản trị hệ thống</option>
+                                            }
+                                            else if (group.name == "Admin")
+                                            {
+                                                @:<option value="@group.name">Quản trị viên</option>
+                                            }
+                                            else if (group.name == "Merchant")
+                                            {
+                                                @:<option value="@group.name">Người bán</option>
+                                            }
+                                            else
+                                            {
+                                                @:<option value="@group.name">Khách hàng</option>
+                                            }
+
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <button type="submit" class="btn btn-info btn-wd btn-flat btn-fill">Lưu</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section script{
+    <script type="text/javascript">
+        $(function () {
+            $('#dateDOB').datetimepicker({
+                format: "DD/MM/YYYY"
+            });
+            $('#dateDOB').on("dp.change", function (e) {
+                $("input[name='dobDisplay']").val(e.date.date() + "/" + (e.date.month() + 1) + "/" + e.date.year());
+            });
+        });
+    </script>
+}

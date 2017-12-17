@@ -63,7 +63,7 @@ namespace WebApplication2.Controllers.API
                 File.Move(file.LocalFileName, Path.Combine(storagePath, fileName));
                 image.url = HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority + "/assets/img/content/" + fileName;
                 Service.imageDAO.insertImage(image);
-                Service.imageDAO.saveImage();
+
                 images.Add(image);
             }
             Response response = new Response("200", "Ảnh đã được tải lên thành công", images);
@@ -91,7 +91,6 @@ namespace WebApplication2.Controllers.API
             image.url = HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority + "/assets/img/content/" + fileName;
 
             Service.imageDAO.insertImage(image);
-            Service.imageDAO.saveImage();
 
             Response response = new Response("200", "Ảnh đã được tải lên thành công", image);
             return Content<Response>(HttpStatusCode.OK, response);

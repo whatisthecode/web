@@ -58,11 +58,6 @@ namespace WebApplication2.DAO
             throw new NotImplementedException();
         }
 
-        public void saveImage()
-        {
-            base.save();
-        }
-
         public void updateImage(Image image)
         {
             base.update(image);

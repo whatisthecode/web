@@ -53,11 +53,6 @@ namespace WebApplication2.DAO
             throw new NotImplementedException();
         }
 
-        public void saveInvoiceDetail()
-        {
-            base.save();
-        }
-
         public void updateInvoiceDetail(InvoiceDetail invoicedetail)
         {
             base.update(invoicedetail);
@@ -65,10 +60,13 @@ namespace WebApplication2.DAO
 
         public IEnumerable<InvoiceDetail> getListDetailByInvoiceId(short invoiceId)
         {
-            var query = from invoice in base.getContext().invoiceDetails
-                        where invoice.invoice.Equals(invoiceId)
-                        select invoice;
-            return query;
+            using (DBContext context = new DBContext())
+            {
+                var query = from invoice in context.invoiceDetails
+                            where invoice.invoice.Equals(invoiceId)
+                            select invoice;
+                return query;
+            }     
 
         }
     }

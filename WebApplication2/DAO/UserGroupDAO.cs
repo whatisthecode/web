@@ -15,7 +15,6 @@ namespace WebApplication2.DAO
         void deleteUserGroup(String userId, Int16 groupId);
         void ClearUserGroups(String userId);
         void updateUserGroup(ApplicationUserGroup userGroup);
-        void saveUserGroup();
         void dispose();
     }
 }

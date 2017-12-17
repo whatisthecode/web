@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 
 namespace WebApplication2.Models
 {
@@ -57,12 +58,21 @@ namespace WebApplication2.Models
             [Display(Name = "Phone Number")]
             public string PhoneNumber { get; set; }
 
-            [Compare("PhoneNumber", ErrorMessage = "The {0} must be at least {2} characters long.")]
             [DataType(DataType.PhoneNumber)]
             [Display(Name = "Confirm Phone Number")]
             public string ConfirmPhoneNumber { get; set; }
 
-            public DateTime dob { get; set; }
+            public DateTime dob {
+                get
+                {
+                    String temp = this.dobDisplay.Split('/')[2] + "/" + this.dobDisplay.Split('/')[1] + "/" + this.dobDisplay.Split('/')[0];
+                    return DateTime.Parse(temp);
+                }
+                private set { }
+            }
+
+            public String dobDisplay { get; set; }
+
             [Required]
             public string firstName { get; set; }
             [Required]
@@ -71,6 +81,13 @@ namespace WebApplication2.Models
             public string identityNumber { get; set; }
             [Required]
             public List<string> groups { get; set; }
+
+            public String groupName { get; set; }
+
+            public RegisterBindingModel()
+            {
+
+            }
         }
     }
 
@@ -121,5 +138,10 @@ namespace WebApplication2.Models
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string password { get; set; }
+
+        public LoginModel()
+        {
+
+        }
     }
 }

@@ -29,7 +29,12 @@ namespace WebApplication2
                         "~/Assets/JS/bootstrap-wysihtml5-0.0.2.min.js",
                         "~/Assets/JS/respond.js",
                         "~/Assets/JS/jquery-comfirm.min.js",
-                        "~/Assets/JS/modernizr-2.6.2.js"));
+                        "~/Assets/JS/modernizr-2.6.2.js",
+                        "~/Assets/JS/moment.min.js",
+                        "~/Assets/JS/bootstrap.transition.min.js",
+                        "~/Assets/JS/bootstrap.collapse.min.js",
+                        "~/Assets/JS/bootstrap-datetimepicker.min.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/blank_js").Include(
                         "~/Assets/JS/jquery-1.10.2.min.js",
                         "~/Assets/JS/bootstrap.min.js",
@@ -83,6 +88,7 @@ namespace WebApplication2
                       "~/Assets/CSS/Client/owl.theme.css",
                       "~/Assets/CSS/Client/style.default.css",
                       "~/Assets/CSS/Client/custom.css"));
+
             bundles.Add(new StyleBundle("~/Content/admin-login").Include(
                       "~/Assets/CSS/Admin/login-style.css"));
 
@@ -95,7 +101,8 @@ namespace WebApplication2
                      "~/Assets/CSS/animate.min.css",
                      "~/Assets/CSS/Admin/paper-dashboard.css",
                      "~/Assets/CSS/Admin/demo.css",
-                     "~/Assets/CSS/Admin/themify-icons.css"));
+                     "~/Assets/CSS/Admin/themify-icons.css",
+                     "~/Assets/CSS/bootstrap-datetimepicker.min.css"));
         }
     }
 }

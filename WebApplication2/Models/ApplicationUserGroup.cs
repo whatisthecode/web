@@ -19,12 +19,19 @@ namespace WebApplication2.Models
             this.userId = userId;
             this.groupId = groupId;
         }
-        [Key, Column("user_id", Order = 0)]
+
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public Int16 id { get; set; }
+
+        [Column("user_id")]
         [ForeignKey("ApplicationUser")]
+        [Index("IX_userId_groupId", 1, IsUnique = true)]
         public String userId { get; set; }
 
-        [Key, Column("group_id", Order = 1)]
+        [Column("group_id")]
         [ForeignKey("Group")]
+        [Index("IX_userId_groupId", 2, IsUnique = true)]
         public Int16 groupId { get; set; }
 
         public ApplicationUser ApplicationUser { get; set; }
