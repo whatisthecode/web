@@ -158,5 +158,21 @@ namespace WebApplication2.DAO
                 return pv;
             }
         }
+
+        PagedResult<Product> ProductDAO.pageViewByCategoryId(short categoryId, short pageindex, short pagesize)
+        {
+            using (DBContext context = new DBContext())
+            {
+                var query = from c in context.categoryProducts
+                            where c.categoryId == categoryId
+                            join pro in context.products on c.productId equals pro.id
+                            where pro.status > 0
+                            orderby pro.name
+                            select pro;
+
+                PagedResult<Product> pv = base.PageView(query, pageindex, pagesize);
+                return pv;
+            }
+        }
     }
 }

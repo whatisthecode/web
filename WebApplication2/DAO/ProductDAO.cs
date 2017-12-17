@@ -22,5 +22,6 @@ namespace WebApplication2.DAO
         PagedResult<Product> PageView(Int16 indexnum, Int16 pagesize, String Orderby);
         PagedResult<Product> PageView(Int16 indexnum, Int16 pagesize, String Orderby, Boolean ascending);
         PagedResult<Product> AdminPageView(Int16 userId, Int16 indexnum, Int16 pagesize, String Orderby);
+        PagedResult<Product> pageViewByCategoryId(short categoryId, short pageindex, short pagesize);
     }
 }

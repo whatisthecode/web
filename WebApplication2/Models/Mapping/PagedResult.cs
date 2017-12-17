@@ -9,8 +9,13 @@ namespace LaptopWebsite.Models.Mapping
     {
         public IList<T> items { get; set; }
         public int currentPage { get; set; }
-        public int pageCount {get;set;}
+        public int pageCount { get; set; }
         public int pageSize { get; set; }
         public int rowCount { get; set; }
+
+        public PagedResult()
+        {
+
+        }
     }
 }

@@ -61,7 +61,7 @@ namespace WebApplication2.DAO
         {
             return base.get().Where(cp => cp.productId == prodId).ToList();
         }
-        PagedResult<Product> CategoryProductDAO.pageView(short categoryId, short pageindex, short pagesize, string orderBy, bool ascending)
+        PagedResult<Product> pageView(short categoryId, short pageindex, short pagesize, string orderBy, bool ascending)
         {
             PagedResult<CategoryProduct> pv = new PagedResult<CategoryProduct>();
             using (DBContext context = new DBContext())

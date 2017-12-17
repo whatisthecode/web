@@ -18,7 +18,7 @@
 
                     <h1>Giỏ hàng</h1>
                     <p class="text-muted">Hiện tại bạn có <span ng-bind="selectedProductsLength"></span> sản phẩm trong giỏ hàng.</p>
-                    <div class="table-responsive" style="display:none">
+                    <div class="table-responsive">
                         <table class="table">
                             <thead>
                                 <tr>
@@ -33,7 +33,7 @@
                                 <tr ng-repeat="product in products">
                                     <td>
                                         <a href="#">
-                                            <img src="Assets/img/detailsquare.jpg" alt="White Blouse Armani">
+                                            <img src="{{product.details[0].url}}" alt="White Blouse Armani">
                                         </a>
                                     </td>
                                     <td>
@@ -41,7 +41,7 @@
                                         <p style="margin-bottom : 5px">Còn lại: {{product.attributes[1].value}}</p>
                                     </td>
                                     <td>
-                                        <input style="width : 60px;" name="amount" type="number" min="0" max="{{product.attributes[1].value}}" ng-model="product.amount" ng-change="amountChange(product)" ng-click="amountChange(product)" class="form-control amount">
+                                        <input style="width : 60px;" name="amount" type="number" min="0" max="{{product.constAmount}}" ng-model="product.amount" ng-change="amountChange(product)" ng-click="amountChange(product)" class="form-control amount">
                                     </td>
                                     <td>{{product.attributes[0].value}}</td>
                                     <td>{{product.attributes[2].value}}</td>
@@ -79,6 +79,46 @@
             <!-- /.box -->
             </div>
         <!-- /.col-md-12 -->
+
+        <div class="container">
+            <div class="col-md-12">
+                <h2>Sản phẩm bạn sẽ thích</h2>
+            </div>
+        </div>
+
+        <data-owl-carousel class="owl-carousel" data-options="{navigation: false, pagination: true, rewindNav : false}" style="margin-left: 15px;">
+            <div owl-carousel-item="" ng-repeat="product in products1" class="item">
+                <div class="product">
+                    <div class="flip-container">
+                        <div class="flipper">
+                            <div class="front">
+                                <a ng-click="viewDetail(product.id)">
+                                    <img src="{{product.thumbnails[0].url}}" alt="" class="img-responsive">
+                                </a>
+                            </div>
+                            <div class="back">
+                                <a ng-click="viewDetail(product.id)">
+                                    <img src="{{product.thumbnails[1].url}}" alt="" class="img-responsive">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <a ng-click="viewDetail(product.id)" class="invisible">
+                        <img src="{{product.thumbnails[0].url}}" alt="" class="img-responsive">
+                    </a>
+                    <div class="text">
+                        <h3><a ng-click="viewDetail(product.id)">{{product.name}}</a></h3>
+                        <p class="price">{{product.attributes[0].value}}</p>
+                        <p class="buttons">
+                            <a class="btn btn-default" href="/{{product.choseCategories[0].Category.code}}/{{product.id}}">Chi tiết</a>
+                            <a ng-click="addProductToCart(product)" class="btn btn-primary"><i class="fa fa-shopping-cart"></i></a>
+                        </p>
+                    </div>
+                    <!-- /.text -->
+                </div>
+                <!-- /.product -->
+            </div>
+        </data-owl-carousel>
 
     </div>
     <!-- /.container -->

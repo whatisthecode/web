@@ -131,22 +131,22 @@
                         <div class="flip-container">
                             <div class="flipper">
                                 <div class="front">
-                                    <a href="detail.html">
-                                        <img src="./Assets/IMG/product1.jpg" alt="" class="img-responsive">
+                                    <a ng-click="viewDetail(product.id)">
+                                        <img src="{{product.thumbnails[0].url}}" alt="" class="img-responsive">
                                     </a>
                                 </div>
                                 <div class="back">
-                                    <a href="detail.html">
-                                        <img src="./Assets/IMG/product1_2.jpg" alt="" class="img-responsive">
+                                    <a ng-click="viewDetail(product.id)">
+                                        <img src="{{product.thumbnails[1].url}}" alt="" class="img-responsive">
                                     </a>
                                 </div>
                             </div>
                         </div>
-                        <a href="detail.html" class="invisible">
-                            <img src="./Assets/IMG/product1.jpg" alt="" class="img-responsive">
+                        <a ng-click="viewDetail(product.id)" class="invisible">
+                            <img src="{{product.thumbnails[0].url}}" alt="" class="img-responsive">
                         </a>
                         <div class="text">
-                            <h3><a href="detail.html">{{product.name}}</a></h3>
+                            <h3><a ng-click="viewDetail(product.id)">{{product.name}}</a></h3>
                             <p class="price">{{product.attributes[0].value}}</p>
                             <p class="buttons">
                                 <a class="btn btn-default" ng-click="viewDetail(product.id)">Chi tiết</a>
@@ -163,7 +163,7 @@
 
             <div class="pages">
 
-                <div uib-pagination boundary-links="true" total-items="rowCount" ng-model="pageIndex" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"
+                <div uib-pagination boundary-links="true" total-items="rowCount" items-per-page="pageSize" ng-model="pageIndex" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"
                      ng-change="pageChanged(pageSize, pageIndex, filter)"></div>
             </div>
 

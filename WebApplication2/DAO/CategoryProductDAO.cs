@@ -18,6 +18,5 @@ namespace WebApplication2.DAO
         void updateCategoryProduct(CategoryProduct catepro);
         void deleteCategoryProduct(Int16 idcatepro);
         void dispose();
-        PagedResult<Product> pageView(Int16 categoryId, Int16 pageindex, Int16 pagesize, string orderBy, bool ascending);
     }
 }

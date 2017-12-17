@@ -75,6 +75,13 @@ namespace WebApplication2.Controllers.API
                     var amount = invoiceProduct.amount;
                     var price = proAttrs[0].value;
                     var discount = proAttrs[2].value;
+                    var productAmount = short.Parse(proAttrs[1].value) - amount;
+
+                    ProductAttribute updateAttrs = new ProductAttribute(); //Update Amount of product after create Invoice
+                    updateAttrs = Service.productAttributeDAO.getProductAttributeById(proAttrs[1].id);
+                    updateAttrs.value = productAmount.ToString();
+                    Service.productAttributeDAO.updateProductAttribute(updateAttrs);
+
                     InvoiceDetail invoiceDetail = null;
                     if (double.Parse(discount) > 0)
                     {
@@ -103,30 +110,41 @@ namespace WebApplication2.Controllers.API
 
         [Route("api/invoice")]
         [HttpPut]
+        [APIAuthorize]
         public IHttpActionResult update([FromBody]Invoice invoice)
         {
-            Invoice invoice1 = Service.invoiceDAO.checkExist(invoice);
-            Response response = new Response();
-            if (invoice1 != null && invoice1.id != invoice.id)
-            {
-                response = new Response("409", "Hóa đơn đã tồn tại", null);
-                return Content<Response>(HttpStatusCode.NotFound, response);
-            }
-            else if (Service.invoiceDAO.getInvoiceById(invoice.id) == null)
+            Response response = null;
+            Invoice invoiceInDB = Service.invoiceDAO.getInvoiceById(invoice.id);
+            if (invoiceInDB == null)
             {
                 response = new Response("404", "Hóa đơn không tồn tại", null);
                 return Content<Response>(HttpStatusCode.NotFound, response);
             }
             else
             {
-                invoice1 = Service.invoiceDAO.getInvoiceById(invoice.id);
-                invoice1.code = invoice.code;
-                invoice1.buyerId = invoice.buyerId;
-                invoice1.salerId = invoice.salerId;
-                invoice1.total = invoice.total;
-                Service.invoiceDAO.updateInvoice(invoice1);
+                var statusUpdate = invoice.status;
+                var statusInDB = invoiceInDB.status;
+                if(statusInDB == 1 && statusUpdate == 0)
+                {
+                    response = new Response("417", "Đang giao không thể trở về đang xử lý", null);
+                    return Content<Response>(HttpStatusCode.ExpectationFailed, response);
+                }
+                else if (statusInDB == -1)
+                {
+                    response = new Response("417", "Hóa đơn đã bị hủy không thể cập nhật trạng thái", null);
+                    return Content<Response>(HttpStatusCode.ExpectationFailed, response);
+                }
+                else if (statusInDB == 2)
+                {
+                    response = new Response("417", "Hoá đơn đã hoàn thành không thể cập nhật trạng thái", null);
+                    return Content<Response>(HttpStatusCode.ExpectationFailed, response);
+                }
 
-                response = new Response("200", "Cập nhật hóa đơn thành công", invoice);
+                invoiceInDB.status = invoice.status;
+                Service.invoiceDAO.updateInvoice(invoiceInDB);
+
+                response = new Response("200", "Cập nhật hóa đơn thành công", invoiceInDB);
+
                 return Content<Response>(HttpStatusCode.OK, response);
             }
         }
@@ -290,9 +308,8 @@ namespace WebApplication2.Controllers.API
                 response.results = "";
                 return Content<Response>(HttpStatusCode.OK, response);
             }
-            
-
         }
 
+        
     }
 }

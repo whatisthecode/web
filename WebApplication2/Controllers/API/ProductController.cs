@@ -172,21 +172,38 @@ namespace WebApplication2.Controllers.API
 
             PagedResult<Product> pagedResult = new PagedResult<Product>();
             pagedResult =  Service.productDAO.PageView(pageRequest.pageIndex, pageRequest.pageSize, pageRequest.order, false);
+
+            PagedResult<ProductDetail> pagedResultDetail = new PagedResult<ProductDetail>();
+            pagedResultDetail.currentPage = pagedResult.currentPage;
+            pagedResultDetail.pageCount = pagedResult.pageCount;
+            pagedResultDetail.pageSize = pagedResult.pageSize;
+            pagedResultDetail.rowCount = pagedResult.rowCount;
+
+            List<ProductDetail> listDetails = new List<ProductDetail>();
             IList<Product> products = pagedResult.items;
             Int16 productsLength = (Int16)products.Count;
             for (Int16 i = 0; i < productsLength; i++)
             {
                 Product product = products[i];
-                List<ProductAttribute> productAtts = new List<ProductAttribute>();
-                productAtts = Service.productAttributeDAO.getProAttrsByProId(product.id);
-                //UserInfo userInfo = Service.userInfoDAO.getUserInfo(product.createdBy);
-                products[i].attributes = productAtts;
-                products[i].UserInfo = Service.userInfoDAO.getUserInfo(products[i].createdBy);
-                //products[i].UserInfo = userInfo;
+                ProductDetail productDetail = new ProductDetail();
+                productDetail.id = product.id;
+                productDetail.code = product.code;
+                productDetail.name = product.name;
+                productDetail.status = product.status;
+                productDetail.userInfo = Service.userInfoDAO.getUserInfo(product.createdBy);
+                productDetail.attributes = Service.productAttributeDAO.getProAttrsByProId(product.id);
+                productDetail.choseCategories = Service.categoryProductDAO.getListCategoryProductByProdId(product.id).ToList();
+                foreach(var pro in productDetail.choseCategories)
+                {
+                    pro.Category = Service.categoryDAO.getCategoryById(pro.categoryId);
+                }
+                productDetail.thumbnails = Service.imageDAO.getThumbnail(product.id).ToList();
+                listDetails.Add(productDetail);
             }
+            pagedResultDetail.items = listDetails;
             response.code = "200";
             response.status = "Danh sách sản phẩm hiện tại: ";
-            response.results = pagedResult;
+            response.results = pagedResultDetail;
             return Content<Response>(HttpStatusCode.OK, response);
 
         }
@@ -328,7 +345,41 @@ namespace WebApplication2.Controllers.API
             response.status = "Lấy sản phẩm thành công";
             response.results = product;
             return Content<Response>(HttpStatusCode.OK, response);
+        }
 
+        [Route("api/category/{categoryId}/products/")]
+        [HttpGet]
+        public IHttpActionResult getProductByCategory(Int16 categoryId, [FromUri] PageRequest pageRequest)
+        {
+            Response response = new Response();
+
+            PagedResult<Product> pageResults = Service.productDAO.pageViewByCategoryId(categoryId, pageRequest.pageIndex, pageRequest.pageSize);
+
+            PagedResult<ProductDetail> pagedResultDetails = new PagedResult<ProductDetail>();
+            pagedResultDetails.pageCount = pageResults.pageCount;
+            pagedResultDetails.pageSize = pageResults.pageSize;
+            pagedResultDetails.rowCount = pageResults.rowCount;
+            pagedResultDetails.currentPage = pageResults.currentPage;
+            List<ProductDetail> lists = new List<ProductDetail>();
+            for (var i = 0; i < pageResults.rowCount; i++)
+            {
+                var item = pageResults.items[i];
+                ProductDetail productDetail = new ProductDetail();
+                productDetail.id = item.id;
+                productDetail.code = item.code;
+                productDetail.name = item.name;
+                productDetail.status = item.status;
+                productDetail.attributes = Service.productAttributeDAO.getProAttrsByProId(item.id);
+                productDetail.choseCategories = Service.categoryProductDAO.getListCategoryProductByProdId(item.id).ToList();
+                productDetail.thumbnails = Service.imageDAO.getThumbnail(item.id).ToList();
+                lists.Add(productDetail);
+            }
+
+            pagedResultDetails.items = lists;
+            response.code = "200";
+            response.status = "Thành công";
+            response.results = pagedResultDetails;
+            return Content<Response>(HttpStatusCode.OK, response); ;
         }
     }
 }

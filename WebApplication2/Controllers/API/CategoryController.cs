@@ -135,20 +135,6 @@ namespace WebApplication2.Controllers.API
 
         }
 
-        [Route("api/category/{categoryId}/products/")]
-        [HttpGet]
-        public IHttpActionResult getProductByCategory(Int16 categoryId, [FromUri] PageRequest pageRequest)
-        {
-            Response response = new Response();
-
-            PagedResult<Product> pageResults = Service.categoryProductDAO.pageView(categoryId, pageRequest.pageIndex, pageRequest.pageSize, pageRequest.order, pageRequest.ascending);
-
-            response.code = "200";
-            response.status = "Thành công";
-            response.results = pageResults;
-            return Content<Response>(HttpStatusCode.OK, response); ;
-        }
-
         [Route("api/category/{codeName}")]
         public IHttpActionResult getCategoryByCode([FromUri]string codeName)
         {
