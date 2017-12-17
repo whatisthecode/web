@@ -76,26 +76,8 @@ namespace WebApplication2.DAO
         public PagedResult<Product> PageView(short indexnum, short pagesize, string Orderby, bool ascending = false)
         {
             var query = from c in base.getContext().products select c;
-            query.Where(p => p.status >= 0);
-            if (query != null && ascending)
-            {
-                switch (Orderby)
-                {
-                    case "name":
-                        query = query.OrderBy(n => n.name);
-                        break;
-
-                }
-            }
-            if (query != null && !ascending)
-            {
-                switch (Orderby)
-                {
-                    case "name":
-                            query = query.OrderByDescending(d => d.name);
-                        break;
-                }
-            }
+            query.Where(p => p.status > 0);
+            query = query.OrderBy(p => p.name);
             PagedResult<Product> pv = base.PageView(query, indexnum, pagesize);
             return pv;
         }
@@ -144,7 +126,19 @@ namespace WebApplication2.DAO
             }
             PagedResult<Product> pv = base.PageView(query, indexnum, pagesize);
             return pv;
+        }
 
+        PagedResult<Product> ProductDAO.pageViewByCategoryId(short categoryId, short pageindex, short pagesize)
+        {
+            var query = from c in base.getContext().categoryProducts
+                        where c.categoryId == categoryId
+                        join pro in base.getContext().products on c.productId equals pro.id
+                        where pro.status > 0
+                        orderby pro.name
+                        select pro;
+
+            PagedResult<Product> pv = base.PageView(query, pageindex, pagesize);
+            return pv;
         }
     }
 }

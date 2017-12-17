@@ -4,7 +4,6 @@
         $scope.selectedProducts = [];
         $scope.totalInvoice = 0;
         $scope.selectedProductsLength = "0";
-
         viewOninit = function () {
             $scope.selectedProducts = $cookieStore.get("selectedProducts");
             if (Helper.notEmpty($scope.selectedProducts)) {
@@ -22,12 +21,20 @@
                     if (response) {
                         response.results["amount"] = 1;
                         response.results["productTotal"] = productTotal(response.results.attributes[0].value, response.results.amount, response.results.attributes[2].value);
+                        response.results["constAmount"] = 0;
                         response.results.attributes[0].value = Helper.addCommasToMoney(response.results.attributes[0].value);
                         if (Helper.notEmpty(response.results.attributes[2].value))
                         {
                             response.results.attributes[2].value = Helper.addCommasToMoney(response.results.attributes[2].value);
                         }
+                        if (Helper.notEmpty(response.results.attributes[1].value))
+                        {
+                            const consAmount = response.results.attributes[1].value;
+                            response.results.constAmount = consAmount;
+                            response.results.attributes[1].value = changAmount(response.results.attributes[1].value, response.results.amount);
+                        }
                         $scope.products.push(response.results);
+                        console.log($scope.products);
                         $scope.totalInvoice = sumInvoice($scope.products);
                     }
                 }, function (err) {
@@ -55,13 +62,14 @@
             else {
                 validator.prototype.hideWarning("#errors", "checkAmountEmpty" + product.id, "Xin nhập số lượng sản phẩm cần mua");
             }
-            if (validateInputAmount(product.attributes[1].value, product.amount) === false) {
+            if (validateInputAmount(product.constAmount, product.amount) === false) {
                 validator.prototype.showWarning("#errors", "checkAmount" + product.id, "Số lượng sản phẩm cần mua vượt quá số lượng sản phẩm được bán");
             }
             else {
                 validator.prototype.hideWarning("#errors", "checkAmount" + product.id, "Số lượng sản phẩm cần mua vượt quá số lượng sản phẩm được bán");
             }
             product.productTotal = productTotal(product.attributes[0].value, product.amount, product.attributes[2].value);
+            product.attributes[1].value = changAmount(product.constAmount, product.amount);
             $scope.totalInvoice = sumInvoice($scope.products);
             return product;
         };
@@ -102,7 +110,8 @@
         };
 
         validateInputAmount = function (productAmount, buyAmount) {
-            if (parseInt(productAmount) >= parseInt(buyAmount))
+            console.log(Number(buyAmount) <= Number(productAmount));
+            if (Number(productAmount) > 0 && Number(buyAmount) <= Number(productAmount))
                 return true;
             else
                 return false;
@@ -151,7 +160,10 @@
             else
                 return false;
         };
-            
+
+        changAmount = function (productAmount, buyAmount) {
+            return Number(productAmount) - Number(buyAmount);
+        };
 
         viewOninit();
     });

@@ -18,7 +18,7 @@
 
                     <h1>Giỏ hàng</h1>
                     <p class="text-muted">Hiện tại bạn có <span ng-bind="selectedProductsLength"></span> sản phẩm trong giỏ hàng.</p>
-                    <div class="table-responsive" style="display:none">
+                    <div class="table-responsive">
                         <table class="table">
                             <thead>
                                 <tr>
@@ -33,7 +33,7 @@
                                 <tr ng-repeat="product in products">
                                     <td>
                                         <a href="#">
-                                            <img src="Assets/img/detailsquare.jpg" alt="White Blouse Armani">
+                                            <img src="{{product.details[0].url}}" alt="White Blouse Armani">
                                         </a>
                                     </td>
                                     <td>
@@ -41,7 +41,7 @@
                                         <p style="margin-bottom : 5px">Còn lại: {{product.attributes[1].value}}</p>
                                     </td>
                                     <td>
-                                        <input style="width : 60px;" name="amount" type="number" min="0" max="{{product.attributes[1].value}}" ng-model="product.amount" ng-change="amountChange(product)" ng-click="amountChange(product)" class="form-control amount">
+                                        <input style="width : 60px;" name="amount" type="number" min="0" max="{{product.constAmount}}" ng-model="product.amount" ng-change="amountChange(product)" ng-click="amountChange(product)" class="form-control amount">
                                     </td>
                                     <td>{{product.attributes[0].value}}</td>
                                     <td>{{product.attributes[2].value}}</td>
