@@ -6,9 +6,6 @@
             }
         });
 
-        $scope.pageSize = 3;
-        $scope.pageIndex = 1;
-        $scope.rowCount = null;
         $scope.products1 = [];
 
         getProduct = function (pageIndex, pageSize, filter) {
@@ -19,7 +16,6 @@
                         response.items[i].attributes[0].value = Helper.addCommasToMoney(response.items[i].attributes[0].value);
                     }
                     $scope.products1 = response.items;
-                    $scope.rowCount = response.rowCount;
                 }
             }, function (err) {
                 if (err) {
@@ -29,11 +25,7 @@
         };
 
         viewInit = function () {
-            getProduct(1, 3, null);
-        };
-
-        $scope.pageChanged = function (pageSize, pageIndex) {
-            getProduct(pageIndex, pageSize, null);
+            getProduct(1, 10, null);
         };
 
         var selectedProducts = [];
@@ -53,5 +45,36 @@
         };
 
         viewInit();
-    });
+    }).directive("owlCarousel", function () {
+        return {
+            restrict: 'E',
+            transclude: false,
+            link: function (scope) {
+                scope.initCarousel = function (element) {
+                    // provide any default options you want
+                    var defaultOptions = {
+                    };
+                    var customOptions = scope.$eval($(element).attr('data-options'));
+                    // combine the two options objects
+                    for (var key in customOptions) {
+                        defaultOptions[key] = customOptions[key];
+                    }
+                    // init carousel
+                    $(element).owlCarousel(defaultOptions);
+                };
+            }
+        };
+    })
+        .directive('owlCarouselItem', [function () {
+            return {
+                restrict: 'A',
+                transclude: false,
+                link: function (scope, element) {
+                    // wait for the last item in the ng-repeat then call init
+                    if (scope.$last) {
+                        scope.initCarousel(element.parent());
+                    }
+                }
+            };
+        }]);
 }

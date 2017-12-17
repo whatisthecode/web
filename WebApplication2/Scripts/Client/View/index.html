@@ -28,9 +28,16 @@
         </div>
 
         <div class="container">
-            <div class="row products">
+            <!--<div class="row products">
 
                 <div class="col-md-4 col-sm-6" ng-repeat="product in products1">
+                    
+                </div>
+
+            </div>-->
+            <!-- /.products -->
+            <data-owl-carousel class="owl-carousel" data-options="{navigation: false, pagination: true, rewindNav : false}">
+                <div owl-carousel-item="" ng-repeat="product in products1" class="item">
                     <div class="product">
                         <div class="flip-container">
                             <div class="flipper">
@@ -54,21 +61,14 @@
                             <p class="price">{{product.attributes[0].value}}</p>
                             <p class="buttons">
                                 <a class="btn btn-default" href="/{{product.choseCategories[0].Category.code}}/{{product.id}}">Chi tiết</a>
-                                <a ng-click="addProductToCart(product)" class="btn btn-primary"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ</a>
+                                <!--<a ng-click="addProductToCart(product)" class="btn btn-primary"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ</a>-->
                             </p>
                         </div>
                         <!-- /.text -->
                     </div>
                     <!-- /.product -->
                 </div>
-
-            </div>
-            <!-- /.products -->
-            <div class="pages">
-
-                <div uib-pagination boundary-links="true" total-items="rowCount" ng-model="pageIndex" items-per-page="pageSize" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"
-                     ng-change="pageChanged(pageSize, pageIndex, filter)"></div>
-            </div>
+            </data-owl-carousel>
         </div>
         <!-- /.container -->
 
