@@ -62,10 +62,7 @@ namespace WebApplication2.DAO
         {
             using (DBContext context = new DBContext())
             {
-                var query = from invoice in context.invoiceDetails
-                            where invoice.invoice.Equals(invoiceId)
-                            select invoice;
-                return query;
+                return context.invoiceDetails.Where(inv => inv.invoice.Equals(invoiceId)).ToList();
             }     
 
         }

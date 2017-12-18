@@ -140,6 +140,20 @@ namespace WebApplication2.Controllers.API
                     return Content<Response>(HttpStatusCode.ExpectationFailed, response);
                 }
 
+                if(statusUpdate == -1)
+                {
+                    List<InvoiceDetail> updateDetails = new List<InvoiceDetail>();
+                    updateDetails = Service.invoiceDetailDAO.getListDetailByInvoiceId(invoiceInDB.id).ToList();
+                    for(var i = 0; i < updateDetails.Count; i++)
+                    {
+                        InvoiceDetail updateDetail = new InvoiceDetail();
+                        updateDetail = updateDetails[i];
+                        List<ProductAttribute> attrs = Service.productAttributeDAO.getProAttrsByProId(updateDetail.product);
+                        attrs[1].value = (short.Parse(attrs[1].value) + updateDetail.amount).ToString();
+                        Service.productAttributeDAO.updateProductAttribute(attrs[1]);
+                    }
+                }
+
                 invoiceInDB.status = invoice.status;
                 Service.invoiceDAO.updateInvoice(invoiceInDB);
 

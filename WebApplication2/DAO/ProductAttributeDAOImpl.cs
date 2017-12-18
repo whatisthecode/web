@@ -49,10 +49,7 @@ namespace WebApplication2.DAO
             {
                 if (proId > 0)
                 {
-                    var query = from p in context.productAttributes
-                                where p.productId == proId
-                                select p;
-                    return query.ToList();
+                    return context.productAttributes.Where(p => p.productId.Equals(proId)).ToList();
                 }
                 return null;
             }
