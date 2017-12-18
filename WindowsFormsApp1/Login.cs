@@ -64,6 +64,7 @@ namespace WindowsFormsApp1
                     {
                         var contents = ((JObject)response.Content.ReadAsAsync<Response>().Result.results).ToObject<Token>();
                         LoginInfo.token = contents.accessToken;
+                        Console.WriteLine(LoginInfo.token);
                         LoginInfo.id = contents.id;
                         this.Hide();
                         Product pr = new Product();
