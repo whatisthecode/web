@@ -23,5 +23,10 @@ namespace WebApplication2.Models.RequestModel
             public bool ascending { get; set; }
             public Int16 userId { get; set; }
         }
+
+        public class Search
+        {
+            public string keyword { get; set; }
+        }
     }
 }

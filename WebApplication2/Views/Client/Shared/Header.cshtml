@@ -1,7 +1,7 @@
 ﻿<!-- *** NAVBAR ***
 _________________________________________________________ -->
 
-<div class="navbar navbar-default yamm" role="navigation" id="navbar">
+<div class="navbar navbar-default yamm" role="navigation" id="navbar" data-ng-controller="HeaderController">
     <div class="container">
         <div class="navbar-header">
 
@@ -62,12 +62,19 @@ _________________________________________________________ -->
 
             <form class="navbar-form" role="search">
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Search">
+                    <input id="inputSearch" ng-model="keyword" ng-change="search(keyword)" type="text" class="form-control" placeholder="Search">
                     <span class="input-group-btn">
 
                         <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
 
                     </span>
+                </div>
+                <div id="results">
+                    <ul>
+                        <li ng-repeat="product in itemSearch">
+                            <a ng-click="viewDetail(product.choseCategories[0].categoryId, product.id)">{{product.name}}</a>
+                        </li>
+                    </ul>
                 </div>
             </form>
 

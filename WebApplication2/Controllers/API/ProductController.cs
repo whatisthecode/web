@@ -381,5 +381,30 @@ namespace WebApplication2.Controllers.API
             response.results = pagedResultDetails;
             return Content<Response>(HttpStatusCode.OK, response); ;
         }
+
+        //HttpGet api/search?keyword=param
+        [Route("api/search")]
+        [HttpGet]
+        public IHttpActionResult searchProduct([FromUri]Search search)
+        {
+            if(search.keyword != null)
+            {
+                PagedResult<Product> pagedResult = Service.productDAO.pageViewForSearch(search.keyword);
+                List<ProductDetail> list = new List<ProductDetail>();
+                for(var i = 0; i < pagedResult.items.Count; i++)
+                {
+                    ProductDetail product = new ProductDetail();
+                    product.id = pagedResult.items[i].id;
+                    product.name = pagedResult.items[i].name;
+                    product.status = pagedResult.items[i].status;
+                    product.choseCategories = Service.categoryProductDAO.getListCategoryProductByProdId(pagedResult.items[i].id).ToList();
+                    list.Add(product);
+                }
+                Response res = new Response("200", "Thành công", list);
+                return Content<Response>(HttpStatusCode.OK, res);
+            }
+            Response response = new Response("200", "Thành công", null);
+            return Content<Response>(HttpStatusCode.OK, response);
+        }
     }
 }

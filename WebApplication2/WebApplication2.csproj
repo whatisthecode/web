@@ -451,6 +451,7 @@
     <Content Include="Scripts\Client\Service\Register.js" />
     <Content Include="Scripts\Client\Service\User.js" />
     <Content Include="Scripts\Client\Shared\Footer.js" />
+    <Content Include="Scripts\Client\Shared\Header.js" />
     <Content Include="Scripts\Client\Shared\Top.js" />
     <Content Include="Scripts\Client\View\cart.html" />
     <Content Include="Scripts\Client\View\check-out.html" />

@@ -156,5 +156,15 @@ namespace WebApplication2.DAO
                 return pv;
             }
         }
+
+        PagedResult<Product> ProductDAO.pageViewForSearch(string keyword)
+        {
+            using (DBContext context = new DBContext())
+            {
+                var query = context.products.Where(c => c.name.Contains(keyword) && c.status > 0).OrderBy(c => c.name);
+                PagedResult<Product> pv = base.PageView(query, 1, 10);
+                return pv;
+            }
+        }
     }
 }
