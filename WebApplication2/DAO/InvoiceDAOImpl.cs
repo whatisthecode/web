@@ -58,7 +58,7 @@ namespace WebApplication2.DAO
             base.insert(invoice);
         }
 
-        public PagedResult<Invoice> PageView(short buyerId, short salerId, int pageIndex, int pageSize, bool descending = false)
+        public PagedResult<Invoice> PageView(short buyerId, short salerId, int pageIndex, int pageSize, bool ascending = false)
         {
             using (DBContext context = new DBContext())
             {
@@ -66,10 +66,10 @@ namespace WebApplication2.DAO
                 var query = from c in context.invoices select c;
                 if (buyerId == 0 && salerId == 0)
                 {
-                    if (descending)
-                        query = query.OrderByDescending(n => n.createdAt);
-                    else
+                    if (ascending)
                         query = query.OrderBy(n => n.createdAt);
+                    else
+                        query = query.OrderByDescending(n => n.createdAt);
 
                     pv = base.PageView(query, pageIndex, pageSize);
                 }
@@ -77,10 +77,10 @@ namespace WebApplication2.DAO
                 if (buyerId == 0 && salerId != 0)
                 {
                     query = query.Where(inv => inv.salerId == salerId);
-                    if (descending)
-                        query = query.OrderByDescending(n => n.createdAt);
-                    else
+                    if (ascending)
                         query = query.OrderBy(n => n.createdAt);
+                    else
+                        query = query.OrderByDescending(n => n.createdAt);
 
                     pv = base.PageView(query, pageIndex, pageSize);
                 }
@@ -88,10 +88,10 @@ namespace WebApplication2.DAO
                 if (buyerId != 0 && salerId == 0)
                 {
                     query = query.Where(inv => inv.buyerId == buyerId);
-                    if (descending)
-                        query = query.OrderByDescending(n => n.createdAt);
-                    else
+                    if (ascending)
                         query = query.OrderBy(n => n.createdAt);
+                    else
+                        query = query.OrderByDescending(n => n.createdAt);
 
                     pv = base.PageView(query, pageIndex, pageSize);
                 }
@@ -99,10 +99,10 @@ namespace WebApplication2.DAO
                 if (salerId != 0 && salerId != 0)
                 {
                     query = query.Where(inv => inv.buyerId == buyerId || inv.salerId == salerId);
-                    if (descending)
-                        query = query.OrderByDescending(n => n.createdAt);
-                    else
+                    if (ascending)
                         query = query.OrderBy(n => n.createdAt);
+                    else
+                        query = query.OrderByDescending(n => n.createdAt);
 
                     pv = base.PageView(query, pageIndex, pageSize);
                 }

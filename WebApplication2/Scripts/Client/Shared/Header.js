@@ -22,10 +22,10 @@
             var cate = null;
             switch (categoryId)
             {
-                case "1":
+                case 1:
                     cate = "MOUSE";
                     break;
-                case "2":
+                case 2:
                     cate = "KEYBOARD";
                     break;
                 default:
