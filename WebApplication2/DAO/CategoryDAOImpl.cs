@@ -122,10 +122,7 @@ namespace WebApplication2.DAO
         {
             using (DBContext context = new DBContext())
             {
-                var query = from cate in context.categories
-                            where cate.typeId.Equals(id)
-                            select cate;
-                return query;
+                return context.categories.Where(cate => cate.typeId.Equals(id)).ToList();
             }
         }
     }

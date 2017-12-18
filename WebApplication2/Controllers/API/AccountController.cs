@@ -27,6 +27,7 @@ using System.Web.Script.Serialization;
 using Newtonsoft.Json.Linq;
 using System.Text;
 using WebApplication2.CustomAttribute;
+using Microsoft.Owin.Security.DataProtection;
 
 namespace WebAPI_NG_TokenbasedAuth.Controllers
 {
@@ -202,13 +203,13 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
 
             Response response = new Response();
 
-            UserInfo checkUser = Service.userInfoDAO.checkExist("identityNumber", model.identityNumber);
-            if (checkUser != null)
-            {
-                response.code = "409";
-                response.status = "Số chứng minh nhân dân đã được đăng ký";
-                return Content<Response>(HttpStatusCode.Conflict, response);
-            }
+            //UserInfo checkUser = Service.userInfoDAO.checkExist("identityNumber", model.identityNumber);
+            //if (checkUser != null)
+            //{
+            //    response.code = "409";
+            //    response.status = "Số chứng minh nhân dân đã được đăng ký";
+            //    return Content<Response>(HttpStatusCode.Conflict, response);
+            //}
 
 
             var identityUser = new ApplicationUser() { UserName = model.Email, Email = model.Email , PhoneNumber = model.PhoneNumber};
@@ -216,7 +217,7 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
             IdentityResult result = new IdentityResult();
             try
             {
-                result = Service._userManager.Create(identityUser, model.Password);
+                result = await Service._userManager.CreateAsync(identityUser, model.Password);
             }
             catch (Exception e)
             {
@@ -251,7 +252,8 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
                     userGroup.userId = identityUser.Id;
                     Service.userGroupDAO.AddUserToGroup(userGroup);
                 }
-                string code = Service._userManager.GenerateEmailConfirmationTokenAsync(identityUser.Id).Result;
+                var provider = new DpapiDataProtectionProvider("Sample");
+                var code = Service._userManager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser>(provider.Create("EmailConfirmation"));
                 var callbackUrl = new Uri(Url.Link("ConfirmEmail", new { userId = identityUser.Id, code = code }));
                 await Service._userManager.SendEmailAsync(identityUser.Id, "Xác thực tài khoản của bạn", "Vui lòng nhấn vào link sau: <a href=\"" + callbackUrl + "\">link</a>");
                 var message = "Chúng tôi đã gửi email xác thực tài khoản vào mail " + identityUser.Email + " . Vui lòng kiểm tra email để xác thực.";

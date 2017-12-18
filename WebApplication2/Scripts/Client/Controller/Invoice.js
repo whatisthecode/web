@@ -3,7 +3,8 @@
         $scope.view = {
             products: [],
             total: "0",
-            userData: ""
+            userData: "",
+            show: true
         };
 
         $scope.createInvoice = function () {
@@ -17,6 +18,7 @@
                     console.log(response);
                     $cookieStore.remove("checkOuts");
                     $cookieStore.remove("selectedProducts");
+                    $scope.view.show = false;
                 }
             }, function (err) {
                 if (err) {
@@ -59,14 +61,23 @@
         viewInit = function () {
             getUserInfo();
             var checkOuts = $cookieStore.get("checkOuts");
+            if (!Helper.notEmpty(checkOuts))
+            {
+                setTimeout(function () {
+                    alert("Bạn chưa có sản phẩm nào để thanh toán.");
+                }, 1000);
+                setTimeout(function () {
+                    window.location.href = "/";
+                }, 2000);
+            }
             $scope.view.products = checkOuts;
-            console.log(checkOuts);
             var sum = 0;
             for (var i = 0; i < checkOuts.length; i++)
             {
                 sum = sum + Number(Helper.removeCommas(checkOuts[i].price));
             }
             $scope.view.total = Helper.addCommasToMoney(sum);
+            $scope.view.show = true;
         };
 
         viewInit();

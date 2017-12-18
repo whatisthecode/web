@@ -51,16 +51,11 @@ namespace WebApplication2.DAO
         {
             using (DBContext context = new DBContext())
             {
-                var query = from u in context.userInfos select u;
-                switch (field)
-                {
-                    case "identityNumber":
-                        query = query.Where(q => q.identityNumber == value);
-                        break;
-                    default:
-                        break;
-                }
-                var user = query.FirstOrDefault();
+                UserInfo user = new UserInfo();
+                var query = from u in context.userInfos
+                            where u.identityNumber.Equals(value)
+                            select u;
+                user = query.FirstOrDefault();
                 if (user != null)
                 {
                     return user;

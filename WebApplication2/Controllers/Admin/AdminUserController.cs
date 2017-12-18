@@ -83,6 +83,8 @@ namespace WebApplication2.Controllers.Admin
         [HttpPost]
         public ActionResult Create(RegisterBindingModel createUser)
         {
+            var token = Session["currentUser"].ToString();
+            Session["currentUser"] = null;
             ViewBag.now = DateTime.Now.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
             ViewBag.groups = Service.groupDAO.getGroup();
             HttpClient httpClient = new HttpClient();
@@ -95,6 +97,7 @@ namespace WebApplication2.Controllers.Admin
             {
                 var content = response.Content.ReadAsAsync<Response>().Result;
                 ApplicationUser user = ((JObject)content.results).ToObject<ApplicationUser>();
+                Session["currentUser"] = token;
                 return RedirectToAction("Detail", "AdminUser", new { id = user.Id });
             }
             return View(createUser);

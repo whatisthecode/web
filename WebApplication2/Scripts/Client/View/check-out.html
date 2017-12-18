@@ -11,7 +11,7 @@
                         <span style="font-size:25px; font-weight:400;">Hóa Đơn </span>
                         <img class="pull-right" src="Assets/img/logo.jpg" alt="White Blouse Armani" height="50" width="50" />
                     </div>
-                    <p class="text-muted"><b>Họ tên:</b> {{view.userData.userInfo.firstName}} {{view.userData.userInfo.lastName}}</p>
+                    <p class="text-muted"><b>Họ tên:</b> <span ng-bind="view.userData.userInfo.firstName"></span> <span ng-bind="view.userData.userInfo.lastName"></span></p>
                     <div class="table-responsive">
                         <table class="table">
                             <thead>
@@ -29,14 +29,16 @@
                                 </tr>
                                 <tr class="total">
                                     <td colspan="3">Tổng cộng</td>
-                                    <th class="text-right">{{view.total}}</th>
+                                    <th class="text-right"><span ng-bind="view.total"></span></th>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                    <div id="#errors" class="text-right"></div>
-                    <a ng-click="removeInvoice()" class="btn btn-default text-primary">Hủy</a>
-                    <a ng-click="createInvoice()"class="btn btn-primary pull-right">Xác nhận</a>
+                    <div id="errors" class="text-right"></div>
+                    <div ng-show="!view.show" style="margin-bottom: 7px;" id="success" class="text-left text-success">Thanh toán thành công.</div>
+                    <a ng-show="view.show" ng-click="removeInvoice()" class="btn btn-default text-primary">Hủy</a>
+                    <a ng-show="view.show" ng-click="createInvoice()" class="btn btn-primary pull-right">Xác nhận</a>
+                    <a ng-show="!view.show" href="/" class="btn btn-default">Tiếp tục mua hàng</a>
                 </div>
             </div>
         </div>

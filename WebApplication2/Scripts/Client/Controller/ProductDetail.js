@@ -15,6 +15,7 @@
                 if (response) {
                     $scope.view.productDetail = response.results;
                     $scope.view.productDetail.attributes[0].value = Helper.addCommasToMoney($scope.view.productDetail.attributes[0].value);
+                    $scope.view.productDetail.attributes[2].value = Helper.addCommasToMoney($scope.view.productDetail.attributes[2].value);
                 }
             }, function (err) {
                 if (err) {

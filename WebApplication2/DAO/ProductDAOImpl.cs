@@ -86,26 +86,8 @@ namespace WebApplication2.DAO
             using (DBContext context = new DBContext())
             {
                 var query = from c in context.products select c;
-                query.Where(p => p.status >= 0);
-                if (query != null && ascending)
-                {
-                    switch (Orderby)
-                    {
-                        case "name":
-                            query = query.OrderBy(n => n.name);
-                            break;
-
-                    }
-                }
-                if (query != null && !ascending)
-                {
-                    switch (Orderby)
-                    {
-                        case "name":
-                            query = query.OrderByDescending(d => d.name);
-                            break;
-                    }
-                }
+                query.Where(p => p.status > 0);
+                query = query.OrderBy(n => n.name);
                 PagedResult<Product> pv = base.PageView(query, indexnum, pagesize);
                 return pv;
             }

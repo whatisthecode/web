@@ -43,18 +43,18 @@
                             <div class="flipper">
                                 <div class="front">
                                     <a ng-click="viewDetail(product.id)">
-                                        <img src="{{product.thumbnails[0].url}}" alt="" class="img-responsive">
+                                        <img ng-src="{{product.thumbnails[0].url}}" alt="" class="img-responsive">
                                     </a>
                                 </div>
                                 <div class="back">
                                     <a ng-click="viewDetail(product.id)">
-                                        <img src="{{product.thumbnails[1].url}}" alt="" class="img-responsive">
+                                        <img ng-src="{{product.thumbnails[1].url}}" alt="" class="img-responsive">
                                     </a>
                                 </div>
                             </div>
                         </div>
                         <a ng-click="viewDetail(product.id)" class="invisible">
-                            <img src="{{product.thumbnails[0].url}}" alt="" class="img-responsive">
+                            <img ng-src="{{product.thumbnails[0].url}}" alt="" class="img-responsive">
                         </a>
                         <div class="text">
                             <h3><a ng-click="viewDetail(product.id)">{{product.name}}</a></h3>
