@@ -3,7 +3,7 @@
         var apiName = {
             "getProductByCategory": "api/category/$1/products/?pageIndex=$2&pageSize=$3&order=$4",
             "getProducts": "api/products/?pageIndex=$1&pageSize=$2&order=$3",
-            "searchProducts" : "api/search?keyword=$1"
+            "searchProducts": "api/search?keyword=$1"
         };
         return {
             getProduct: function (categoryId, pageSize, pageIndex, orderBy, success, fail) {

@@ -23,8 +23,9 @@ namespace WebApplication2.DAO
             using (DBContext context = new DBContext())
             {
                 T instance = this.getById(id);
+                context.Set<T>().Attach(instance);
                 context.Set<T>().Remove(instance);
-                context.SaveChanges();
+                var nrOfObjectsChanged  = context.SaveChanges();
             }
 
         }

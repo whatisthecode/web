@@ -13,35 +13,30 @@
 
         var categoryId = null;
         getProduct = function (pageIndex, pageSize, filter) {
-            switch ($routeParams.category) {
-                case "KEYBOARD":
-                    categoryId = 2;
-                    $scope.currentPage = "Bàn Phím";
-                    break;
-                case "MOUSE":
-                    categoryId = 1;
-                    $scope.currentPage = "Chuột";
-                    break;
-                default:
-                    break;
-            }
-            Product.getProduct(categoryId, pageIndex, pageSize, filter, function (response) {
-                if (response)
-                {
-                    
-                    for (var i = 0; i < response.items.length; i++)
-                    {
-                        response.items[i].attributes[0].value = Helper.addCommasToMoney(response.items[i].attributes[0].value);
+            Category.getCategoryByCode($routeParams.category, function (response) {
+                console.log(response);
+                categoryId = response.id;
+                $scope.currentPage = response.name;
+
+                Product.getProduct(categoryId, pageIndex, pageSize, filter, function (response) {
+                    if (response) {
+
+                        for (var i = 0; i < response.items.length; i++) {
+                            response.items[i].attributes[0].value = Helper.addCommasToMoney(response.items[i].attributes[0].value);
+                        }
+                        $scope.products = response.items;
+                        $scope.pageSize = response.pageSize;
+                        $scope.pageIndex = response.currentPage;
+                        $scope.rowCount = response.rowCount;
                     }
-                    $scope.products = response.items;
-                    $scope.pageSize = response.pageSize;
-                    $scope.pageIndex = response.currentPage;
-                    $scope.rowCount = response.rowCount;
-                }
+                }, function (err) {
+                    if (err) {
+                        console.log(err);
+                    }
+                });
+
             }, function (err) {
-                if (err) {
-                    console.log(err);
-                }
+                console.log(err);
             });
         };
 
@@ -82,6 +77,7 @@
         getCategoryType = function (id) {
             Category.getCategoryByType(id, function (success) {
                 if (success) {
+                    console.log(success);
                     switch (id)
                     {
                         case 1: $scope.cateBrands = success.results;

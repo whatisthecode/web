@@ -122,7 +122,22 @@ namespace WebApplication2.Controllers.API
 
         }
 
-        [Route("api/category/")]
+        [Route("api/category")]
+        public IHttpActionResult getCategoryByCode([FromUri]CategoryCode categoryCode)
+        {
+            Response response = new Response();
+            if (categoryCode == null)
+            {
+                response.code = "400";
+                response.status = "Thiếu mã loại sản phẩm";
+                return Content<Response>(HttpStatusCode.BadRequest, response);
+            }
+            Category category = Service.categoryDAO.getCategoryByCode(categoryCode.code);
+            response = new Response("200", "Thành công", category);
+            return Content<Response>(HttpStatusCode.OK, response);
+        }
+
+        [Route("api/categorys/")]
         [HttpGet]
         public IHttpActionResult getCategories()
         {
@@ -133,20 +148,6 @@ namespace WebApplication2.Controllers.API
             response.results = categories.ToList();
             return Content<Response>(HttpStatusCode.OK, response);
 
-        }
-
-        [Route("api/category/{codeName}")]
-        public IHttpActionResult getCategoryByCode([FromUri]string codeName)
-        {
-            Response response = new Response();
-            if (codeName == "" || codeName == null)
-            {
-                response.code = "400";
-                response.status = "Thiếu mã loại sản phẩm";
-                return Content<Response>(HttpStatusCode.BadRequest, response);
-            }
-
-            return null;
         }
     }
 }

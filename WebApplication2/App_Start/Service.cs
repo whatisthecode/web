@@ -28,5 +28,6 @@ namespace WebApplication2
         public static ImageDAO imageDAO = new ImageDAOImpl();
         public static UserManager<ApplicationUser> _userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(DBContext.Create()));
         public static RoleManager<ApplicationRole> _roleManager = new ApplicationRoleManager(new RoleStore<ApplicationRole>(DBContext.Create()));
+        public static ShowHideDAO showHideDAO = new ShowHideDAOImpl();
     }
 }

@@ -37,6 +37,7 @@ namespace WebApplication2.DAO
         public DbSet<Token> token { get; set; }
         public DbSet<ApplicationUserGroup> userGroups { get; set; } 
         public DbSet<ApplicationRoleGroup> roleGroups { get; set; }
+        public DbSet<ShowHideProduct> showHideProducts { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
