@@ -64,19 +64,19 @@ namespace WindowsFormsApp1
             int selectedCategories = cbCategories.SelectedIndex;
 
         }
-        public Int16 selectedStatus { get; set; }
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            int selectedStatus = comboBox1.SelectedIndex;
-
-        }
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            Int16 status = selectedStatus;
-            Console.WriteLine(status);
             List<Int16> categories = new List<Int16>();
             categories.Add(selectedCategories);
+            List<JObject> thumbnails = new List<JObject>();
+            JObject tempThumbnail = new JObject();
+            tempThumbnail.Add("url", selectedThumbnail);
+            thumbnails.Add(tempThumbnail);
+            List<JObject> details = new List<JObject>();
+            JObject tempDetail = new JObject();
+            tempDetail.Add("url", selectedDetail);
+            details.Add(tempDetail);
             var token = Login.LoginInfo.token;
             var userId = Login.LoginInfo.id;
             string code = txtCode.Text;
@@ -86,6 +86,7 @@ namespace WindowsFormsApp1
             string price = txtPrice.Text;
             string amount = txtAmount.Text;
             string discount = txtDiscount.Text;
+            string color = txtColor.Text;
             try
             {
                 HttpClient httpClient = new HttpClient();
@@ -96,8 +97,9 @@ namespace WindowsFormsApp1
                 attributes.price = price;
                 attributes.amount = amount;
                 attributes.discount = discount;
-                attributes.color = "red";
+                attributes.color = color ;
                 CreateProductModel cr = new CreateProductModel();
+                cr.status = true;
                 cr.code = code;
                 cr.name = name;
                 cr.shortDescription = shortDes;
@@ -105,15 +107,18 @@ namespace WindowsFormsApp1
                 cr.createdBy = userId;
                 cr.attributes = attributes;
                 cr.categories = categories.ToArray();
-                Console.WriteLine(selectedCategories);
+                cr.thumbnails = thumbnails;
+                cr.details = details;
                 HttpContent httpContent = new ObjectContent<CreateProductModel>(cr, new JsonMediaTypeFormatter());
                 var response = httpClient.PostAsync("api/product", httpContent).Result;
-                Console.WriteLine(response);
                 if (response.IsSuccessStatusCode)
                 {
                     var result = response.Content.ReadAsStringAsync().Result;
                     var s = JsonConvert.DeserializeObject(result);
-                    Console.WriteLine(result);
+                    Product_Add pa = new Product_Add();
+                    Product pr = new Product();
+                    pa.Hide();
+                    pr.Refresh();
                 }
                 else
                 {
@@ -131,13 +136,26 @@ namespace WindowsFormsApp1
 
         }
 
-        OpenFileDialog ofd = new OpenFileDialog();
+        OpenFileDialog ofd_thumbnail = new OpenFileDialog();
         private void btnThumbnail_Click(object sender, EventArgs e)
         {
-            if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            if (ofd_thumbnail.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                string selectedFile = ofd.FileName;
-                txtThumbnail.Text = ofd.FileName;
+                string selectedThumbnail = ofd_thumbnail.FileName;
+                txtThumbnail.Text = ofd_thumbnail.FileName;
+            }
+        }
+
+        OpenFileDialog ofd_detail = new OpenFileDialog();
+        private JToken selectedThumbnail;
+        private JToken selectedDetail;
+
+        private void btnDetail_Click(object sender, EventArgs e)
+        {
+            if (ofd_detail.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                string selectedDetail = ofd_detail.FileName;
+                txtDetail.Text = ofd_detail.FileName;
             }
         }
     }

@@ -28,19 +28,19 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.invoiceGV = new System.Windows.Forms.DataGridView();
             this.label1 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.invoiceGV)).BeginInit();
             this.SuspendLayout();
             // 
-            // dataGridView1
+            // invoiceGV
             // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(50, 68);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(592, 210);
-            this.dataGridView1.TabIndex = 5;
+            this.invoiceGV.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.invoiceGV.Location = new System.Drawing.Point(50, 68);
+            this.invoiceGV.Name = "invoiceGV";
+            this.invoiceGV.Size = new System.Drawing.Size(592, 210);
+            this.invoiceGV.TabIndex = 5;
             // 
             // label1
             // 
@@ -69,10 +69,11 @@
             this.ClientSize = new System.Drawing.Size(692, 346);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.invoiceGV);
             this.Name = "Invoice";
             this.Text = "Invoice";
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            this.Load += new System.EventHandler(this.Invoice_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.invoiceGV)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -80,7 +81,7 @@
 
         #endregion
 
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView invoiceGV;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button button1;
     }

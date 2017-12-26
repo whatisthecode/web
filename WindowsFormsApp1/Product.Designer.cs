@@ -114,6 +114,7 @@
             this.cateFilter.Name = "cateFilter";
             this.cateFilter.Size = new System.Drawing.Size(121, 21);
             this.cateFilter.TabIndex = 10;
+            this.cateFilter.SelectedIndexChanged += new System.EventHandler(this.cateFilter_SelectedIndexChanged);
             // 
             // Product
             // 

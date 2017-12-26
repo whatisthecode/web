@@ -203,7 +203,6 @@ namespace WebApplication2.Controllers.API
         }
 
         [Route("api/invoice")]
-        [APIAuthorize]
         [HttpGet]
         public async System.Threading.Tasks.Task<IHttpActionResult> getInvoicesAsync([FromUri]PageRequest pageRequest)
         {

@@ -75,6 +75,7 @@ namespace WindowsFormsApp1
                 {
                     CategoriesResult searchResult = JsonConvert.DeserializeObject<CategoriesResult>(item.ToString());
                     cateResults.Add(searchResult);
+                    Console.WriteLine(searchResult);
                 }
                 cateFilter.DataSource = cateResults;
                 cateFilter.DisplayMember = "name";
@@ -140,6 +141,27 @@ namespace WindowsFormsApp1
                     MessageBox.Show("DEk OK");
                 }
             }
+        }
+
+        public void getProductByCate(object idCate)
+        {
+            HttpClient httpClient = new HttpClient();
+            httpClient.BaseAddress = baseUrl;
+            var response = httpClient.GetAsync("api/category/"+idCate+"/products/").Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var result = response.Content.ReadAsStringAsync().Result;
+                Console.WriteLine(result);
+            }
+
+        }
+        public object SelectedValue { get; set; }
+
+        private void cateFilter_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int selectedStatus = cateFilter.SelectedIndex;
+            SelectedValue = cateFilter.SelectedValue;
+            this.getProductByCate(SelectedValue);            
         }
     }
 }

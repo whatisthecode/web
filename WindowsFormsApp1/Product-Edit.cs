@@ -7,6 +7,8 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Formatting;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -44,6 +46,17 @@ namespace WindowsFormsApp1
                 cbCategories.DisplayMember = "name";
                 cbCategories.ValueMember = "id";
             }
+        }
+
+        public Int16 selectedCategories { get; set; }
+        private void cbCategories_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+        public Int16 selectedStatus { get; set; }
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
         private void Product_Edit_Load(object sender, EventArgs e)
         {
@@ -83,6 +96,101 @@ namespace WindowsFormsApp1
                 }
             }
 
+        }
+
+        OpenFileDialog ofd_thumbnail = new OpenFileDialog();
+        private void btnThumbnail_Click(object sender, EventArgs e)
+        {
+            if (ofd_thumbnail.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                string selectedThumbnail = ofd_thumbnail.FileName;
+                txtThumbnail.Text = ofd_thumbnail.FileName;
+            }
+        }
+
+        OpenFileDialog ofd_detail = new OpenFileDialog();
+        private JToken selectedThumbnail;
+        private JToken selectedDetail;
+
+        private void btnDetail_Click(object sender, EventArgs e)
+        {
+            if (ofd_detail.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                string selectedDetail = ofd_detail.FileName;
+                txtDetail.Text = ofd_detail.FileName;
+            }
+        }
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+           
+        }
+
+        private void btnAdd_Click_1(object sender, EventArgs e)
+        {
+            Int16 status = selectedStatus;
+            List<Int16> categories = new List<Int16>();
+            categories.Add(selectedCategories);
+            List<JObject> thumbnails = new List<JObject>();
+            JObject tempThumbnail = new JObject();
+            tempThumbnail.Add("url", selectedThumbnail);
+            thumbnails.Add(tempThumbnail);
+            List<JObject> details = new List<JObject>();
+            JObject tempDetail = new JObject();
+            tempDetail.Add("url", selectedDetail);
+            details.Add(tempDetail);
+            var token = Login.LoginInfo.token;
+            var userId = Login.LoginInfo.id;
+            string code = txtCode.Text;
+            string name = txtName.Text;
+            string shortDes = txtShort.Text;
+            string longDes = txtLong.Text;
+            string price = txtPrice.Text;
+            string amount = txtAmount.Text;
+            string discount = txtDiscount.Text;
+            string color = txtColor.Text;
+            try
+            {
+                HttpClient httpClient = new HttpClient();
+                httpClient.BaseAddress = baseUrl;
+                httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                dynamic attributes = new JObject();
+                attributes.price = price;
+                attributes.amount = amount;
+                attributes.discount = discount;
+                attributes.color = color;
+                CreateProductModel cr = new CreateProductModel();
+                cr.code = code;
+                cr.name = name;
+                cr.shortDescription = shortDes;
+                cr.longDescription = longDes;
+                cr.createdBy = userId;
+                cr.attributes = attributes;
+                cr.categories = categories.ToArray();
+                cr.thumbnails = thumbnails;
+                cr.details = details;
+                HttpContent httpContent = new ObjectContent<CreateProductModel>(cr, new JsonMediaTypeFormatter());
+                var response = httpClient.PutAsync("api/product/"+idProduct, httpContent).Result;
+                var statusCode = response.StatusCode;
+                if (response.IsSuccessStatusCode)
+                {
+                    
+                    var result = response.Content.ReadAsStringAsync().Result;
+                    var s = JsonConvert.DeserializeObject(result);
+                    Product pr = new Product();
+                    this.Hide();
+                    pr.Refresh();
+                }
+                else
+                {
+                    Console.WriteLine("Fail");
+                }
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Fail quá fail");
+            }
         }
     }
 }

@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -46,9 +45,7 @@
             this.txtPrice = new System.Windows.Forms.TextBox();
             this.txtAmount = new System.Windows.Forms.TextBox();
             this.txtDiscount = new System.Windows.Forms.TextBox();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.cbCategories = new System.Windows.Forms.ComboBox();
-            this.comboBox3 = new System.Windows.Forms.ComboBox();
             this.label11 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.btnAdd = new System.Windows.Forms.Button();
@@ -58,16 +55,9 @@
             this.label14 = new System.Windows.Forms.Label();
             this.btnDetail = new System.Windows.Forms.Button();
             this.txtDetail = new System.Windows.Forms.TextBox();
+            this.txtColor = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(24, 97);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(37, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Status";
             // 
             // label2
             // 
@@ -108,7 +98,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(362, 89);
+            this.label6.Location = new System.Drawing.Point(24, 94);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(57, 13);
             this.label6.TabIndex = 5;
@@ -117,7 +107,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(362, 126);
+            this.label7.Location = new System.Drawing.Point(362, 90);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(31, 13);
             this.label7.TabIndex = 6;
@@ -127,7 +117,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(362, 162);
+            this.label8.Location = new System.Drawing.Point(362, 126);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(43, 13);
             this.label8.TabIndex = 7;
@@ -136,7 +126,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(362, 196);
+            this.label9.Location = new System.Drawing.Point(362, 160);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(49, 13);
             this.label9.TabIndex = 8;
@@ -145,7 +135,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(362, 231);
+            this.label10.Location = new System.Drawing.Point(362, 195);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(31, 13);
             this.label10.TabIndex = 9;
@@ -153,7 +143,7 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(380, 382);
+            this.btnCancel.Location = new System.Drawing.Point(380, 326);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(94, 34);
             this.btnCancel.TabIndex = 12;
@@ -190,36 +180,24 @@
             // 
             // txtPrice
             // 
-            this.txtPrice.Location = new System.Drawing.Point(430, 123);
+            this.txtPrice.Location = new System.Drawing.Point(430, 87);
             this.txtPrice.Name = "txtPrice";
             this.txtPrice.Size = new System.Drawing.Size(166, 20);
             this.txtPrice.TabIndex = 17;
             // 
             // txtAmount
             // 
-            this.txtAmount.Location = new System.Drawing.Point(430, 159);
+            this.txtAmount.Location = new System.Drawing.Point(430, 123);
             this.txtAmount.Name = "txtAmount";
             this.txtAmount.Size = new System.Drawing.Size(219, 20);
             this.txtAmount.TabIndex = 18;
             // 
             // txtDiscount
             // 
-            this.txtDiscount.Location = new System.Drawing.Point(430, 193);
+            this.txtDiscount.Location = new System.Drawing.Point(430, 157);
             this.txtDiscount.Name = "txtDiscount";
             this.txtDiscount.Size = new System.Drawing.Size(166, 20);
             this.txtDiscount.TabIndex = 19;
-            // 
-            // comboBox1
-            // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
-            "Invisible",
-            "Available"});
-            this.comboBox1.Location = new System.Drawing.Point(113, 89);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(204, 21);
-            this.comboBox1.TabIndex = 20;
-            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // cbCategories
             // 
@@ -227,24 +205,16 @@
             this.cbCategories.Items.AddRange(new object[] {
             "Bàn phím",
             "Chuột"});
-            this.cbCategories.Location = new System.Drawing.Point(430, 85);
+            this.cbCategories.Location = new System.Drawing.Point(113, 86);
             this.cbCategories.Name = "cbCategories";
-            this.cbCategories.Size = new System.Drawing.Size(219, 21);
+            this.cbCategories.Size = new System.Drawing.Size(204, 21);
             this.cbCategories.TabIndex = 21;
             this.cbCategories.SelectedIndexChanged += new System.EventHandler(this.cbCategories_SelectedIndexChanged);
-            // 
-            // comboBox3
-            // 
-            this.comboBox3.FormattingEnabled = true;
-            this.comboBox3.Location = new System.Drawing.Point(430, 227);
-            this.comboBox3.Name = "comboBox3";
-            this.comboBox3.Size = new System.Drawing.Size(219, 21);
-            this.comboBox3.TabIndex = 22;
             // 
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(602, 125);
+            this.label11.Location = new System.Drawing.Point(602, 89);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(30, 13);
             this.label11.TabIndex = 23;
@@ -253,7 +223,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(602, 196);
+            this.label12.Location = new System.Drawing.Point(602, 160);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(30, 13);
             this.label12.TabIndex = 24;
@@ -261,7 +231,7 @@
             // 
             // btnAdd
             // 
-            this.btnAdd.Location = new System.Drawing.Point(248, 382);
+            this.btnAdd.Location = new System.Drawing.Point(248, 326);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(126, 34);
             this.btnAdd.TabIndex = 25;
@@ -272,7 +242,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(362, 268);
+            this.label13.Location = new System.Drawing.Point(362, 232);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(56, 13);
             this.label13.TabIndex = 26;
@@ -280,7 +250,7 @@
             // 
             // btnThumbnail
             // 
-            this.btnThumbnail.Location = new System.Drawing.Point(430, 263);
+            this.btnThumbnail.Location = new System.Drawing.Point(430, 227);
             this.btnThumbnail.Name = "btnThumbnail";
             this.btnThumbnail.Size = new System.Drawing.Size(75, 23);
             this.btnThumbnail.TabIndex = 27;
@@ -290,7 +260,7 @@
             // 
             // txtThumbnail
             // 
-            this.txtThumbnail.Location = new System.Drawing.Point(511, 265);
+            this.txtThumbnail.Location = new System.Drawing.Point(511, 229);
             this.txtThumbnail.Name = "txtThumbnail";
             this.txtThumbnail.Size = new System.Drawing.Size(166, 20);
             this.txtThumbnail.TabIndex = 28;
@@ -298,7 +268,7 @@
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(363, 302);
+            this.label14.Location = new System.Drawing.Point(363, 266);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(34, 13);
             this.label14.TabIndex = 29;
@@ -306,25 +276,45 @@
             // 
             // btnDetail
             // 
-            this.btnDetail.Location = new System.Drawing.Point(430, 297);
+            this.btnDetail.Location = new System.Drawing.Point(430, 261);
             this.btnDetail.Name = "btnDetail";
             this.btnDetail.Size = new System.Drawing.Size(75, 23);
             this.btnDetail.TabIndex = 30;
             this.btnDetail.Text = "Choose file";
             this.btnDetail.UseVisualStyleBackColor = true;
+            this.btnDetail.Click += new System.EventHandler(this.btnDetail_Click);
             // 
             // txtDetail
             // 
-            this.txtDetail.Location = new System.Drawing.Point(511, 299);
+            this.txtDetail.Location = new System.Drawing.Point(511, 263);
             this.txtDetail.Name = "txtDetail";
             this.txtDetail.Size = new System.Drawing.Size(166, 20);
             this.txtDetail.TabIndex = 31;
+            // 
+            // txtColor
+            // 
+            this.txtColor.Location = new System.Drawing.Point(430, 191);
+            this.txtColor.Name = "txtColor";
+            this.txtColor.Size = new System.Drawing.Size(166, 20);
+            this.txtColor.TabIndex = 32;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(206, 19);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(299, 42);
+            this.label1.TabIndex = 33;
+            this.label1.Text = "Add new product";
             // 
             // Product_Add
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(727, 444);
+            this.ClientSize = new System.Drawing.Size(718, 377);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.txtColor);
             this.Controls.Add(this.txtDetail);
             this.Controls.Add(this.btnDetail);
             this.Controls.Add(this.label14);
@@ -334,9 +324,7 @@
             this.Controls.Add(this.btnAdd);
             this.Controls.Add(this.label12);
             this.Controls.Add(this.label11);
-            this.Controls.Add(this.comboBox3);
             this.Controls.Add(this.cbCategories);
-            this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.txtDiscount);
             this.Controls.Add(this.txtAmount);
             this.Controls.Add(this.txtPrice);
@@ -354,7 +342,6 @@
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
             this.Name = "Product_Add";
             this.Text = "Product_Add";
             this.Load += new System.EventHandler(this.Product_Add_Load);
@@ -364,8 +351,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
@@ -383,9 +368,7 @@
         private System.Windows.Forms.TextBox txtPrice;
         private System.Windows.Forms.TextBox txtAmount;
         private System.Windows.Forms.TextBox txtDiscount;
-        private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.ComboBox cbCategories;
-        private System.Windows.Forms.ComboBox comboBox3;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Button btnAdd;
@@ -395,5 +378,7 @@
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Button btnDetail;
         private System.Windows.Forms.TextBox txtDetail;
+        private System.Windows.Forms.TextBox txtColor;
+        private System.Windows.Forms.Label label1;
     }
 }
