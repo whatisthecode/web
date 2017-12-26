@@ -252,8 +252,7 @@ namespace WebAPI_NG_TokenbasedAuth.Controllers
                     userGroup.userId = identityUser.Id;
                     Service.userGroupDAO.AddUserToGroup(userGroup);
                 }
-                var provider = new DpapiDataProtectionProvider("Sample");
-                var code = Service._userManager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser>(provider.Create("EmailConfirmation"));
+                string code = await Service._userManager.GenerateEmailConfirmationTokenAsync(identityUser.Id);
                 var callbackUrl = new Uri(Url.Link("ConfirmEmail", new { userId = identityUser.Id, code = code }));
                 await Service._userManager.SendEmailAsync(identityUser.Id, "Xác thực tài khoản của bạn", "Vui lòng nhấn vào link sau: <a href=\"" + callbackUrl + "\">link</a>");
                 var message = "Chúng tôi đã gửi email xác thực tài khoản vào mail " + identityUser.Email + " . Vui lòng kiểm tra email để xác thực.";

@@ -361,7 +361,7 @@ namespace WebApplication2.Controllers.API
             pagedResultDetails.rowCount = pageResults.rowCount;
             pagedResultDetails.currentPage = pageResults.currentPage;
             List<ProductDetail> lists = new List<ProductDetail>();
-            for (var i = 0; i < pageResults.items.Count(); i++)
+            for (var i = 0; i < pageResults.items.Count; i++)
             {
                 var item = pageResults.items[i];
                 ProductDetail productDetail = new ProductDetail();

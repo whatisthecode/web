@@ -125,5 +125,13 @@ namespace WebApplication2.DAO
                 return context.categories.Where(cate => cate.typeId.Equals(id)).ToList();
             }
         }
+
+        public Category getCategoryByCode(string code)
+        {
+            using (DBContext context = new DBContext())
+            {
+                return context.categories.Where(cate => cate.code.Equals(code)).FirstOrDefault();
+            }
+        }
     }
 }

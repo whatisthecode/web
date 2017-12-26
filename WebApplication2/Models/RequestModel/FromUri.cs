@@ -28,5 +28,10 @@ namespace WebApplication2.Models.RequestModel
         {
             public string keyword { get; set; }
         }
+
+        public class CategoryCode
+        {
+            public string code { get; set; }
+        }
     }
 }

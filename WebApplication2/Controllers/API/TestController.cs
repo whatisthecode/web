@@ -158,6 +158,17 @@ namespace WebApplication2.Controllers.API
             //TODO : CREATE 2 category type product
             Service.categoryDAO.insertCategory(new Category() { code = "MOUSE", name = "Chuột", typeId = Service.categoryTypeDAO.getCategoryTypeByCode("PRODUCT").id});
             Service.categoryDAO.insertCategory(new Category(){ code = "KEYBOARD", name = "Bàn phím", typeId = Service.categoryTypeDAO.getCategoryTypeByCode("PRODUCT").id });
+            Service.categoryDAO.insertCategory(new Category() { code = "KBOARDLIKE", name = "Giả cơ", typeId = Service.categoryTypeDAO.getCategoryTypeByCode("PRODUCT").id , parentId = Service.categoryDAO.getCategoryByCode("KEYBOARD").id });
+            Service.categoryDAO.insertCategory(new Category() { code = "KBOARDREAL", name = "Cơ", typeId = Service.categoryTypeDAO.getCategoryTypeByCode("PRODUCT").id, parentId = Service.categoryDAO.getCategoryByCode("KEYBOARD").id });
+
+            Service.categoryDAO.insertCategory(new Category() { code = "RAZER", name = "Razer", typeId = Service.categoryTypeDAO.getCategoryTypeByCode("BRAND").id });
+            Service.categoryDAO.insertCategory(new Category() { code = "OZONE", name = "Ozone", typeId = Service.categoryTypeDAO.getCategoryTypeByCode("BRAND").id });
+            Service.categoryDAO.insertCategory(new Category() { code = "STEEL", name = "SteelSeri", typeId = Service.categoryTypeDAO.getCategoryTypeByCode("BRAND").id });
+
+            Service.categoryDAO.insertCategory(new Category() { code = "CONDITION1", name = "Dưới 1 triệu", typeId = Service.categoryTypeDAO.getCategoryTypeByCode("ATTRIBUTE").id });
+            Service.categoryDAO.insertCategory(new Category() { code = "CONDITION2", name = "Từ 1 triệu tới 3 triệu", typeId = Service.categoryTypeDAO.getCategoryTypeByCode("ATTRIBUTE").id });
+            Service.categoryDAO.insertCategory(new Category() { code = "CONDITION3", name = "Từ 3 triệu tới 5 triệu", typeId = Service.categoryTypeDAO.getCategoryTypeByCode("ATTRIBUTE").id });
+            Service.categoryDAO.insertCategory(new Category() { code = "CONDITION4", name = "Từ 5 triệu trở lên", typeId = Service.categoryTypeDAO.getCategoryTypeByCode("ATTRIBUTE").id });
 
             Response response = new Response("200", "Initializing a test enviroment!", null);
             return Content<Response>(HttpStatusCode.OK, response);

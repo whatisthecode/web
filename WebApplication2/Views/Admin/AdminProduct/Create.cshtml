@@ -104,7 +104,7 @@
                                 ci++;
                             }
                         }
-                        <input type="hidden" id="currentCatIndex" value="@ci" />
+                        <input id="currentCatIndex" value="@ci" style="display:none"/>
                     </ul>
                 </div>
             </div>
@@ -408,11 +408,12 @@
             var index = $("#currentCatIndex").val();
             if ($(self).prop("checked")) {
                 $(self).prop("name", "choseCategories[" + index + "].categoryId");
-                $("#currentCatIndex").val((index + 1));
+                $("#currentCatIndex").val((Number(index) + 1));
+                console.log($(self).prop("name", "choseCategories[" + index + "].categoryId"));
             }
             else {
                 $(self).prop("name", "");
-                $("#currentCatIndex").val((index - 1));
+                $("#currentCatIndex").val((Number(index) - 1));
             }
         });
         // Open the Modal

@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using WebApplication2.DAO;
+using WebApplication2.Schedules;
 
 namespace WebApplication2
 {
@@ -26,6 +27,8 @@ namespace WebApplication2
 
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new CustomViewEngine());
+
+            JobScheduler.Start();
 
             GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings.PreserveReferencesHandling = Newtonsoft.Json.PreserveReferencesHandling.None;
             GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;

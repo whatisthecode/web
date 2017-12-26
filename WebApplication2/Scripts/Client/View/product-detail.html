@@ -17,7 +17,7 @@
 
         <div class="col-md-3">
             <!-- *** MENUS AND FILTERS ***
-    _________________________________________________________ -->
+        _________________________________________________________ -->
             <div class="panel panel-default sidebar-menu">
 
                 <div class="panel-heading">
@@ -42,23 +42,21 @@
             <div class="panel panel-default sidebar-menu">
 
                 <div class="panel-heading">
-                    <h3 class="panel-title">Thương hiệu <a class="btn btn-xs btn-danger pull-right" href="#"><i class="fa fa-times-circle"></i> Xóa</a></h3>
+                    <h3 class="panel-title">Thương hiệu</h3>
                 </div>
 
                 <div class="panel-body">
 
-                    <form>
-                        <div class="form-group">
-                            <div class="checkbox" ng-repeat="cate in cateBrands">
-                                <label>
-                                    <input type="checkbox">{{cate.name}} (10)
-                                </label>
-                            </div>
-                        </div>
+                    <ul class="nav nav-pills nav-stacked category-menu">
+                        <li>
+                            <ul>
+                                <li ng-repeat="cate in cateBrands">
+                                    <a ng-href="{{cate.code}}">{{cate.name}}</a>
+                                </li>
+                            </ul>
+                        </li>
 
-                        <button class="btn btn-default btn-sm btn-primary"><i class="fa fa-pencil"></i> Áp dụng</button>
-
-                    </form>
+                    </ul>
 
                 </div>
             </div>
@@ -74,7 +72,7 @@
                         <li>
                             <ul>
                                 <li ng-repeat="cate in cateAttrs">
-                                    <a href="category.html">{{cate.name}}</a>
+                                    <a ng-href="{{cate.code}}">{{cate.name}}</a>
                                 </li>
                             </ul>
                         </li>
