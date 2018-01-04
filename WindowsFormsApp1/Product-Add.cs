@@ -40,7 +40,7 @@ namespace WindowsFormsApp1
         {
             HttpClient httpClient = new HttpClient();
             httpClient.BaseAddress = baseUrl;
-            var response = httpClient.GetAsync("api/category").Result;
+            var response = httpClient.GetAsync("api/categorys").Result;
             if (response.IsSuccessStatusCode)
             {
                 var result = response.Content.ReadAsStringAsync().Result;
@@ -99,7 +99,7 @@ namespace WindowsFormsApp1
                 attributes.discount = discount;
                 attributes.color = color ;
                 CreateProductModel cr = new CreateProductModel();
-                cr.status = true;
+                cr.status = 1;
                 cr.code = code;
                 cr.name = name;
                 cr.shortDescription = shortDes;

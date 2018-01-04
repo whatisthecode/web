@@ -64,7 +64,7 @@ namespace WindowsFormsApp1
             productView.DataSource = searchResults;
             HttpClient httpClient = new HttpClient();
             httpClient.BaseAddress = baseUrl;
-            var response = httpClient.GetAsync("api/category").Result;
+            var response = httpClient.GetAsync("api/categorys").Result;
             if (response.IsSuccessStatusCode)
             {
                 var result = response.Content.ReadAsStringAsync().Result;
@@ -125,7 +125,6 @@ namespace WindowsFormsApp1
                         Console.WriteLine(response);
                         if (response.IsSuccessStatusCode)
                         {
-                            MessageBox.Show("ok babe");
                             var resulted = response.Content.ReadAsStringAsync().Result;
                             Console.WriteLine(resulted);
                         }
@@ -147,13 +146,20 @@ namespace WindowsFormsApp1
         {
             HttpClient httpClient = new HttpClient();
             httpClient.BaseAddress = baseUrl;
-            var response = httpClient.GetAsync("api/category/"+idCate+"/products/").Result;
+            var response = httpClient.GetAsync("api/category/"+idCate+ "/products?pageIndex=1&pageSize=10").Result;
             if (response.IsSuccessStatusCode)
             {
                 var result = response.Content.ReadAsStringAsync().Result;
-                Console.WriteLine(result);
+                JObject temp = JObject.Parse(result);
+                IList<JToken> results = temp["results"]["items"].Children().ToList();
+                IList<SearchResult> searchResults = new List<SearchResult>();
+                foreach (JToken item in results)
+                {
+                    SearchResult searchResult = JsonConvert.DeserializeObject<SearchResult>(item.ToString());
+                    searchResults.Add(searchResult);
+                }
+                productView.DataSource = searchResults;
             }
-
         }
         public object SelectedValue { get; set; }
 

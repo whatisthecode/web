@@ -22,7 +22,7 @@ namespace WebApplication2.Controllers.API
 
         }
 
-        [APIAuthorize(Roles = "CREATE_INVOICE")]
+        ////[APIAuthorize(Roles = "CREATE_INVOICE")]
         [Route("api/invoice")]
         [HttpPost]
         public IHttpActionResult insertAsync([FromBody]ViewInvoiceModel viewInvoiceModel)

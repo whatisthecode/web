@@ -12,7 +12,7 @@ namespace WebApplication2.Models.RequestModel
         public static String[] required = { "name", "code", "createdBy", "categories",
             "attributes.price", "attributes.amount", "attributes.discount", "attributes.color"};
 
-        public Boolean status { get; set; }
+        public Int16 status { get; set; }
         public String code { get; set; }
         public String name { get; set; }
         public String shortDescription { get; set; }
