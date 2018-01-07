@@ -28,7 +28,7 @@ namespace WebApplication2
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new CustomViewEngine());
 
-            JobScheduler.Start();
+            //JobScheduler.Start();
 
             GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings.PreserveReferencesHandling = Newtonsoft.Json.PreserveReferencesHandling.None;
             GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
