@@ -111,7 +111,7 @@ namespace WebApplication2.Controllers.API
         [Route("api/invoice/{id}")]
         [HttpPut]
         [APIAuthorize]
-        public IHttpActionResult update([FromUri] Int16 id,[FromBody]Int16 status)
+        public IHttpActionResult update([FromUri] Int16 id,[FromBody]Invoice invoice)
         {
             Response response = null;
             Invoice invoiceInDB = Service.invoiceDAO.getInvoiceById(id);
@@ -122,7 +122,7 @@ namespace WebApplication2.Controllers.API
             }
             else
             {
-                var statusUpdate = status;
+                var statusUpdate = invoice.status;
                 var statusInDB = invoiceInDB.status;
                 if(statusInDB == 1 && statusUpdate == 0)
                 {
@@ -154,7 +154,7 @@ namespace WebApplication2.Controllers.API
                     }
                 }
 
-                invoiceInDB.status = status;
+                invoiceInDB.status = invoice.status;
                 Service.invoiceDAO.updateInvoice(invoiceInDB);
 
                 response = new Response("200", "Cập nhật hóa đơn thành công", invoiceInDB);

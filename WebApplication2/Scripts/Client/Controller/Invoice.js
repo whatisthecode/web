@@ -13,6 +13,7 @@
                 "buyer": $scope.view.userData.userInfo.id,
                 "total": $scope.view.total
             };
+            console.log(req);
             Invoice.createInvoice(req, function (response) {
                 if (response) {
                     console.log(response);
