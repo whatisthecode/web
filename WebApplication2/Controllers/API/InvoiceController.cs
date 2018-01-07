@@ -154,7 +154,7 @@ namespace WebApplication2.Controllers.API
                     }
                 }
 
-                invoiceInDB.status = invoice.status;
+                invoiceInDB.status = status;
                 Service.invoiceDAO.updateInvoice(invoiceInDB);
 
                 response = new Response("200", "Cập nhật hóa đơn thành công", invoiceInDB);
