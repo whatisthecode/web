@@ -15,8 +15,8 @@ namespace WebApplication2.Schedules
         {
             DateTime now = DateTime.Now;
             DateTime time = default(DateTime).Add(now.TimeOfDay);
-            DateTime newTime = DateTime.ParseExact(time.ToString("H:mm"), "HH:mm", CultureInfo.InvariantCulture);
-            List <ShowHideProduct> listSH = Service.showHideDAO.findShowHideProducts(now.Date, now.Date, now.DayOfWeek).ToList();
+            DateTime newTime = DateTime.Parse(time.TimeOfDay.ToString(), CultureInfo.InvariantCulture);
+            List <ShowHideProduct> listSH = Service.showHideDAO.findShowHideProducts(now, now, now.DayOfWeek).ToList();
             if(listSH.Count() > 0)
             {
                 for (var i = 0; i < listSH.Count(); i++)

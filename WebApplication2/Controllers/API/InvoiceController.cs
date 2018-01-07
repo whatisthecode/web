@@ -108,13 +108,13 @@ namespace WebApplication2.Controllers.API
             return Content<Response>(HttpStatusCode.Created, response);
         }
 
-        [Route("api/invoice")]
+        [Route("api/invoice/{id}")]
         [HttpPut]
         [APIAuthorize]
-        public IHttpActionResult update([FromBody]Invoice invoice)
+        public IHttpActionResult update([FromUri] Int16 id,[FromBody]Int16 status)
         {
             Response response = null;
-            Invoice invoiceInDB = Service.invoiceDAO.getInvoiceById(invoice.id);
+            Invoice invoiceInDB = Service.invoiceDAO.getInvoiceById(id);
             if (invoiceInDB == null)
             {
                 response = new Response("404", "Hóa đơn không tồn tại", null);
@@ -122,7 +122,7 @@ namespace WebApplication2.Controllers.API
             }
             else
             {
-                var statusUpdate = invoice.status;
+                var statusUpdate = status;
                 var statusInDB = invoiceInDB.status;
                 if(statusInDB == 1 && statusUpdate == 0)
                 {
