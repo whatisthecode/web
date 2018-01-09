@@ -35,3 +35,9 @@ span.hidden-sm{
     cursor: pointer;
     border-radius: 5px;
 }
+
+.img {
+    height: 150px;
+    width:auto;
+    margin:auto;
+}
