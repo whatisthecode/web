@@ -48,7 +48,6 @@
             this.cbCategories = new System.Windows.Forms.ComboBox();
             this.label11 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
-            this.btnAdd = new System.Windows.Forms.Button();
             this.label13 = new System.Windows.Forms.Label();
             this.btnThumbnail = new System.Windows.Forms.Button();
             this.txtThumbnail = new System.Windows.Forms.TextBox();
@@ -57,6 +56,7 @@
             this.txtDetail = new System.Windows.Forms.TextBox();
             this.txtColor = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.btnAdd = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label2
@@ -143,12 +143,15 @@
             // 
             // btnCancel
             // 
+            this.btnCancel.Image = global::WindowsFormsApp1.Properties.Resources.Exit;
+            this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnCancel.Location = new System.Drawing.Point(380, 326);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(94, 34);
+            this.btnCancel.Size = new System.Drawing.Size(97, 34);
             this.btnCancel.TabIndex = 12;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // txtCode
             // 
@@ -229,16 +232,6 @@
             this.label12.TabIndex = 24;
             this.label12.Text = "VNĐ";
             // 
-            // btnAdd
-            // 
-            this.btnAdd.Location = new System.Drawing.Point(248, 326);
-            this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(126, 34);
-            this.btnAdd.TabIndex = 25;
-            this.btnAdd.Text = "Save";
-            this.btnAdd.UseVisualStyleBackColor = true;
-            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
-            // 
             // label13
             // 
             this.label13.AutoSize = true;
@@ -307,6 +300,18 @@
             this.label1.Size = new System.Drawing.Size(299, 42);
             this.label1.TabIndex = 33;
             this.label1.Text = "Add new product";
+            // 
+            // btnAdd
+            // 
+            this.btnAdd.Image = global::WindowsFormsApp1.Properties.Resources.Save;
+            this.btnAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnAdd.Location = new System.Drawing.Point(248, 326);
+            this.btnAdd.Name = "btnAdd";
+            this.btnAdd.Size = new System.Drawing.Size(126, 34);
+            this.btnAdd.TabIndex = 25;
+            this.btnAdd.Text = "Save";
+            this.btnAdd.UseVisualStyleBackColor = true;
+            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
             // Product_Add
             // 

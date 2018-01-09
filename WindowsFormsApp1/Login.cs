@@ -67,7 +67,7 @@ namespace WindowsFormsApp1
                         Console.WriteLine(LoginInfo.token);
                         LoginInfo.id = contents.id;
                         this.Hide();
-                        Invoice pr = new Invoice();
+                        Manage pr = new Manage();
                         pr.ShowDialog();
                     }
                     else

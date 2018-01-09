@@ -30,7 +30,7 @@ namespace WindowsFormsApp1
         {
             HttpClient httpClient = new HttpClient();
             httpClient.BaseAddress = baseUrl;
-            var response = httpClient.GetAsync("api/category").Result;
+            var response = httpClient.GetAsync("api/categorys").Result;
             if (response.IsSuccessStatusCode)
             {
                 var result = response.Content.ReadAsStringAsync().Result;
@@ -53,10 +53,10 @@ namespace WindowsFormsApp1
         {
 
         }
-        public Int16 selectedStatus { get; set; }
+        public object selectedStatus { get; set; }
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+           selectedStatus = comboBox1.SelectedValue;
         }
         private void Product_Edit_Load(object sender, EventArgs e)
         {
@@ -94,31 +94,14 @@ namespace WindowsFormsApp1
                         txtColor.Text = item.value;
                     }
                 }
+                Dictionary<Int32, String> status = new Dictionary<int, string>();
+                status.Add(0, "Invisible");
+                status.Add(1, "Available");
+                comboBox1.DataSource = new BindingSource(status, null);
+                comboBox1.DisplayMember = "Value";
+                comboBox1.ValueMember = "Key";
             }
 
-        }
-
-        OpenFileDialog ofd_thumbnail = new OpenFileDialog();
-        private void btnThumbnail_Click(object sender, EventArgs e)
-        {
-            if (ofd_thumbnail.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                string selectedThumbnail = ofd_thumbnail.FileName;
-                txtThumbnail.Text = ofd_thumbnail.FileName;
-            }
-        }
-
-        OpenFileDialog ofd_detail = new OpenFileDialog();
-        private JToken selectedThumbnail;
-        private JToken selectedDetail;
-
-        private void btnDetail_Click(object sender, EventArgs e)
-        {
-            if (ofd_detail.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                string selectedDetail = ofd_detail.FileName;
-                txtDetail.Text = ofd_detail.FileName;
-            }
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
@@ -128,7 +111,7 @@ namespace WindowsFormsApp1
 
         private void btnAdd_Click_1(object sender, EventArgs e)
         {
-            Int16 status = selectedStatus;
+            Int16 status = Int16.Parse(selectedStatus.ToString());
             List<Int16> categories = new List<Int16>();
             categories.Add(selectedCategories);
             List<JObject> thumbnails = new List<JObject>();
@@ -141,7 +124,6 @@ namespace WindowsFormsApp1
             details.Add(tempDetail);
             var token = Login.LoginInfo.token;
             var userId = Login.LoginInfo.id;
-            string code = txtCode.Text;
             string name = txtName.Text;
             string shortDes = txtShort.Text;
             string longDes = txtLong.Text;
@@ -161,7 +143,7 @@ namespace WindowsFormsApp1
                 attributes.discount = discount;
                 attributes.color = color;
                 CreateProductModel cr = new CreateProductModel();
-                cr.code = code;
+                cr.status = status;
                 cr.name = name;
                 cr.shortDescription = shortDes;
                 cr.longDescription = longDes;
@@ -175,12 +157,10 @@ namespace WindowsFormsApp1
                 var statusCode = response.StatusCode;
                 if (response.IsSuccessStatusCode)
                 {
-                    
-                    var result = response.Content.ReadAsStringAsync().Result;
-                    var s = JsonConvert.DeserializeObject(result);
-                    Product pr = new Product();
+                    MessageBox.Show("Update successful");
                     this.Hide();
-                    pr.Refresh();
+                    Product pr = new Product();
+                    pr.ShowDialog();
                 }
                 else
                 {
@@ -190,6 +170,33 @@ namespace WindowsFormsApp1
             catch (Exception)
             {
                 Console.WriteLine("Fail quá fail");
+            }
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+        }
+
+        OpenFileDialog ofd_thumbnail = new OpenFileDialog();
+        private JToken selectedThumbnail;
+        private void btnThumbnail_Click_1(object sender, EventArgs e)
+        {
+            if (ofd_thumbnail.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                selectedThumbnail = ofd_thumbnail.FileName;
+                txtThumbnail.Text = ofd_thumbnail.FileName;
+            }
+        }
+
+        OpenFileDialog ofd_detail = new OpenFileDialog();
+        private JToken selectedDetail;
+        private void btnDetail_Click_1(object sender, EventArgs e)
+        {
+            if (ofd_detail.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                selectedDetail = ofd_detail.FileName;
+                txtDetail.Text = ofd_detail.FileName;
             }
         }
     }
