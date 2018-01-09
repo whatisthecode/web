@@ -13,12 +13,15 @@ using System.IO;
 using Newtonsoft.Json.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using LaptopWebsite.Models.Mapping;
 
 namespace WindowsFormsApp1
 {
     public partial class Product : Form
     {
         static Uri baseUrl = new Uri("http://localhost:54962/");
+        string token = Login.LoginInfo.token;
+
         public Product()
         {
             InitializeComponent();
@@ -49,19 +52,29 @@ namespace WindowsFormsApp1
             public string id { get; set; }
             public string name { get; set; }
         }
-        private void Product_Load(object sender, EventArgs e)
-        {
-            WebClient wc = new WebClient();
-            var json = wc.DownloadString(baseUrl+ "api/products/?pageIndex=1&pageSize=10&order=name");
-            JObject googleSearch = JObject.Parse(json);
-            IList<JToken> results = googleSearch["results"]["items"].Children().ToList();
-            IList<SearchResult> searchResults = new List<SearchResult>();
-            foreach (JToken result in results)
+
+        public void getProductList() {
+            HttpClient httpClient = new HttpClient();
+            httpClient.BaseAddress = baseUrl;
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var response = httpClient.GetAsync("api/products/?pageIndex=1&pageSize=10&order=name").Result;
+            if (response.IsSuccessStatusCode)
             {
-                SearchResult searchResult = JsonConvert.DeserializeObject<SearchResult>(result.ToString());
-                searchResults.Add(searchResult);
+                WebApplication2.Models.Mapping.Response content = response.Content.ReadAsAsync<WebApplication2.Models.Mapping.Response>().Result;
+                PagedResult<WebApplication2.Models.Product> pageResult = ((JObject)content.results).ToObject<PagedResult<WebApplication2.Models.Product>>();
+                IList<WebApplication2.Models.Product> searchResults = new List<WebApplication2.Models.Product>();
+                foreach (WebApplication2.Models.Product item in pageResult.items)
+                {
+                    WebApplication2.Models.Product pr = item;
+                    searchResults.Add(pr);
+                }
+                productView.DataSource = searchResults;
             }
-            productView.DataSource = searchResults;
+
+        }
+
+        public void getCategoryList()
+        {
             HttpClient httpClient = new HttpClient();
             httpClient.BaseAddress = baseUrl;
             var response = httpClient.GetAsync("api/categorys").Result;
@@ -81,7 +94,11 @@ namespace WindowsFormsApp1
                 cateFilter.DisplayMember = "name";
                 cateFilter.ValueMember = "id";
             }
-
+        }
+        private void Product_Load(object sender, EventArgs e)
+        {
+            this.getProductList();
+            this.getCategoryList();
         }
 
         private void productView_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -122,11 +139,9 @@ namespace WindowsFormsApp1
                         HttpClient httpClient = new HttpClient();
                         httpClient.BaseAddress = baseUrl;
                         var response = httpClient.DeleteAsync("api/product/"+idProduct).Result;
-                        Console.WriteLine(response);
                         if (response.IsSuccessStatusCode)
                         {
-                            var resulted = response.Content.ReadAsStringAsync().Result;
-                            Console.WriteLine(resulted);
+                            MessageBox.Show("Delete successful");
                         }
 
                     }
@@ -168,6 +183,18 @@ namespace WindowsFormsApp1
             int selectedStatus = cateFilter.SelectedIndex;
             SelectedValue = cateFilter.SelectedValue;
             this.getProductByCate(SelectedValue);            
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            Manage mn = new Manage();
+            mn.ShowDialog();
+        }
+
+        private void btnRefresh_Click(object sender, EventArgs e)
+        {
+            this.getProductList();
         }
     }
 }

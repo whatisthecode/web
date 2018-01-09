@@ -9,6 +9,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
@@ -70,91 +71,95 @@ namespace WindowsFormsApp1
                     WebApplication2.Models.Invoice iv = item.invoice;
                     searchResults.Add(iv);
                 }
-                DataGridViewComboBoxColumn cb = new DataGridViewComboBoxColumn();
-                cb.HeaderText = "StatusChange";
-                cb.Name = "cbStatus";
-                cb.Items.Add("-1");
-                cb.Items.Add("0");
-                cb.Items.Add("1");
-                invoiceGV.Columns.Add(cb);
-                this.invoiceGV.CellEndEdit += new DataGridViewCellEventHandler(invoiceGV_CellEndEdit);
-                this.invoiceGV.EditingControlShowing += new DataGridViewEditingControlShowingEventHandler(invoiceGV_EditingControlShowing);
                 invoiceGV.DataSource = searchResults;
             }
         }
         private void Invoice_Load(object sender, EventArgs e)
         {
             this.getInvoiceList();
+            Dictionary<Int32, String> status = new Dictionary<int, string>();
+            status.Add(-1, "Đã bị hủy");
+            status.Add(0, "Đang xử lý");
+            status.Add(1, "Đang giao");
+            status.Add(2, "Đã hoàn tất");
+            cbStatus.DataSource = new BindingSource(status, null);
+            cbStatus.DisplayMember = "Value";
+            cbStatus.ValueMember = "Key";
+        }
+
+        private void cbStatus_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            MessageBox.Show(cbStatus.SelectedItem.ToString());
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if (invoiceGV.SelectedRows.Count == 0)
+
+            int statusInDB = int.Parse(invoiceGV.SelectedRows[0].Cells[3].Value.ToString());
+            int invoiceId = int.Parse(invoiceGV.SelectedRows[0].Cells[0].Value.ToString());
+            int statusUpdate = int.Parse(selectedStatus.ToString());
+            if (statusInDB == 1 && statusUpdate == 0)
             {
-                MessageBox.Show("Xin chọn 1 dòng");
+                MessageBox.Show("Đang giao không thể trở về đang xử lý");
             }
-            else
+            else if (statusInDB == -1)
             {
-                var invoiceId = invoiceGV.SelectedRows[0].Cells[0].Value.ToString();
-                MessageBox.Show(invoiceId);
+                MessageBox.Show("Hóa đơn đã bị hủy không thể cập nhật trạng thái");
+            }
+            else if (statusInDB == 2)
+            {
+                MessageBox.Show("Hoá đơn đã hoàn thành không thể cập nhật trạng thái");
+            }
+            HttpClient httpClient = new HttpClient();
+            httpClient.BaseAddress = baseUrl;
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            JObject data = new JObject();
+            data.Add("status", statusUpdate);
+            HttpContent httpContent = new ObjectContent<JObject>(data, new JsonMediaTypeFormatter());
+            var response = httpClient.PutAsync("api/invoice/"+ invoiceId,httpContent).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                MessageBox.Show("Update invoice successful");
+                invoiceGV.Update();
+                invoiceGV.Refresh();
             }
         }
-        void invoiceGV_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+
+        private void invoiceGV_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (cbm != null)
-            {
-                cbm.SelectedIndexChanged -= new EventHandler(cbm_SelectedIndexChanged);
-            }
-
-        }
-        ComboBox cbm;
-        DataGridViewCell currentCell;
-        void invoiceGV_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
-
-        {
-
-            if (e.Control is ComboBox)
-
-            {
-
-                cbm = (ComboBox)e.Control;
-
-                if (cbm != null)
-
-                {
-
-                    cbm.SelectedIndexChanged += new EventHandler(cbm_SelectedIndexChanged);
-                }
-
-                currentCell = this.invoiceGV.CurrentCell;
-
-            }
-
         }
 
-
-
-        void cbm_SelectedIndexChanged(object sender, EventArgs e)
-
+        private void invoiceGV_RowHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            var temp = cbm.SelectedValue;
-            Console.WriteLine(temp);
-            this.BeginInvoke(new MethodInvoker(EndEdit));
+            var invoiceId = invoiceGV.SelectedRows[0].Cells[0].Value.ToString();
+            var invoiceStatus = invoiceGV.SelectedRows[0].Cells[3].Value.ToString();
+            switch (invoiceStatus)
+            {
+                case "-1":
+                    invoiceStatus = "Đã bị Hủy";
+                    break;
+                case "0":
+                    invoiceStatus = "Đang xử lý";
+                    break;
+                case "1":
+                    invoiceStatus = "Đang giao hàng";
+                    break;
+                case "2":
+                    invoiceStatus = "Đã giao";
+                    break;
+            }
+            cbStatus.Text = invoiceStatus;
+        }
+       
+        public object selectedStatus { get; set; }
+        private void cbStatus_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+            selectedStatus = cbStatus.SelectedValue;
         }
 
-        void EndEdit()
+        private void button1_Click(object sender, EventArgs e)
         {
-            if (cbm != null)
-            {
-                DataRowView drv = cbm.SelectedItem as DataRowView;
-                if (drv != null)
-                {
-                    this.invoiceGV[currentCell.ColumnIndex + 1, currentCell.RowIndex].Value = drv[2].ToString();
-                    var temp = this.invoiceGV[currentCell.ColumnIndex + 1, currentCell.RowIndex].Value = drv[2].ToString();
-                    Console.WriteLine(temp);
-                    this.invoiceGV.EndEdit();
-                }
-            }
+            this.getInvoiceList();
         }
     }
 }

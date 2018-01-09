@@ -115,10 +115,10 @@ namespace WindowsFormsApp1
                 {
                     var result = response.Content.ReadAsStringAsync().Result;
                     var s = JsonConvert.DeserializeObject(result);
-                    Product_Add pa = new Product_Add();
+                    MessageBox.Show("Thêm thành công");
+                    this.Hide();
                     Product pr = new Product();
-                    pa.Hide();
-                    pr.Refresh();
+                    pr.ShowDialog();
                 }
                 else
                 {
@@ -135,28 +135,32 @@ namespace WindowsFormsApp1
         {
 
         }
+        private JToken selectedThumbnail;
+        private JToken selectedDetail;
 
         OpenFileDialog ofd_thumbnail = new OpenFileDialog();
         private void btnThumbnail_Click(object sender, EventArgs e)
         {
             if (ofd_thumbnail.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                string selectedThumbnail = ofd_thumbnail.FileName;
+                selectedThumbnail = ofd_thumbnail.FileName;
                 txtThumbnail.Text = ofd_thumbnail.FileName;
             }
         }
 
         OpenFileDialog ofd_detail = new OpenFileDialog();
-        private JToken selectedThumbnail;
-        private JToken selectedDetail;
-
         private void btnDetail_Click(object sender, EventArgs e)
         {
             if (ofd_detail.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                string selectedDetail = ofd_detail.FileName;
+                selectedDetail = ofd_detail.FileName;
                 txtDetail.Text = ofd_detail.FileName;
             }
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            this.Hide();
         }
     }
 }

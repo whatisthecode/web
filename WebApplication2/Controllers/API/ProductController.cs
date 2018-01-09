@@ -190,6 +190,8 @@ namespace WebApplication2.Controllers.API
                 productDetail.code = product.code;
                 productDetail.name = product.name;
                 productDetail.status = product.status;
+                productDetail.shortDescription = product.shortDescription;
+                productDetail.longDescription = product.longDescription;
                 productDetail.userInfo = Service.userInfoDAO.getUserInfo(product.createdBy);
                 productDetail.attributes = Service.productAttributeDAO.getProAttrsByProId(product.id);
                 productDetail.choseCategories = Service.categoryProductDAO.getListCategoryProductByProdId(product.id).ToList();
@@ -223,13 +225,6 @@ namespace WebApplication2.Controllers.API
 
             }
             else
-            if (productcheck.status == 1)
-            {
-                response.code = "409";
-                response.status = "Không thể cập nhật sản phẩm khi bài đăng đã được công khai";
-                return Content<Response>(HttpStatusCode.Conflict, response);
-            }
-            else
             {
 
                 response.code = "200";
@@ -259,7 +254,7 @@ namespace WebApplication2.Controllers.API
                     
 
                 }
-
+                productcheck.status = updateProductModel.status;
                 productcheck.name = updateProductModel.name;
                 productcheck.shortDescription = updateProductModel.shortDescription;
                 productcheck.longDescription = updateProductModel.longDescription;
@@ -289,9 +284,7 @@ namespace WebApplication2.Controllers.API
                 response.code = "200";
                 response.status = "Xóa sản phẩm thành công";
                 Service.productDAO.updateProduct(productDel);
-
-                return Content<Response>(HttpStatusCode.NotFound, response);
-
+                return Content<Response>(HttpStatusCode.OK, response);
             }
 
         }

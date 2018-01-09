@@ -82,6 +82,7 @@
             this.btnDetail.TabIndex = 60;
             this.btnDetail.Text = "Choose file";
             this.btnDetail.UseVisualStyleBackColor = true;
+            this.btnDetail.Click += new System.EventHandler(this.btnDetail_Click_1);
             // 
             // label14
             // 
@@ -107,6 +108,7 @@
             this.btnThumbnail.TabIndex = 57;
             this.btnThumbnail.Text = "Choose file";
             this.btnThumbnail.UseVisualStyleBackColor = true;
+            this.btnThumbnail.Click += new System.EventHandler(this.btnThumbnail_Click_1);
             // 
             // label13
             // 
@@ -119,6 +121,8 @@
             // 
             // btnAdd
             // 
+            this.btnAdd.Image = global::WindowsFormsApp1.Properties.Resources.Save;
+            this.btnAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnAdd.Location = new System.Drawing.Point(287, 353);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(126, 34);
@@ -166,6 +170,7 @@
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(204, 21);
             this.comboBox1.TabIndex = 51;
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // txtDiscount
             // 
@@ -213,17 +218,21 @@
             // 
             this.txtCode.Location = new System.Drawing.Point(152, 93);
             this.txtCode.Name = "txtCode";
+            this.txtCode.ReadOnly = true;
             this.txtCode.Size = new System.Drawing.Size(204, 20);
             this.txtCode.TabIndex = 44;
             // 
             // btnCancel
             // 
+            this.btnCancel.Image = global::WindowsFormsApp1.Properties.Resources.Exit;
+            this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnCancel.Location = new System.Drawing.Point(419, 353);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(94, 34);
             this.btnCancel.TabIndex = 43;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // label10
             // 
