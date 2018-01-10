@@ -30,7 +30,7 @@ namespace WindowsFormsApp1
         {
             HttpClient httpClient = new HttpClient();
             httpClient.BaseAddress = baseUrl;
-            var response = httpClient.GetAsync("api/categorys").Result;
+            var response = httpClient.GetAsync("api/category-type/2").Result;
             if (response.IsSuccessStatusCode)
             {
                 var result = response.Content.ReadAsStringAsync().Result;
@@ -159,8 +159,6 @@ namespace WindowsFormsApp1
                 {
                     MessageBox.Show("Update successful");
                     this.Hide();
-                    Product pr = new Product();
-                    pr.ShowDialog();
                 }
                 else
                 {

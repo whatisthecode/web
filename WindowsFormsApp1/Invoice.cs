@@ -78,7 +78,7 @@ namespace WindowsFormsApp1
         {
             this.getInvoiceList();
             Dictionary<Int32, String> status = new Dictionary<int, string>();
-            status.Add(-1, "Đã bị hủy");
+            status.Add(-1, "Đã hủy");
             status.Add(0, "Đang xử lý");
             status.Add(1, "Đang giao");
             status.Add(2, "Đã hoàn tất");

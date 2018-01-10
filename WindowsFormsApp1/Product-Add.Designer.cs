@@ -57,13 +57,12 @@
             this.txtColor = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.btnAdd = new System.Windows.Forms.Button();
-            this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
             this.SuspendLayout();
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(24, 169);
+            this.label2.Location = new System.Drawing.Point(24, 130);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(32, 13);
             this.label2.TabIndex = 1;
@@ -72,7 +71,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(24, 201);
+            this.label3.Location = new System.Drawing.Point(24, 162);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(35, 13);
             this.label3.TabIndex = 2;
@@ -81,7 +80,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(24, 233);
+            this.label4.Location = new System.Drawing.Point(24, 194);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(83, 13);
             this.label4.TabIndex = 3;
@@ -90,7 +89,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(24, 267);
+            this.label5.Location = new System.Drawing.Point(24, 228);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(80, 13);
             this.label5.TabIndex = 4;
@@ -99,7 +98,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(24, 134);
+            this.label6.Location = new System.Drawing.Point(24, 95);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(57, 13);
             this.label6.TabIndex = 5;
@@ -156,28 +155,28 @@
             // 
             // txtCode
             // 
-            this.txtCode.Location = new System.Drawing.Point(113, 162);
+            this.txtCode.Location = new System.Drawing.Point(113, 123);
             this.txtCode.Name = "txtCode";
             this.txtCode.Size = new System.Drawing.Size(204, 20);
             this.txtCode.TabIndex = 13;
             // 
             // txtName
             // 
-            this.txtName.Location = new System.Drawing.Point(113, 194);
+            this.txtName.Location = new System.Drawing.Point(113, 155);
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(204, 20);
             this.txtName.TabIndex = 14;
             // 
             // txtShort
             // 
-            this.txtShort.Location = new System.Drawing.Point(113, 226);
+            this.txtShort.Location = new System.Drawing.Point(113, 187);
             this.txtShort.Name = "txtShort";
             this.txtShort.Size = new System.Drawing.Size(204, 20);
             this.txtShort.TabIndex = 15;
             // 
             // txtLong
             // 
-            this.txtLong.Location = new System.Drawing.Point(113, 260);
+            this.txtLong.Location = new System.Drawing.Point(113, 221);
             this.txtLong.Name = "txtLong";
             this.txtLong.Size = new System.Drawing.Size(204, 20);
             this.txtLong.TabIndex = 16;
@@ -209,7 +208,7 @@
             this.cbCategories.Items.AddRange(new object[] {
             "Bàn phím",
             "Chuột"});
-            this.cbCategories.Location = new System.Drawing.Point(113, 126);
+            this.cbCategories.Location = new System.Drawing.Point(113, 87);
             this.cbCategories.Name = "cbCategories";
             this.cbCategories.Size = new System.Drawing.Size(204, 21);
             this.cbCategories.TabIndex = 21;
@@ -314,25 +313,11 @@
             this.btnAdd.UseVisualStyleBackColor = true;
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
-            // checkedListBox1
-            // 
-            this.checkedListBox1.FormattingEnabled = true;
-            this.checkedListBox1.Items.AddRange(new object[] {
-            "Bàn phim",
-            "Chuột",
-            "Razer",
-            "Corsair"});
-            this.checkedListBox1.Location = new System.Drawing.Point(113, 56);
-            this.checkedListBox1.Name = "checkedListBox1";
-            this.checkedListBox1.Size = new System.Drawing.Size(204, 64);
-            this.checkedListBox1.TabIndex = 34;
-            // 
             // Product_Add
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(718, 377);
-            this.Controls.Add(this.checkedListBox1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtColor);
             this.Controls.Add(this.txtDetail);
@@ -400,6 +385,5 @@
         private System.Windows.Forms.TextBox txtDetail;
         private System.Windows.Forms.TextBox txtColor;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.CheckedListBox checkedListBox1;
     }
 }

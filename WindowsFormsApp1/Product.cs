@@ -36,7 +36,6 @@ namespace WindowsFormsApp1
         {
             Product_Add pr = new Product_Add();
             pr.ShowDialog();
-            Hide();
         }
         public class SearchResult
         {
@@ -77,7 +76,7 @@ namespace WindowsFormsApp1
         {
             HttpClient httpClient = new HttpClient();
             httpClient.BaseAddress = baseUrl;
-            var response = httpClient.GetAsync("api/categorys").Result;
+            var response = httpClient.GetAsync("api/category-type/2").Result;
             if (response.IsSuccessStatusCode)
             {
                 var result = response.Content.ReadAsStringAsync().Result;
