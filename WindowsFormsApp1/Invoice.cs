@@ -161,5 +161,12 @@ namespace WindowsFormsApp1
         {
             this.getInvoiceList();
         }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            Manage mn = new Manage();
+            mn.ShowDialog();
+        }
     }
 }
