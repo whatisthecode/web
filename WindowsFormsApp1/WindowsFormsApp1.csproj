@@ -70,12 +70,6 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Invoice-Edit.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Invoice-Edit.Designer.cs">
-      <DependentUpon>Invoice-Edit.cs</DependentUpon>
-    </Compile>
     <Compile Include="Invoice.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -115,9 +109,6 @@
     <Compile Include="ProductData.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Invoice-Edit.resx">
-      <DependentUpon>Invoice-Edit.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Invoice.resx">
       <DependentUpon>Invoice.cs</DependentUpon>
     </EmbeddedResource>
