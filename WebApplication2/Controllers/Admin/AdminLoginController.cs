@@ -34,6 +34,7 @@ namespace WebApplication2.Controllers.Admin
             ViewBag.email = email;
             ViewBag.password = password;
             ViewBag.returnUrl = returnUrl;
+            returnUrl = "http://localhost:54962/";
             if (email == null || password == null)
             {
                 return View();
@@ -88,33 +89,33 @@ namespace WebApplication2.Controllers.Admin
                     List<SidebarModel> sidebar = new List<SidebarModel>();
                     if (isSuperAdmin)
                     {
-                        sidebar.Add(new SidebarModel("Người dùng", "/dashboard/users?pageSize=10&pageIndex=1", "ti-user", "user"));
+                        //sidebar.Add(new SidebarModel("Người dùng", "/dashboard/users?pageSize=10&pageIndex=1", "ti-user", "user"));
                         sidebar.Add(new SidebarModel("Sản phẩm", "/dashboard/products?pageSize=10&pageIndex=1", "ti-package", "product"));
-                        sidebar.Add(new SidebarModel("Đơn hàng", "/dashboard/invoices?pageSize=10&pageIndex=1", "ti-shopping-cart-full", "invoice"));
-                        sidebar.Add(new SidebarModel("Thông tin cá nhân", "/dashboard/info", "ti-id-badge", "info"));
+                        //sidebar.Add(new SidebarModel("Đơn hàng", "/dashboard/invoices?pageSize=10&pageIndex=1", "ti-shopping-cart-full", "invoice"));
+                        //sidebar.Add(new SidebarModel("Thông tin cá nhân", "/dashboard/info", "ti-id-badge", "info"));
                         sidebar.Add(new SidebarModel("Đăng xuất", "/logout", "ti-shift-right", "logout"));
                     }
                     else if (isAdmin)
                     {
-                        sidebar.Add(new SidebarModel("Người dùng", "/dashboard/users?pageSize=10&pageIndex=1", "ti-user", "user"));
+                        //sidebar.Add(new SidebarModel("Người dùng", "/dashboard/users?pageSize=10&pageIndex=1", "ti-user", "user"));
                         sidebar.Add(new SidebarModel("Sản phẩm", "/dashboard/products?pageSize=10&pageIndex=1", "ti-package", "product"));
-                        sidebar.Add(new SidebarModel("Đơn hàng", "/dashboard/invoices?pageSize=10&pageIndex=1", "ti-shopping-cart-full", "invoice"));
-                        sidebar.Add(new SidebarModel("Thông tin cá nhân", "/dashboard/info", "ti-id-badge", "info"));
+                        //sidebar.Add(new SidebarModel("Đơn hàng", "/dashboard/invoices?pageSize=10&pageIndex=1", "ti-shopping-cart-full", "invoice"));
+                        //sidebar.Add(new SidebarModel("Thông tin cá nhân", "/dashboard/info", "ti-id-badge", "info"));
                         sidebar.Add(new SidebarModel("Đăng xuất", "/logout", "ti-shift-right", "logout"));
                     }
                     else if (isCustomer)
                     {
-                        sidebar.Add(new SidebarModel("Đơn hàng","/dashboard/invoices?pageSize=10&pageIndex=1", "ti-shopping-cart-full", "invoice"));
-                        sidebar.Add(new SidebarModel("Thông tin cá nhân","/dashboard/info", "ti-id-badge", "info"));
-                        sidebar.Add(new SidebarModel("Nâng cấp tài khoản","/upgrade", "ti-rocket", "upgrade"));
+                        //sidebar.Add(new SidebarModel("Đơn hàng","/dashboard/invoices?pageSize=10&pageIndex=1", "ti-shopping-cart-full", "invoice"));
+                        //sidebar.Add(new SidebarModel("Thông tin cá nhân","/dashboard/info", "ti-id-badge", "info"));
+                        //sidebar.Add(new SidebarModel("Nâng cấp tài khoản","/upgrade", "ti-rocket", "upgrade"));
                         sidebar.Add(new SidebarModel("Đăng xuất","/logout", "ti-shift-right", "logout"));
                     }
                     else if (isMerchant)
                     {
                         sidebar.Add(new SidebarModel("Sản phẩm", "/dashboard/products?pageSize=10&pageIndex=1", "ti-package", "product"));
-                        sidebar.Add(new SidebarModel("Đơn hàng", "/dashboard/invoices?pageSize=10&pageIndex=1", "ti-shopping-cart-full", "invoice"));
-                        sidebar.Add(new SidebarModel("Thông tin cá nhân", "/dashboard/info", "ti-id-badge", "info"));
-                        sidebar.Add(new SidebarModel("Mua gói tin", "/buy", "ti-money", "buy"));
+                        //sidebar.Add(new SidebarModel("Đơn hàng", "/dashboard/invoices?pageSize=10&pageIndex=1", "ti-shopping-cart-full", "invoice"));
+                        //sidebar.Add(new SidebarModel("Thông tin cá nhân", "/dashboard/info", "ti-id-badge", "info"));
+                        //sidebar.Add(new SidebarModel("Mua gói tin", "/buy", "ti-money", "buy"));
                         sidebar.Add(new SidebarModel("Đăng xuất", "/logout", "ti-shift-right", "logout"));
                     }
                     Session["sidebar"] = sidebar;
