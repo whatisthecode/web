@@ -93,7 +93,7 @@ namespace WebApplication2.Controllers.API
         }
 
         [HttpDelete]
-        [Route("api/show-hide-produc")]
+        [Route("api/show-hide-product/{id}")]
         public IHttpActionResult DeleteSchedule([FromUri] Int16 id)
         {
             Service.showHideDAO.deleteShowHideProduct(id);
